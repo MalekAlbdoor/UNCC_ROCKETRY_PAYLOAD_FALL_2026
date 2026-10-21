@@ -13,17 +13,19 @@ TRANSONIC AVIONICS PAYLOAD - MAIN ICs & SENSORS  (rev B, 2026-10-20)
 - High-G Accelerometer:  STMicroelectronics H3LIS331DLTR (±100/200/400g, LGA-16)
 - Barometer:             TE MS561101BA03-50 (24-bit, 8-SMD)
 - GPS:                   u-blox SAM-M10Q-00B (integrated antenna, LGA-20)
-- Airspeed / Pitot:      TBD (MPXV7002DP removed, range too small)
-- Skin Temperature:      TDK B57861S0103F040 (10k NTC bead)
+- Air Temp / Humidity:   Sensirion SHT45-AD1F-R2 (PTFE membrane, DFN-4)
 
 3. TELEMETRY
 --------------------------------------------------------------------------------
 - Radio:                 CDEBYTE E22-900M30S (SX1262 + PA, 915 MHz, 1W)
 
-4. POWER
+4. CAMERA
+--------------------------------------------------------------------------------
+- Camera:                RunCam Split 4 V3 (4K30, 5V rail, 450 mA max, UART control)
+
+5. POWER
 --------------------------------------------------------------------------------
 - 5V Buck:               TI TPS54302DDCR (3A, SOT-23-6)
 - 5V Buck Inductor:      Wurth 74439346100 (10 uH, 7.6A Isat)
 - 3.3V LDO:              Diodes Inc AP2112K-3.3TRG1 (600 mA, SOT-23-5)
-- Current Sense Amp:     TI INA180A2IDBVR (gain 50, SOT-23-5)
 ================================================================================
