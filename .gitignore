@@ -1,0 +1,33 @@
+# KiCad per-user / per-machine state
+*.kicad_prl
+fp-info-cache*
+
+# KiCad lock files
+*.lck
+~*.lck
+.~lock.*#
+
+# KiCad backups, autosaves and local history
+*-backups/
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*-bak
+*.bak
+_autosave-*
+.history/
+
+# Archives
+*.zip
+*.7z
+*.rar
+
+# Fabrication outputs (regenerate from the board)
+*.gbr
+*.gbrjob
+*.drl
+*-pos.csv
+gerbers/
+
+# Editor / OS
+.vscode/
+.DS_Store
