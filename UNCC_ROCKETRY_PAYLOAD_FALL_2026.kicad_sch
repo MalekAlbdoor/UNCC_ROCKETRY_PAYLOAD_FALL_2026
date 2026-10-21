@@ -7,13 +7,43 @@
 	(lib_symbols)
 	(wire
 		(pts
-			(xy 88.9 139.7) (xy 120.65 139.7)
+			(xy 158.75 99.06) (xy 190.5 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "007a245e-94cf-49c3-a9fe-79fed9b1eef0")
+	)
+	(wire
+		(pts
+			(xy 158.75 58.42) (xy 190.5 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "06d50065-dcba-4ec4-887b-6d76f7fe2e61")
+	)
+	(wire
+		(pts
+			(xy 88.9 134.62) (xy 120.65 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "08c9b644-c045-487b-a1bf-5d5dc70f3d0c")
+	)
+	(wire
+		(pts
+			(xy 158.75 104.14) (xy 190.5 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0981d8f3-3508-4632-9ca7-1b4d070d2f10")
 	)
 	(wire
 		(pts
@@ -27,6 +57,16 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 60.96) (xy 190.5 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f03c345-76c9-40f2-85b6-b9522ed6407c")
+	)
+	(wire
+		(pts
 			(xy 88.9 149.86) (xy 120.65 149.86)
 		)
 		(stroke
@@ -37,7 +77,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 142.24) (xy 120.65 142.24)
+			(xy 88.9 137.16) (xy 120.65 137.16)
 		)
 		(stroke
 			(width 0)
@@ -67,13 +107,53 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 147.32) (xy 120.65 147.32)
+			(xy 158.75 109.22) (xy 190.5 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c1fca62-960d-4554-8b6d-59efde2ff873")
+	)
+	(wire
+		(pts
+			(xy 88.9 144.78) (xy 120.65 144.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "4ef6bd11-0e81-4f32-8e7f-6455b23f618a")
+	)
+	(wire
+		(pts
+			(xy 158.75 96.52) (xy 190.5 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f448fa4-1fe7-454f-90af-b05fa4ae9478")
+	)
+	(wire
+		(pts
+			(xy 158.75 55.88) (xy 190.5 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "55f18a64-c895-4681-b936-ed2d2eb20b1c")
+	)
+	(wire
+		(pts
+			(xy 158.75 101.6) (xy 190.5 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6173bf4b-20a2-4fae-9f47-7f5911be1466")
 	)
 	(wire
 		(pts
@@ -107,7 +187,17 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 129.54) (xy 120.65 129.54)
+			(xy 158.75 63.5) (xy 190.5 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b5b5173-0034-4763-94b9-99c6f6c70773")
+	)
+	(wire
+		(pts
+			(xy 88.9 121.92) (xy 120.65 121.92)
 		)
 		(stroke
 			(width 0)
@@ -117,7 +207,17 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 134.62) (xy 120.65 134.62)
+			(xy 158.75 83.82) (xy 190.5 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e84b259-3d51-4599-9099-9e18bd6319dd")
+	)
+	(wire
+		(pts
+			(xy 88.9 127) (xy 120.65 127)
 		)
 		(stroke
 			(width 0)
@@ -127,7 +227,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 132.08) (xy 120.65 132.08)
+			(xy 88.9 124.46) (xy 120.65 124.46)
 		)
 		(stroke
 			(width 0)
@@ -147,6 +247,16 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 111.76) (xy 190.5 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b795f62d-36ad-4ec0-97c6-18ae89d4a579")
+	)
+	(wire
+		(pts
 			(xy 158.75 86.36) (xy 190.5 86.36)
 		)
 		(stroke
@@ -154,6 +264,16 @@
 			(type default)
 		)
 		(uuid "ba24f188-15a3-489b-be91-de3cf04ec27b")
+	)
+	(wire
+		(pts
+			(xy 158.75 106.68) (xy 190.5 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb8db495-172e-4362-8d0d-743f3db12eab")
 	)
 	(wire
 		(pts
@@ -177,7 +297,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 144.78) (xy 120.65 144.78)
+			(xy 88.9 142.24) (xy 120.65 142.24)
 		)
 		(stroke
 			(width 0)
@@ -237,7 +357,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 137.16) (xy 120.65 137.16)
+			(xy 88.9 129.54) (xy 120.65 129.54)
 		)
 		(stroke
 			(width 0)
@@ -246,8 +366,8 @@
 		(uuid "f1426a95-e693-4345-9597-f5941bd22faf")
 	)
 	(sheet
-		(at 190.5 114.3)
-		(size 19.05 41.91)
+		(at 190.5 119.38)
+		(size 19.05 36.83)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -262,7 +382,7 @@
 		)
 		(uuid "1c734ea3-90be-4042-bbd0-cde558354372")
 		(property "Sheetname" "SENSORS"
-			(at 190.5 113.5884 0)
+			(at 190.5 118.6684 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -510,7 +630,7 @@
 			)
 		)
 		(pin "NRST" bidirectional
-			(at 120.65 129.54 180)
+			(at 120.65 121.92 180)
 			(uuid "2b46a03e-a0dc-4a96-a346-d4bb67001b4b")
 			(effects
 				(font
@@ -520,7 +640,7 @@
 			)
 		)
 		(pin "SWDIO" bidirectional
-			(at 120.65 132.08 180)
+			(at 120.65 124.46 180)
 			(uuid "25fbfdbf-bb03-4b33-9502-d6f349ed7a78")
 			(effects
 				(font
@@ -530,7 +650,7 @@
 			)
 		)
 		(pin "SWCLK" input
-			(at 120.65 134.62 180)
+			(at 120.65 127 180)
 			(uuid "c104a585-192b-470d-aaa6-e30ddc059376")
 			(effects
 				(font
@@ -540,7 +660,7 @@
 			)
 		)
 		(pin "SWO" output
-			(at 120.65 137.16 180)
+			(at 120.65 129.54 180)
 			(uuid "8ea9aa3c-0feb-4a50-ab98-61710f891781")
 			(effects
 				(font
@@ -550,7 +670,7 @@
 			)
 		)
 		(pin "DBG_TX" output
-			(at 120.65 139.7 180)
+			(at 120.65 134.62 180)
 			(uuid "7fa98ae2-e6d7-448a-875e-c628b39f1df1")
 			(effects
 				(font
@@ -560,7 +680,7 @@
 			)
 		)
 		(pin "DBG_RX" input
-			(at 120.65 142.24 180)
+			(at 120.65 137.16 180)
 			(uuid "11c1273f-3ba6-48a9-9f30-aad4d8ff1d09")
 			(effects
 				(font
@@ -570,7 +690,7 @@
 			)
 		)
 		(pin "CAM_TX" output
-			(at 120.65 144.78 180)
+			(at 120.65 142.24 180)
 			(uuid "b4ba2b09-ea4c-4600-975b-2aa1aae106e4")
 			(effects
 				(font
@@ -580,7 +700,7 @@
 			)
 		)
 		(pin "CAM_RX" input
-			(at 120.65 147.32 180)
+			(at 120.65 144.78 180)
 			(uuid "d5bd03d2-1309-4237-ab7f-c991da282f1e")
 			(effects
 				(font
@@ -669,6 +789,126 @@
 				(justify right)
 			)
 		)
+		(pin "CS_FLASH" output
+			(at 158.75 55.88 0)
+			(uuid "cd74e373-a322-4455-8b29-c588643debb7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CLK_FLASH" output
+			(at 158.75 58.42 0)
+			(uuid "6b3aa67d-9831-4937-a7ff-a9171ca9c73c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "DI_FLASH" output
+			(at 158.75 60.96 0)
+			(uuid "1d480b6e-9bf5-40de-9111-d5f56813a716")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "DO_FLASH" input
+			(at 158.75 63.5 0)
+			(uuid "55720aa4-0070-4205-bf13-a08dc7b70935")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_RXEN" output
+			(at 158.75 83.82 0)
+			(uuid "3f2bfedb-4f06-4f78-82b9-0689884f8b36")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_CS" output
+			(at 158.75 96.52 0)
+			(uuid "d482aeb5-8158-4942-a676-9610eb49606e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_SCK" output
+			(at 158.75 99.06 0)
+			(uuid "a870339f-d3b0-4a80-b44b-237020d33b07")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_MOSI" output
+			(at 158.75 101.6 0)
+			(uuid "cd320356-3312-4a0f-aaba-3d6a77961e8b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_MISO" input
+			(at 158.75 104.14 0)
+			(uuid "797bd85b-eb28-47e8-967b-3cdec7005da4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_BUSY" input
+			(at 158.75 106.68 0)
+			(uuid "27b21045-cff8-46b5-843c-3773941b21cd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_DIO1" input
+			(at 158.75 109.22 0)
+			(uuid "36a50ce4-66b0-4dd2-bfeb-ec2b2d08d271")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LORA_NRST" output
+			(at 158.75 111.76 0)
+			(uuid "972feccd-5011-4cb6-9c0f-1e568c07eb77")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963"
@@ -713,6 +953,46 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "CS_FLASH" input
+			(at 190.5 55.88 180)
+			(uuid "b9304315-7a25-4421-9c12-182897ee0934")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CLK_FLASH" input
+			(at 190.5 58.42 180)
+			(uuid "52ad3c58-e93f-4ef0-9783-0d4679751fa2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "DI_FLASH" input
+			(at 190.5 60.96 180)
+			(uuid "b2bde046-2cf8-4568-9e91-a834e7e3f115")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "DO_FLASH" output
+			(at 190.5 63.5 180)
+			(uuid "7c040dec-ec5e-4234-95b6-9eac0bdaba25")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -771,7 +1051,7 @@
 	)
 	(sheet
 		(at 190.5 81.28)
-		(size 19.05 25.4)
+		(size 19.05 33.02)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -797,7 +1077,7 @@
 			)
 		)
 		(property "Sheetfile" "RF.kicad_sch"
-			(at 190.5 107.2646 0)
+			(at 190.5 114.8846 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -840,6 +1120,86 @@
 		(pin "RESET_GPS" input
 			(at 190.5 93.98 180)
 			(uuid "d04296e6-087c-42ea-998f-071c75ef0f1e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_RXEN" input
+			(at 190.5 83.82 180)
+			(uuid "84e6a591-e4e2-41dd-9f91-91be0a06c41a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_CS" input
+			(at 190.5 96.52 180)
+			(uuid "2f2be81c-00ba-46e9-96eb-229e8d32245c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_SCK" input
+			(at 190.5 99.06 180)
+			(uuid "b9b89d4e-cd30-4638-8293-ee049671bb5e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_MOSI" input
+			(at 190.5 101.6 180)
+			(uuid "0eb73722-1916-4c70-893d-e45512f62a89")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_MISO" output
+			(at 190.5 104.14 180)
+			(uuid "dbabdcad-3cc3-435c-84e7-be4fba30d047")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_BUSY" output
+			(at 190.5 106.68 180)
+			(uuid "b67b4e04-86fa-450c-b32d-c46786c7951e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_DIO1" output
+			(at 190.5 109.22 180)
+			(uuid "020764d8-eef0-44c7-91fd-83215b3200cb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LORA_NRST" input
+			(at 190.5 111.76 180)
+			(uuid "e292d041-4f66-42c7-8b75-fe8ae34e0fba")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -894,7 +1254,7 @@
 			)
 		)
 		(pin "NRST" bidirectional
-			(at 88.9 129.54 0)
+			(at 88.9 121.92 0)
 			(uuid "a87476ac-8f13-40ca-ac5c-bb26b8116726")
 			(effects
 				(font
@@ -904,7 +1264,7 @@
 			)
 		)
 		(pin "SWDIO" bidirectional
-			(at 88.9 132.08 0)
+			(at 88.9 124.46 0)
 			(uuid "551bcc1e-5a23-4236-8e9f-88d8b73c5a1f")
 			(effects
 				(font
@@ -914,7 +1274,7 @@
 			)
 		)
 		(pin "SWCLK" output
-			(at 88.9 134.62 0)
+			(at 88.9 127 0)
 			(uuid "de394d26-45c2-4a38-9202-a94bec14877f")
 			(effects
 				(font
@@ -924,7 +1284,7 @@
 			)
 		)
 		(pin "SWO" input
-			(at 88.9 137.16 0)
+			(at 88.9 129.54 0)
 			(uuid "6cc60a21-438b-4357-89d7-b5ba2c8b0c9d")
 			(effects
 				(font
@@ -934,7 +1294,7 @@
 			)
 		)
 		(pin "DBG_TX" input
-			(at 88.9 139.7 0)
+			(at 88.9 134.62 0)
 			(uuid "c627330e-6dd3-43d5-b42c-2f9ea1245122")
 			(effects
 				(font
@@ -944,7 +1304,7 @@
 			)
 		)
 		(pin "DBG_RX" output
-			(at 88.9 142.24 0)
+			(at 88.9 137.16 0)
 			(uuid "a194565a-d23e-4272-9059-620c9e1e0295")
 			(effects
 				(font
@@ -954,7 +1314,7 @@
 			)
 		)
 		(pin "CAM_TX" input
-			(at 88.9 144.78 0)
+			(at 88.9 142.24 0)
 			(uuid "5d34030e-a2a7-4a06-90a1-62de95cc3f97")
 			(effects
 				(font
@@ -964,7 +1324,7 @@
 			)
 		)
 		(pin "CAM_RX" output
-			(at 88.9 147.32 0)
+			(at 88.9 144.78 0)
 			(uuid "06a80233-59de-4621-837b-0d1308b475a3")
 			(effects
 				(font
@@ -997,52 +1357,6 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963"
 					(page "6")
-				)
-			)
-		)
-	)
-	(sheet
-		(at 69.85 50.8)
-		(size 19.05 24.13)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0)
-		)
-		(uuid "e018840a-93f0-4002-94ba-a0e344cbf581")
-		(property "Sheetname" "CAM"
-			(at 69.85 50.0884 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "CAM.kicad_sch"
-			(at 69.85 75.5146 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
-				(path "/b97e5c20-8436-474e-baf5-e9be786f6963"
-					(page "3")
 				)
 			)
 		)

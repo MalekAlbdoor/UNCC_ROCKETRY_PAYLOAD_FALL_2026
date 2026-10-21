@@ -4136,7 +4136,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Screw_Terminal_01x02"
+		(property "Value" "XT30PW-M"
 			(at 20.32 41.9099 0)
 			(hide yes)
 			(show_name no)
@@ -4148,7 +4148,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_AMASS:AMASS_XT30PW-M_1x02_P2.50mm_Horizontal"
 			(at 22.86 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -5065,7 +5065,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
 			(at 82.55 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -5144,7 +5144,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
 			(at 34.29 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -5744,7 +5744,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
 			(at 24.13 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -5980,7 +5980,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 65.532 52.07 90)
 			(hide yes)
 			(show_name no)
