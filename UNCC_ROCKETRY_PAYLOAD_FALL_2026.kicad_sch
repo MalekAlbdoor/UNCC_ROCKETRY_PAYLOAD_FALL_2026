@@ -47,6 +47,16 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 91.44) (xy 190.5 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3781da62-448b-44c1-8f2e-89c11671cb7a")
+	)
+	(wire
+		(pts
 			(xy 158.75 140.97) (xy 190.5 140.97)
 		)
 		(stroke
@@ -127,6 +137,26 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 93.98) (xy 190.5 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a904133a-e729-43a3-9530-3bb4797a376c")
+	)
+	(wire
+		(pts
+			(xy 158.75 86.36) (xy 190.5 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba24f188-15a3-489b-be91-de3cf04ec27b")
+	)
+	(wire
+		(pts
 			(xy 158.75 149.86) (xy 190.5 149.86)
 		)
 		(stroke
@@ -137,6 +167,16 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 121.92) (xy 190.5 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cc440421-b223-4fef-a3c0-b688d976f8d8")
+	)
+	(wire
+		(pts
 			(xy 88.9 144.78) (xy 120.65 144.78)
 		)
 		(stroke
@@ -144,6 +184,26 @@
 			(type default)
 		)
 		(uuid "d156de0c-9757-449b-8372-800599031edc")
+	)
+	(wire
+		(pts
+			(xy 158.75 88.9) (xy 190.5 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d1c781c0-6ae0-47fc-b41b-5c2d57072ffc")
+	)
+	(wire
+		(pts
+			(xy 158.75 124.46) (xy 190.5 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d266bfab-80f6-40b9-9688-f7fb0ec61092")
 	)
 	(wire
 		(pts
@@ -296,6 +356,26 @@
 		(pin "SDO" output
 			(at 190.5 132.08 180)
 			(uuid "b08002ce-96f2-4113-b35c-cdf084f2f963")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SCL_T" input
+			(at 190.5 121.92 180)
+			(uuid "b62f1cb2-b9de-4c59-9032-4e26c1402d91")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SDA_T" bidirectional
+			(at 190.5 124.46 180)
+			(uuid "5da2f663-bcbc-4d83-80c8-8de98e6e9c79")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -529,6 +609,66 @@
 				(justify left)
 			)
 		)
+		(pin "TX_GPS" input
+			(at 158.75 86.36 0)
+			(uuid "e1ad11fb-5883-4ede-8e6c-ccc4b2fee347")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX_GPS" output
+			(at 158.75 88.9 0)
+			(uuid "ccbcb21d-a499-4a35-977d-cc464571efd6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TIMER_GPS" input
+			(at 158.75 91.44 0)
+			(uuid "924e8022-6db3-44d4-9778-1b0536699697")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RESET_GPS" output
+			(at 158.75 93.98 0)
+			(uuid "e15c45f4-7d81-4537-8525-fd19421d0f35")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SCL_T" output
+			(at 158.75 121.92 0)
+			(uuid "8a183e28-973d-4acc-a777-9f7ffbc1bf3a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SDA_T" bidirectional
+			(at 158.75 124.46 0)
+			(uuid "418c0ef8-2d32-48ec-b182-80109e0fec3d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963"
@@ -665,6 +805,46 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "TX_GPS" output
+			(at 190.5 86.36 180)
+			(uuid "c498c7de-754f-4cdc-a598-ce5d5fad9f8e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RX_GPS" input
+			(at 190.5 88.9 180)
+			(uuid "1d14d8b4-944a-4a94-9d85-46254a189658")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "TIMER_GPS" output
+			(at 190.5 91.44 180)
+			(uuid "62432b02-0af1-452f-b8df-d624d0195f28")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RESET_GPS" input
+			(at 190.5 93.98 180)
+			(uuid "d04296e6-087c-42ea-998f-071c75ef0f1e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
