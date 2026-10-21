@@ -7,7 +7,7 @@ TRANSONIC AVIONICS PAYLOAD - MAIN ICs & SENSORS  (rev B, 2026-10-20)
 - Microcontroller:       STM32F405RGT6 (LQFP-64, Cortex-M4 @ 168 MHz)
 - Flash:                 Winbond W25Q128JVSIQ (16 MB NOR, SOIC-8)
 
-2. SENSORS
+2. SENSORSwa
 --------------------------------------------------------------------------------
 - 6-DOF IMU:             STMicroelectronics LSM6DSO32TR (±32g / ±2000 dps, LGA-14)
 - High-G Accelerometer:  STMicroelectronics H3LIS331DLTR (±100/200/400g, LGA-16)
