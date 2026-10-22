@@ -285,17 +285,20 @@
     "meta": {
       "version": 5
     },
-    "net_colors": {},
-    "netclass_assignments": {},
+    "net_colors": null,
+    "netclass_assignments": null,
     "netclass_patterns": []
   },
   "pcbnew": {
     "last_paths": {
+      "gencad": "",
       "idf": "",
       "netlist": "",
       "plot": "",
+      "pos_files": "",
       "specctra_dsn": "",
       "step": "",
+      "svg": "",
       "vrml": ""
     },
     "page_layout_descr_file": ""
@@ -430,7 +433,7 @@
         "uuid": "b97e5c20-8436-474e-baf5-e9be786f6963"
       }
     ],
-    "used_designators": "#PWR1-5,#PWR7,#PWR9-39,#PWR41-42,#PWR45-47,C1-4,C6-15,C27-28,D4,J2,L1,Q1,R2-9,TP1-6,U1-6,U8-10",
+    "used_designators": "L1,#PWR1-4,#PWR7,#PWR9-36,#PWR45,C1-4,C6-15,R2-7,J2,Q1,TP1-5,U1-6",
     "variants": []
   },
   "sheets": [
