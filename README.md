@@ -8,13 +8,12 @@ The schematic is split into hierarchical sheets, all tied together on the root s
 
 | Sheet | Contents |
 |---|---|
-| POWER | Battery input, 5V buck and 3.3V regulator |
-| MCU | Microcontroller, clock, reset/boot, debug |
+| POWER | 5V buck, 3.3V regulator, power LED, bring-up jumpers and camera power switch |
+| MCU | Microcontroller, clock, reset/boot, battery voltage sense, buzzer and status LED |
 | SENSORS | Inertial, pressure and environmental sensors |
-| RF | GPS |
+| RF | LoRa telemetry radio and GPS |
 | FLASH | Onboard flight data storage |
-| CAM | Camera interface |
-| CONNECTORS | Battery, arming switch, debug header, camera and USB-C |
+| CONNECTORS | Battery input protection, arming switch, debug header, camera and USB-C |
 
 ## Tools
 
