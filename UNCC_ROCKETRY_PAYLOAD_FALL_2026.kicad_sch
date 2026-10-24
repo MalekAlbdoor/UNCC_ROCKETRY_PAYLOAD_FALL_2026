@@ -4,10 +4,15 @@
 	(generator_version "10.0")
 	(uuid "b97e5c20-8436-474e-baf5-e9be786f6963")
 	(paper "A4")
+	(title_block
+		(title "UNCC Rocketry Payload, Fall 2026")
+		(date "2026-10-23")
+		(comment 1 "Author: Malek Albdoor")
+	)
 	(lib_symbols)
 	(wire
 		(pts
-			(xy 158.75 99.06) (xy 190.5 99.06)
+			(xy 158.75 104.14) (xy 190.5 104.14)
 		)
 		(stroke
 			(width 0)
@@ -17,7 +22,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 58.42) (xy 190.5 58.42)
+			(xy 158.75 50.8) (xy 190.5 50.8)
 		)
 		(stroke
 			(width 0)
@@ -37,7 +42,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 104.14) (xy 190.5 104.14)
+			(xy 158.75 109.22) (xy 190.5 109.22)
 		)
 		(stroke
 			(width 0)
@@ -57,7 +62,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 60.96) (xy 190.5 60.96)
+			(xy 158.75 53.34) (xy 190.5 53.34)
 		)
 		(stroke
 			(width 0)
@@ -87,7 +92,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 91.44) (xy 190.5 91.44)
+			(xy 158.75 80.01) (xy 190.5 80.01)
 		)
 		(stroke
 			(width 0)
@@ -107,7 +112,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 109.22) (xy 190.5 109.22)
+			(xy 158.75 111.76) (xy 190.5 111.76)
 		)
 		(stroke
 			(width 0)
@@ -127,7 +132,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 96.52) (xy 190.5 96.52)
+			(xy 158.75 101.6) (xy 190.5 101.6)
 		)
 		(stroke
 			(width 0)
@@ -137,7 +142,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 55.88) (xy 190.5 55.88)
+			(xy 158.75 48.26) (xy 190.5 48.26)
 		)
 		(stroke
 			(width 0)
@@ -147,7 +152,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 101.6) (xy 190.5 101.6)
+			(xy 158.75 106.68) (xy 190.5 106.68)
 		)
 		(stroke
 			(width 0)
@@ -187,7 +192,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 63.5) (xy 190.5 63.5)
+			(xy 158.75 55.88) (xy 190.5 55.88)
 		)
 		(stroke
 			(width 0)
@@ -207,7 +212,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 83.82) (xy 190.5 83.82)
+			(xy 158.75 97.79) (xy 190.5 97.79)
 		)
 		(stroke
 			(width 0)
@@ -237,7 +242,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 93.98) (xy 190.5 93.98)
+			(xy 158.75 82.55) (xy 190.5 82.55)
 		)
 		(stroke
 			(width 0)
@@ -247,7 +252,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 111.76) (xy 190.5 111.76)
+			(xy 158.75 95.25) (xy 190.5 95.25)
 		)
 		(stroke
 			(width 0)
@@ -257,7 +262,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 86.36) (xy 190.5 86.36)
+			(xy 158.75 74.93) (xy 190.5 74.93)
 		)
 		(stroke
 			(width 0)
@@ -267,7 +272,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 106.68) (xy 190.5 106.68)
+			(xy 158.75 92.71) (xy 190.5 92.71)
 		)
 		(stroke
 			(width 0)
@@ -307,7 +312,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 88.9) (xy 190.5 88.9)
+			(xy 158.75 77.47) (xy 190.5 77.47)
 		)
 		(stroke
 			(width 0)
@@ -364,6 +369,16 @@
 			(type default)
 		)
 		(uuid "f1426a95-e693-4345-9597-f5941bd22faf")
+	)
+	(wire
+		(pts
+			(xy 88.9 101.6) (xy 120.65 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f82ea11a-36da-4a6c-ac35-3f3ecf2ea7bb")
 	)
 	(sheet
 		(at 190.5 119.38)
@@ -512,8 +527,8 @@
 		)
 	)
 	(sheet
-		(at 120.65 50.8)
-		(size 38.1 105.41)
+		(at 120.65 43.18)
+		(size 38.1 113.03)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -528,7 +543,7 @@
 		)
 		(uuid "2578422d-1310-4db1-9732-399972814ffb")
 		(property "Sheetname" "MCU"
-			(at 120.65 50.0884 0)
+			(at 120.65 42.4684 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -730,7 +745,7 @@
 			)
 		)
 		(pin "TX_GPS" input
-			(at 158.75 86.36 0)
+			(at 158.75 74.93 0)
 			(uuid "e1ad11fb-5883-4ede-8e6c-ccc4b2fee347")
 			(effects
 				(font
@@ -740,7 +755,7 @@
 			)
 		)
 		(pin "RX_GPS" output
-			(at 158.75 88.9 0)
+			(at 158.75 77.47 0)
 			(uuid "ccbcb21d-a499-4a35-977d-cc464571efd6")
 			(effects
 				(font
@@ -750,7 +765,7 @@
 			)
 		)
 		(pin "TIMER_GPS" input
-			(at 158.75 91.44 0)
+			(at 158.75 80.01 0)
 			(uuid "924e8022-6db3-44d4-9778-1b0536699697")
 			(effects
 				(font
@@ -760,7 +775,7 @@
 			)
 		)
 		(pin "RESET_GPS" output
-			(at 158.75 93.98 0)
+			(at 158.75 82.55 0)
 			(uuid "e15c45f4-7d81-4537-8525-fd19421d0f35")
 			(effects
 				(font
@@ -790,7 +805,7 @@
 			)
 		)
 		(pin "CS_FLASH" output
-			(at 158.75 55.88 0)
+			(at 158.75 48.26 0)
 			(uuid "cd74e373-a322-4455-8b29-c588643debb7")
 			(effects
 				(font
@@ -800,7 +815,7 @@
 			)
 		)
 		(pin "CLK_FLASH" output
-			(at 158.75 58.42 0)
+			(at 158.75 50.8 0)
 			(uuid "6b3aa67d-9831-4937-a7ff-a9171ca9c73c")
 			(effects
 				(font
@@ -810,7 +825,7 @@
 			)
 		)
 		(pin "DI_FLASH" output
-			(at 158.75 60.96 0)
+			(at 158.75 53.34 0)
 			(uuid "1d480b6e-9bf5-40de-9111-d5f56813a716")
 			(effects
 				(font
@@ -820,7 +835,7 @@
 			)
 		)
 		(pin "DO_FLASH" input
-			(at 158.75 63.5 0)
+			(at 158.75 55.88 0)
 			(uuid "55720aa4-0070-4205-bf13-a08dc7b70935")
 			(effects
 				(font
@@ -830,7 +845,7 @@
 			)
 		)
 		(pin "LORA_RXEN" output
-			(at 158.75 83.82 0)
+			(at 158.75 97.79 0)
 			(uuid "3f2bfedb-4f06-4f78-82b9-0689884f8b36")
 			(effects
 				(font
@@ -840,7 +855,7 @@
 			)
 		)
 		(pin "LORA_CS" output
-			(at 158.75 96.52 0)
+			(at 158.75 101.6 0)
 			(uuid "d482aeb5-8158-4942-a676-9610eb49606e")
 			(effects
 				(font
@@ -850,7 +865,7 @@
 			)
 		)
 		(pin "LORA_SCK" output
-			(at 158.75 99.06 0)
+			(at 158.75 104.14 0)
 			(uuid "a870339f-d3b0-4a80-b44b-237020d33b07")
 			(effects
 				(font
@@ -860,7 +875,7 @@
 			)
 		)
 		(pin "LORA_MOSI" output
-			(at 158.75 101.6 0)
+			(at 158.75 106.68 0)
 			(uuid "cd320356-3312-4a0f-aaba-3d6a77961e8b")
 			(effects
 				(font
@@ -870,7 +885,7 @@
 			)
 		)
 		(pin "LORA_MISO" input
-			(at 158.75 104.14 0)
+			(at 158.75 109.22 0)
 			(uuid "797bd85b-eb28-47e8-967b-3cdec7005da4")
 			(effects
 				(font
@@ -880,7 +895,7 @@
 			)
 		)
 		(pin "LORA_BUSY" input
-			(at 158.75 106.68 0)
+			(at 158.75 92.71 0)
 			(uuid "27b21045-cff8-46b5-843c-3773941b21cd")
 			(effects
 				(font
@@ -890,7 +905,7 @@
 			)
 		)
 		(pin "LORA_DIO1" input
-			(at 158.75 109.22 0)
+			(at 158.75 111.76 0)
 			(uuid "36a50ce4-66b0-4dd2-bfeb-ec2b2d08d271")
 			(effects
 				(font
@@ -900,13 +915,23 @@
 			)
 		)
 		(pin "LORA_NRST" output
-			(at 158.75 111.76 0)
+			(at 158.75 95.25 0)
 			(uuid "972feccd-5011-4cb6-9c0f-1e568c07eb77")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "CAM_EN" output
+			(at 120.65 101.6 180)
+			(uuid "2223e3c0-939b-40c0-a126-7e315c422d86")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -918,8 +943,8 @@
 		)
 	)
 	(sheet
-		(at 190.5 50.8)
-		(size 19.05 24.13)
+		(at 190.5 43.18)
+		(size 19.05 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -934,7 +959,7 @@
 		)
 		(uuid "2da4862c-6afe-4d1d-9649-e0f81982daf5")
 		(property "Sheetname" "FLASH"
-			(at 190.5 50.0884 0)
+			(at 190.5 42.4684 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -945,7 +970,7 @@
 			)
 		)
 		(property "Sheetfile" "FLASH.kicad_sch"
-			(at 190.5 75.5146 0)
+			(at 190.5 64.0846 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -956,7 +981,7 @@
 			)
 		)
 		(pin "CS_FLASH" input
-			(at 190.5 55.88 180)
+			(at 190.5 48.26 180)
 			(uuid "b9304315-7a25-4421-9c12-182897ee0934")
 			(effects
 				(font
@@ -966,7 +991,7 @@
 			)
 		)
 		(pin "CLK_FLASH" input
-			(at 190.5 58.42 180)
+			(at 190.5 50.8 180)
 			(uuid "52ad3c58-e93f-4ef0-9783-0d4679751fa2")
 			(effects
 				(font
@@ -976,7 +1001,7 @@
 			)
 		)
 		(pin "DI_FLASH" input
-			(at 190.5 60.96 180)
+			(at 190.5 53.34 180)
 			(uuid "b2bde046-2cf8-4568-9e91-a834e7e3f115")
 			(effects
 				(font
@@ -986,7 +1011,7 @@
 			)
 		)
 		(pin "DO_FLASH" output
-			(at 190.5 63.5 180)
+			(at 190.5 55.88 180)
 			(uuid "7c040dec-ec5e-4234-95b6-9eac0bdaba25")
 			(effects
 				(font
@@ -1041,6 +1066,16 @@
 				(justify left top)
 			)
 		)
+		(pin "CAM_EN" input
+			(at 88.9 101.6 0)
+			(uuid "6a5a31cb-f213-4e24-a170-b2691134699d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963"
@@ -1050,8 +1085,8 @@
 		)
 	)
 	(sheet
-		(at 190.5 81.28)
-		(size 19.05 33.02)
+		(at 190.5 71.12)
+		(size 19.05 43.18)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1066,7 +1101,7 @@
 		)
 		(uuid "a9523b90-9db4-4028-910d-fae31cf15540")
 		(property "Sheetname" "RF"
-			(at 190.5 80.5684 0)
+			(at 190.5 70.4084 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1088,7 +1123,7 @@
 			)
 		)
 		(pin "TX_GPS" output
-			(at 190.5 86.36 180)
+			(at 190.5 74.93 180)
 			(uuid "c498c7de-754f-4cdc-a598-ce5d5fad9f8e")
 			(effects
 				(font
@@ -1098,7 +1133,7 @@
 			)
 		)
 		(pin "RX_GPS" input
-			(at 190.5 88.9 180)
+			(at 190.5 77.47 180)
 			(uuid "1d14d8b4-944a-4a94-9d85-46254a189658")
 			(effects
 				(font
@@ -1108,7 +1143,7 @@
 			)
 		)
 		(pin "TIMER_GPS" output
-			(at 190.5 91.44 180)
+			(at 190.5 80.01 180)
 			(uuid "62432b02-0af1-452f-b8df-d624d0195f28")
 			(effects
 				(font
@@ -1118,7 +1153,7 @@
 			)
 		)
 		(pin "RESET_GPS" input
-			(at 190.5 93.98 180)
+			(at 190.5 82.55 180)
 			(uuid "d04296e6-087c-42ea-998f-071c75ef0f1e")
 			(effects
 				(font
@@ -1128,7 +1163,7 @@
 			)
 		)
 		(pin "LORA_RXEN" input
-			(at 190.5 83.82 180)
+			(at 190.5 97.79 180)
 			(uuid "84e6a591-e4e2-41dd-9f91-91be0a06c41a")
 			(effects
 				(font
@@ -1138,7 +1173,7 @@
 			)
 		)
 		(pin "LORA_CS" input
-			(at 190.5 96.52 180)
+			(at 190.5 101.6 180)
 			(uuid "2f2be81c-00ba-46e9-96eb-229e8d32245c")
 			(effects
 				(font
@@ -1148,7 +1183,7 @@
 			)
 		)
 		(pin "LORA_SCK" input
-			(at 190.5 99.06 180)
+			(at 190.5 104.14 180)
 			(uuid "b9b89d4e-cd30-4638-8293-ee049671bb5e")
 			(effects
 				(font
@@ -1158,7 +1193,7 @@
 			)
 		)
 		(pin "LORA_MOSI" input
-			(at 190.5 101.6 180)
+			(at 190.5 106.68 180)
 			(uuid "0eb73722-1916-4c70-893d-e45512f62a89")
 			(effects
 				(font
@@ -1168,7 +1203,7 @@
 			)
 		)
 		(pin "LORA_MISO" output
-			(at 190.5 104.14 180)
+			(at 190.5 109.22 180)
 			(uuid "dbabdcad-3cc3-435c-84e7-be4fba30d047")
 			(effects
 				(font
@@ -1178,7 +1213,7 @@
 			)
 		)
 		(pin "LORA_BUSY" output
-			(at 190.5 106.68 180)
+			(at 190.5 92.71 180)
 			(uuid "b67b4e04-86fa-450c-b32d-c46786c7951e")
 			(effects
 				(font
@@ -1188,7 +1223,7 @@
 			)
 		)
 		(pin "LORA_DIO1" output
-			(at 190.5 109.22 180)
+			(at 190.5 111.76 180)
 			(uuid "020764d8-eef0-44c7-91fd-83215b3200cb")
 			(effects
 				(font
@@ -1198,7 +1233,7 @@
 			)
 		)
 		(pin "LORA_NRST" input
-			(at 190.5 111.76 180)
+			(at 190.5 95.25 180)
 			(uuid "e292d041-4f66-42c7-8b75-fe8ae34e0fba")
 			(effects
 				(font

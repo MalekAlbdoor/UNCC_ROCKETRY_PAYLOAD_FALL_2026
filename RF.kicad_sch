@@ -4,6 +4,11 @@
 	(generator_version "10.0")
 	(uuid "84c96b27-9442-4d38-81c4-6e860186d284")
 	(paper "A4")
+	(title_block
+		(title "RF: LoRa Telemetry and GPS")
+		(date "2026-10-23")
+		(comment 1 "Author: Malek Albdoor")
+	)
 	(lib_symbols
 		(symbol "Connector:TestPoint"
 			(pin_numbers
@@ -3454,7 +3459,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 154.94 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -3536,7 +3541,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 139.7 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -3618,7 +3623,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 124.46 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -3700,7 +3705,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 207.9752 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -3918,7 +3923,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 45.72 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -4298,7 +4303,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 221.9452 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -4380,7 +4385,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Inductor_SMD:L_0603_1608Metric"
+		(property "Footprint" "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
 			(at 231.14 69.85 0)
 			(hide yes)
 			(show_name no)

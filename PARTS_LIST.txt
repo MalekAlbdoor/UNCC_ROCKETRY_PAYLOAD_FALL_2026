@@ -5,7 +5,7 @@ TRANSONIC AVIONICS PAYLOAD - MAIN ICs & SENSORS  (rev B, 2026-10-20)
 1. CORE LOGIC & MEMORY
 --------------------------------------------------------------------------------
 - Microcontroller:       STM32F405RGT6 (LQFP-64, Cortex-M4 @ 168 MHz)
-- Flash:                 Winbond W25Q128JVSIQ (16 MB NOR, SOIC-8)
+- Flash:                 Winbond W25Q512JVFIQ (64 MB NOR, SOIC-16 300mil)
 
 2. SENSORS
 --------------------------------------------------------------------------------
