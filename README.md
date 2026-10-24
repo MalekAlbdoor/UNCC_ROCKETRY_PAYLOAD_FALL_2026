@@ -20,6 +20,8 @@ The schematic is split into hierarchical sheets, all tied together on the root s
 
 Designed in KiCad 10. Open `UNCC_ROCKETRY_PAYLOAD_FALL_2026.kicad_pro` to get started.
 
+No KiCad? Download [Schematic.pdf](Schematic.pdf) to view the full schematic.
+
 ## Status
 
 Schematic in progress. Firmware is being developed on breadboarded breakout boards in parallel. PCB layout has not started.
