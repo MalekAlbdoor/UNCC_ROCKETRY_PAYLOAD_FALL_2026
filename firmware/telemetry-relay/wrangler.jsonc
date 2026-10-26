@@ -1,0 +1,22 @@
+// Live telemetry relay for the UNCC payload ground station. See src/worker.js.
+// Deploy: npx wrangler@4 deploy        Publish key: npx wrangler@4 secret put PUBLISH_KEY
+{
+  "$schema": "https://unpkg.com/wrangler@4/config-schema.json",
+  "name": "uncc-telemetry",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "routes": [{ "pattern": "telemetry.malekalbdoor.com", "custom_domain": true }],
+  // the ground station GUI is the public viewer page
+  "assets": {
+    "directory": "../UNCC_BASESTATION_PLATFORMIO/gui",
+    "binding": "ASSETS",
+    "run_worker_first": ["/ws", "/api/*"]
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "LIVE", "class_name": "LiveRelay" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["LiveRelay"] }],
+  // off: every relayed packet was a logged event, 36k/hour at 10 Hz, past the free daily allowance
+  "observability": { "enabled": false }
+}
