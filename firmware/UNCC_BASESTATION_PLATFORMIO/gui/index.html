@@ -160,6 +160,22 @@
   .seg button + button { border-left: 1px solid var(--border); }
   .seg button[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
   .chartbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: -4px; }
+  .winPick { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .winPick input { width: 150px; accent-color: var(--gold); margin: 0; }
+  .openBtn { padding: 2px 8px; font-size: 12px; }
+  canvas.zoomable { cursor: zoom-in; }
+
+  /* a chart opened large */
+  #chartModal { width: min(1200px, calc(100vw - 32px)); max-width: none; padding: 0; border: 1px solid var(--border);
+    border-radius: 10px; background: var(--panel); color: var(--text); }
+  #chartModal::backdrop { background: rgb(0 0 0 / 0.5); }
+  #chartModal .cmBody { padding: 12px 14px 10px; }
+  .cmHead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 8px; }
+  .cmHead h2 { margin: 0 auto 0 0; font-size: 16px; font-weight: 700; }
+  .cmHead h2 .mode { font-weight: 500; font-size: 13px; }
+  #cmCanvas { display: block; width: 100%; height: min(68vh, 560px); cursor: grab; touch-action: none; }
+  .cmFoot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin-top: 6px; font-size: 12px; color: var(--muted); }
+  #cmAt { font-family: var(--mono); }
 
   /* replay: plays a recording back through the whole dashboard */
   #replayBar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 10px 14px; border-radius: 8px;
@@ -270,8 +286,8 @@
     <div class="tile"><div class="label">SNR</div><div class="value" id="tSnr">-</div><div class="sub"></div></div>
     <div class="tile"><div class="label">Packet loss</div><div class="value" id="tLoss">-</div><div class="sub" id="tErr"></div></div>
     <div class="tile"><div class="label">Accel</div><div class="value" id="tAcc">-</div><div class="sub" id="tTilt"></div></div>
+    <div class="tile" title="Compass bearing the nose leans toward, from magnetic north"><div class="label">Heading</div><div class="value" id="tHdg">-</div><div class="sub" id="tHdgSub"></div></div>
     <div class="tile"><div class="label">Peak g</div><div class="value" id="tPeak">-</div><div class="sub"><button id="peakReset">Reset</button></div></div>
-    <div class="tile"><div class="label">Temp</div><div class="value" id="tTemp">-</div><div class="sub">IMU chip</div></div>
     <div class="tile"><div class="label">Battery</div><div class="value" id="tBat">-</div><div class="sub" id="tBatSub"></div></div>
     <div class="tile"><div class="label">Rocket uptime</div><div class="value" id="tUp">-</div><div class="sub" id="tRows"></div></div>
     <div class="tile"><div class="label">Flight phase</div><div class="value" id="tPhase">-</div><div class="sub" id="tPhaseSub"></div></div>
@@ -286,8 +302,9 @@
 
   <div class="chartbar">
     <div class="seg" id="rangeSeg" role="group" aria-label="Chart time range">
-      <button data-range="30" aria-pressed="true">Last 30 s</button><button data-range="flight" aria-pressed="false" disabled>Whole flight</button>
+      <button data-range="win" aria-pressed="true">Last <span id="winLabel">30 s</span></button><button data-range="flight" aria-pressed="false">Whole flight</button>
     </div>
+    <label class="winPick">Window <input type="range" id="winSlider" min="0" max="7" step="1" aria-describedby="winLabel"></label>
     <span class="mode" id="rangeNote"></span>
   </div>
 
@@ -322,23 +339,37 @@
 
   <div class="footer">
     <span>Sensors: <b id="fSens">-</b></span>
-    <span id="fOledWrap">Base station screen: <b id="fOled">-</b></span>
-    <span>Window: <b>last 30 s</b></span>
   </div>
 </main>
 
+<dialog id="chartModal" aria-labelledby="cmTitle">
+  <div class="cmBody">
+    <div class="cmHead">
+      <h2 id="cmTitle"></h2>
+      <button id="cmReset">Reset view</button>
+      <button id="cmClose">Close</button>
+    </div>
+    <div class="legend" id="cmLegend"></div>
+    <canvas id="cmCanvas" aria-label="Chart: scroll or pinch to zoom, drag to move, double-click to reset"></canvas>
+    <div class="cmFoot"><span>Scroll or pinch to zoom · drag to move · double-click to reset · arrow keys and +/- work too</span><span id="cmAt"></span></div>
+  </div>
+</dialog>
+
 <script>
-const WINDOW_S = 30;
+// chart window, picked with the slider and remembered on this computer; history is kept for an hour
+const WIN_STOPS = [10, 30, 60, 120, 300, 600, 1800, 3600], HIST_S = 3600;
+let winS = 30;
+try { const v = +localStorage.getItem('uncc-window'); if (WIN_STOPS.includes(v)) winS = v; } catch {}
 // flags bits from the rocket
-const F = { IMU: 1, HIGH_G: 2, BARO: 4, SHT: 8, GPS: 16 };
+const F = { IMU: 1, HIGH_G: 2, BARO: 4, SHT: 8, GPS: 16, MAG: 32 };
 // `need` is [flags, message]: when the rocket reports none of those sensors the chart says so
 const CHARTS = [
   { title: 'Altitude', unit: 'm above pad', minSpan: 4, dp: 1, need: [F.BARO | F.GPS, 'Needs the barometer or GPS'],
     fields: [['alt', 'baro + accel', '--gold'], ['gagl', 'GPS', '--y']] },
   { title: 'Vertical velocity', unit: 'm/s', minSpan: 2, dp: 1, need: [F.IMU | F.HIGH_G, 'Needs an accelerometer'],
     fields: [['vel', 'filter', '--gold'], ['gvu', 'GPS', '--y']] },
-  { title: 'Orientation', unit: '°', minSpan: 10, dp: 1, need: [F.IMU, 'Needs the IMU'],
-    fields: [['roll', 'roll', '--x'], ['pitch', 'pitch', '--y'], ['yaw', 'yaw', '--z']] },
+  { title: 'Orientation', unit: '°', minSpan: 10, dp: 1, need: [F.IMU, 'Needs the IMU'], wrap: true,
+    fields: [['roll', 'roll', '--x'], ['pitch', 'pitch', '--y'], ['yaw', 'yaw', '--z'], ['hdg', 'heading', '--gold']] },
   { title: 'Accel', unit: 'g', minSpan: 2, dp: 2,
     fields: [['ax', 'x', '--x'], ['ay', 'y', '--y'], ['az', 'z', '--z'], ['amag', 'total', '--total']] },
   { title: 'Gyro', unit: 'dps', minSpan: 20, dp: 1,
@@ -347,19 +378,21 @@ const CHARTS = [
     fields: [['hx', 'x', '--x'], ['hy', 'y', '--y'], ['hz', 'z', '--z'], ['hmag', 'total', '--total']] },
   { title: 'Pressure', unit: 'hPa', minSpan: 0.5, dp: 2, need: [F.BARO, 'Barometer not connected yet'],
     fields: [['pres', 'MS5611', '--gold']] },
-  { title: 'Temperature', unit: '°C', minSpan: 2, dp: 1,
-    fields: [['airt', 'air', '--x'], ['temp', 'IMU chip', '--z']] },
+  { title: 'Temperature', unit: '°C', minSpan: 2, dp: 1, need: [F.SHT, 'SHT45 not connected yet'],
+    fields: [['airt', 'air', '--gold']] },
   { title: 'Humidity', unit: '%', minSpan: 5, dp: 1, need: [F.SHT, 'SHT45 not connected yet'],
     fields: [['rh', 'SHT45', '--gold']] },
   { title: 'Signal', unit: 'dBm', minSpan: 20, dp: 0,
     fields: [['rssi', 'RSSI', '--gold']] },
   { title: 'Battery', unit: 'V', minSpan: 0.2, dp: 2,
     fields: [['vbat', 'battery', '--gold']] },
+  { title: 'Magnetic field', unit: 'mG', minSpan: 20, dp: 0, need: [F.MAG, 'Magnetometer not connected yet'],
+    fields: [['magf', 'strength', '--gold']] },
 ];
 const HIST_KEYS = [...new Set(CHARTS.flatMap(c => c.fields.map(([k]) => k)))];
 const CSV_COLS = ['seq', 't', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'hx', 'hy', 'hz', 'peak', 'temp', 'flags',
   'st', 'alt', 'vel', 'malt', 'mvel', 'pres', 'airt', 'rh', 'fix', 'sats', 'lat', 'lon', 'galt', 'gvu', 'gspd',
-  'roll', 'pitch', 'yaw', 'vbat', 'rssi', 'snr', 'loss'];
+  'roll', 'pitch', 'yaw', 'vbat', 'hdg', 'magf', 'rssi', 'snr', 'loss'];
 const PHASES = ['Pad', 'Boost', 'Coast', 'Descent', 'Landed'];
 // The public page never gets the rocket's position: the operator strips lat/lon before
 // broadcasting. Set to true to show it to everyone.
@@ -404,7 +437,8 @@ const chartEls = CHARTS.map(c => {
   const card = document.createElement('div');
   card.className = 'card';
   card.dataset.id = 'chart:' + c.title;
-  card.innerHTML = `<div class="card-head"><h2>${c.title} <span class="mode">(${c.unit})</span></h2><div class="legend"></div></div><canvas></canvas>`;
+  card.innerHTML = `<div class="card-head"><h2>${c.title} <span class="mode">(${c.unit})</span></h2><div class="legend"></div>`
+    + `<button class="openBtn" title="Open to zoom and move around" aria-label="Open the ${c.title} chart">Open</button></div><canvas class="zoomable"></canvas>`;
   $('charts').appendChild(card);
   const legend = card.querySelector('.legend');
   const vals = c.fields.map(([key, name, color]) => {
@@ -413,7 +447,11 @@ const chartEls = CHARTS.map(c => {
     legend.appendChild(span);
     return span.querySelector('b');
   });
-  return { cfg: c, canvas: card.querySelector('canvas'), vals };
+  const el = { cfg: c, canvas: card.querySelector('canvas'), vals };
+  const open = () => { if (!document.body.classList.contains('editing')) openChart(el); };
+  card.querySelector('.openBtn').onclick = open;
+  el.canvas.onclick = open;
+  return el;
 });
 
 function niceStep(raw) {
@@ -422,9 +460,55 @@ function niceStep(raw) {
   return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p;
 }
 
-function drawChart({ cfg, canvas }, tNow) {
-  const dpr = window.devicePixelRatio || 1;
+// What the charts show: the last `winS` seconds, the whole flight, or, with no liftoff yet,
+// everything kept so far (the last hour). `now` spans label their axis as time ago.
+function chartSpan(tNow) {
+  const fl = V.flight, hist = V.hist;
+  if (RANGE.mode === 'flight') {
+    if (fl && fl.pts.length > 1) {
+      const t0 = fl.pts[0].t;
+      return { pts: fl.pts, t0, t1: fl.done ? fl.pts.at(-1).t : Math.max(tNow, t0 + 1), ref: fl.launchRx ?? t0, flight: fl };
+    }
+    if (hist.length > 1) return { pts: hist, t0: hist[0].t, t1: Math.max(tNow, hist[0].t + 1), ref: tNow, now: true };
+  }
+  return { pts: hist, t0: tNow - winS, t1: tNow, ref: tNow, now: true };
+}
+
+// index of the first point at or after t (points are kept in time order)
+function firstAt(pts, t) {
+  let lo = 0, hi = pts.length;
+  while (lo < hi) { const m = (lo + hi) >> 1; if (pts[m].t < t) lo = m + 1; else hi = m; }
+  return lo;
+}
+
+// time ticks land on steps a clock reads well: 5 s, 15 s, 30 s, 1 min, 5 min...
+const TIME_STEPS = [0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600];
+const timeStep = raw => TIME_STEPS.find(v => v >= raw) ?? 3600;
+
+// seconds, or minutes:seconds when the chart spans two minutes or more
+function fmtSec(s, mins = false) {
+  const a = Math.abs(s), sign = s < 0 ? '-' : '';
+  if (!mins) return `${sign}${+a.toFixed(3)}s`;
+  const tot = Math.round(a);
+  return `${sign}${Math.floor(tot / 60)}:${String(tot % 60).padStart(2, '0')}`;
+}
+
+function tickText(sp, s, mins = false) {
+  const zero = Math.abs(s) < 1e-6;
+  if (sp.now) return zero ? 'now' : fmtSec(s, mins);
+  if (sp.flight && sp.flight.launchRx != null) return zero ? 'liftoff' : (s > 0 ? 'T+' : '') + fmtSec(s, mins);
+  return fmtSec(s, mins);
+}
+
+const PAD = { l: 44, r: 8, t: 6, b: 20 };
+
+// Draws one chart's lines between t0 and t1. Only the points on screen are read, and with more
+// points than pixels each pixel column draws its low and high, so an hour of history stays quick.
+// With hoverT it marks that moment and returns the point nearest to it.
+function drawSeries(canvas, cfg, sp, t0, t1, hoverT = null) {
   const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (!w || !h) return null;                      // hidden
+  const dpr = window.devicePixelRatio || 1;
   if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
   }
@@ -432,84 +516,210 @@ function drawChart({ cfg, canvas }, tNow) {
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
   g.clearRect(0, 0, w, h);
 
-  const pad = { l: 44, r: 8, t: 6, b: 20 };
-  const pw = w - pad.l - pad.r, ph = h - pad.t - pad.b;
-  // whole flight: x is seconds from liftoff, and stops moving once the rocket has landed
-  const fl = V.flight, whole = RANGE.mode === 'flight' && fl && fl.pts.length > 1;
-  let pts, t0, t1, ref;
-  if (whole) {
-    pts = fl.pts; t0 = pts[0].t; ref = fl.launchRx ?? t0;
-    t1 = fl.done ? pts.at(-1).t : Math.max(tNow, t0 + 1);
-  } else {
-    t1 = tNow; t0 = tNow - WINDOW_S;
-    pts = V.hist.filter(p => p.t >= t0 - 1);
-  }
-  const span = t1 - t0;
+  const pw = w - PAD.l - PAD.r, ph = h - PAD.t - PAD.b, span = Math.max(t1 - t0, 1e-3);
+  const pts = sp.pts, i0 = Math.max(0, firstAt(pts, t0) - 1), i1 = Math.min(pts.length, firstAt(pts, t1) + 1);
 
-  let lo = Infinity, hi = -Infinity;
-  for (const p of pts) for (const [k] of cfg.fields) {
-    if (Number.isFinite(p[k])) { lo = Math.min(lo, p[k]); hi = Math.max(hi, p[k]); }
+  let lo = Infinity, hi = -Infinity;              // y fits what is on screen
+  for (let i = i0; i < i1; i++) {
+    const p = pts[i];
+    if (p.t < t0 || p.t > t1) continue;
+    for (const [k] of cfg.fields) { const v = p[k]; if (v < lo) lo = v; if (v > hi) hi = v; }
   }
   if (!isFinite(lo)) { lo = -cfg.minSpan / 2; hi = cfg.minSpan / 2; }
-  const mid = (lo + hi) / 2;
-  const ySpan = Math.max(hi - lo, cfg.minSpan) * 1.15;
+  const mid = (lo + hi) / 2, ySpan = Math.max(hi - lo, cfg.minSpan) * 1.15;
   lo = mid - ySpan / 2; hi = mid + ySpan / 2;
 
-  const xOf = t => pad.l + (t - t0) / span * pw;
-  const yOf = v => pad.t + (hi - v) / (hi - lo) * ph;
+  const xOf = t => PAD.l + (t - t0) / span * pw;
+  const yOf = v => PAD.t + (hi - v) / (hi - lo) * ph;
 
   g.font = `10px ${MONO}`;
   g.lineWidth = 1;
   g.strokeStyle = css('--grid');
   g.fillStyle = css('--muted');
-
   const step = niceStep((hi - lo) / 4);
   g.textAlign = 'right'; g.textBaseline = 'middle';
   for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) {
     const y = Math.round(yOf(v)) + 0.5;
-    g.beginPath(); g.moveTo(pad.l, y); g.lineTo(w - pad.r, y); g.stroke();
-    g.fillText(Math.abs(v) < step / 1e3 ? '0' : +v.toFixed(6) + '', pad.l - 6, y);
+    g.beginPath(); g.moveTo(PAD.l, y); g.lineTo(w - PAD.r, y); g.stroke();
+    g.fillText(Math.abs(v) < step / 1e3 ? '0' : +v.toFixed(6) + '', PAD.l - 6, y);
   }
-  g.textAlign = 'center'; g.textBaseline = 'top';
-  if (whole) {
-    const st = niceStep(span / 6);
-    for (let s = Math.ceil((t0 - ref) / st) * st; s <= t1 - ref + 1e-6; s += st) {
-      const x = Math.round(xOf(ref + s)) + 0.5;
-      g.beginPath(); g.moveTo(x, pad.t); g.lineTo(x, pad.t + ph); g.stroke();
-      const v = +s.toFixed(3);
-      g.fillText(fl.launchRx == null ? `${v}s` : v === 0 ? 'liftoff' : `${v > 0 ? 'T+' : ''}${v}s`, x, pad.t + ph + 5);
-    }
-  } else {
-    for (let s = 0; s <= WINDOW_S; s += 5) {
-      const x = Math.round(xOf(tNow - s)) + 0.5;
-      g.beginPath(); g.moveTo(x, pad.t); g.lineTo(x, pad.t + ph); g.stroke();
-      g.fillText(s === 0 ? 'now' : `-${s}s`, x, pad.t + ph + 5);
-    }
+  g.textBaseline = 'top';
+  const st = timeStep(span / Math.max(2, Math.floor(pw / 90))), mins = span >= 120;
+  for (let s = Math.ceil((t0 - sp.ref) / st - 1e-6) * st; s <= t1 - sp.ref + 1e-6; s += st) {
+    const x = Math.round(xOf(sp.ref + s)) + 0.5;
+    g.beginPath(); g.moveTo(x, PAD.t); g.lineTo(x, PAD.t + ph); g.stroke();
+    g.textAlign = x > w - 30 ? 'right' : 'center';        // keep the last label inside the chart
+    g.fillText(tickText(sp, +s.toFixed(6), mins), g.textAlign === 'right' ? w - 1 : x, PAD.t + ph + 5);
   }
 
   g.save();
-  g.beginPath(); g.rect(pad.l, pad.t, pw, ph); g.clip();
+  g.beginPath(); g.rect(PAD.l, PAD.t, pw, ph); g.clip();
   g.lineWidth = 1.6; g.lineJoin = 'round';
+  const gap = Math.max(2, span / pw * 4);         // seconds without data that break the line
+  const dense = i1 - i0 > pw * 2;
   for (const [k, , color] of [...cfg.fields].reverse()) {   // total underneath, axes on top
     g.strokeStyle = css(color);
     g.beginPath();
-    let started = false, prevT = 0;
-    for (const p of pts) {
-      if (!Number.isFinite(p[k])) { started = false; continue; }
-      const x = xOf(p.t), y = yOf(p[k]);
-      if (!started || p.t - prevT > 2) { g.moveTo(x, y); started = true; } else g.lineTo(x, y);  // break the line over gaps
-      prevT = p.t;
+    let started = false, prevT = 0, prevV = 0;
+    // break the line over gaps, and where an angle wraps around instead of drawing across the chart
+    const to = (t, v) => {
+      const x = xOf(t), y = yOf(v);
+      if (!started || t - prevT > gap || (cfg.wrap && Math.abs(v - prevV) > 180)) { g.moveTo(x, y); started = true; }
+      else g.lineTo(x, y);
+      prevT = t; prevV = v;
+    };
+    if (!dense) {
+      for (let i = i0; i < i1; i++) { const p = pts[i]; if (Number.isFinite(p[k])) to(p.t, p[k]); else started = false; }
+    } else {
+      let col = null, mn, mx, tmn, tmx;
+      const flush = () => { if (col === null) return; if (tmn <= tmx) { to(tmn, mn); to(tmx, mx); } else { to(tmx, mx); to(tmn, mn); } };
+      for (let i = i0; i < i1; i++) {
+        const p = pts[i], v = p[k];
+        if (!Number.isFinite(v)) { flush(); col = null; started = false; continue; }
+        const c = Math.floor(xOf(p.t));
+        if (c !== col) { flush(); col = c; mn = mx = v; tmn = tmx = p.t; }
+        else { if (v < mn) { mn = v; tmn = p.t; } if (v > mx) { mx = v; tmx = p.t; } }
+      }
+      flush();
     }
     g.stroke();
+  }
+
+  let near = null;
+  if (hoverT != null && pts.length) {
+    const j = Math.min(firstAt(pts, hoverT), pts.length - 1);
+    near = j > 0 && Math.abs(pts[j - 1].t - hoverT) < Math.abs(pts[j].t - hoverT) ? pts[j - 1] : pts[j];
+    if (near.t < t0 || near.t > t1) near = null;
+  }
+  if (near) {
+    const x = Math.round(xOf(near.t)) + 0.5;
+    g.strokeStyle = css('--muted'); g.lineWidth = 1; g.setLineDash([3, 3]);
+    g.beginPath(); g.moveTo(x, PAD.t); g.lineTo(x, PAD.t + ph); g.stroke();
+    g.setLineDash([]);
+    for (const [k, , color] of cfg.fields) {
+      if (!Number.isFinite(near[k])) continue;
+      g.fillStyle = css(color);
+      g.beginPath(); g.arc(xOf(near.t), yOf(near[k]), 3.5, 0, 2 * Math.PI); g.fill();
+    }
   }
   g.restore();
 
   if (cfg.need && V.pkt && !(V.pkt.flags & cfg.need[0])) {
     g.fillStyle = css('--muted'); g.font = `13px ${SANS}`;
     g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText(cfg.need[1], pad.l + pw / 2, pad.t + ph / 2);
+    g.fillText(cfg.need[1], PAD.l + pw / 2, PAD.t + ph / 2);
   }
+  return { near, pw };
 }
+
+// ---------- a chart opened large: scroll or pinch to zoom, drag to move ----------
+// `auto` keeps the view on what the small chart shows until a zoom or drag; `follow` keeps a zoomed view on now
+const CM = { c: null, t0: 0, t1: 0, auto: true, follow: false, hoverT: null, ptrs: new Map() };
+
+// everything the opened chart can move around in: the whole flight, or all the history kept
+function cmData(tNow) {
+  const fl = V.flight, hist = V.hist;
+  if (RANGE.mode === 'flight' && fl && fl.pts.length > 1) return chartSpan(tNow);
+  return { pts: hist, t0: hist.length ? hist[0].t : tNow - winS, t1: tNow, ref: tNow, now: true };
+}
+
+function openChart(c) {
+  CM.c = c; CM.hoverT = null; CM.auto = true;
+  $('cmTitle').innerHTML = `${c.cfg.title} <span class="mode">(${c.cfg.unit})</span>`;
+  $('cmLegend').innerHTML = c.cfg.fields.map(([, name, color]) => `<span><i style="background:var(${color})"></i>${name} <b>-</b></span>`).join('');
+  $('chartModal').showModal();
+  drawModal();
+}
+
+function cmFit(d) {                               // keep the view on the data; follow it again at the right edge
+  const lo = d.pts.length ? d.pts[0].t : d.t0, hi = Math.max(d.t1, lo + 1);
+  const w = Math.min(Math.max(CM.t1 - CM.t0, 0.5), Math.max(hi - lo, 10));
+  CM.t0 = Math.max(lo, Math.min(CM.t0, hi - w)); CM.t1 = CM.t0 + w;
+  CM.follow = !!d.now && CM.t1 >= hi - w * 0.02;
+  if (CM.follow) { CM.t1 = hi; CM.t0 = hi - w; }
+}
+
+function cmTimeAt(x) {
+  const pw = $('cmCanvas').clientWidth - PAD.l - PAD.r;
+  return CM.t0 + (x - PAD.l) / pw * (CM.t1 - CM.t0);
+}
+function cmZoom(factor, at) {
+  const d = cmData(V.clock());
+  if (CM.follow || (CM.auto && d.now)) at = d.t1;  // a live view zooms about now and stays live
+  CM.auto = false;
+  CM.t0 = at - (at - CM.t0) * factor; CM.t1 = at + (CM.t1 - at) * factor;
+  cmFit(d); drawModal();
+}
+function cmPan(dt) {
+  CM.auto = false;
+  CM.t0 += dt; CM.t1 += dt;
+  cmFit(cmData(V.clock())); drawModal();
+}
+
+function drawModal() {
+  if (!CM.c) return;
+  const t = V.clock(), d = cmData(t);
+  if (CM.auto) { const sp = chartSpan(t); CM.t0 = sp.t0; CM.t1 = sp.t1; }
+  else if (CM.follow) { const w = CM.t1 - CM.t0; CM.t1 = d.t1; CM.t0 = d.t1 - w; }
+  const res = drawSeries($('cmCanvas'), CM.c.cfg, d, CM.t0, CM.t1, CM.hoverT);
+  const pt = res && res.near ? res.near : V.pkt;
+  const vals = $('cmLegend').querySelectorAll('b');
+  CM.c.cfg.fields.forEach(([k], i) => {
+    const text = pt && Number.isFinite(pt[k]) ? pt[k].toFixed(CM.c.cfg.dp) : '-';
+    if (vals[i].textContent !== text) vals[i].textContent = text;
+  });
+  const at = res && res.near ? `at ${tickText(d, +(res.near.t - d.ref).toFixed(2))}` : CM.auto ? '' : CM.follow ? 'following live' : '';
+  if ($('cmAt').textContent !== at) $('cmAt').textContent = at;
+}
+
+(() => {
+  const cv = $('cmCanvas'), dlg = $('chartModal');
+  const xIn = e => e.clientX - cv.getBoundingClientRect().left;
+  cv.addEventListener('wheel', e => {
+    e.preventDefault();
+    const w = CM.t1 - CM.t0, pw = cv.clientWidth - PAD.l - PAD.r;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && !e.ctrlKey) cmPan(e.deltaX / pw * w);   // sideways scroll moves
+    else cmZoom(Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)), cmTimeAt(xIn(e)));       // scroll or pinch zooms
+  }, { passive: false });
+  cv.addEventListener('pointerdown', e => {
+    cv.setPointerCapture(e.pointerId);
+    CM.ptrs.set(e.pointerId, xIn(e));
+    cv.style.cursor = 'grabbing'; CM.hoverT = null;
+  });
+  cv.addEventListener('pointermove', e => {
+    const x = xIn(e);
+    if (!CM.ptrs.size) { CM.hoverT = cmTimeAt(x); drawModal(); return; }
+    const prev = new Map(CM.ptrs);
+    CM.ptrs.set(e.pointerId, x);
+    if (CM.ptrs.size === 1) {
+      const pw = cv.clientWidth - PAD.l - PAD.r;
+      cmPan(-(x - prev.get(e.pointerId)) / pw * (CM.t1 - CM.t0));
+    } else if (CM.ptrs.size === 2) {                // two fingers: pinch about the point between them
+      const [a, b] = [...prev.values()], [c, d] = [...CM.ptrs.values()];
+      if (Math.abs(c - d) > 10 && Math.abs(a - b) > 10) cmZoom(Math.abs(a - b) / Math.abs(c - d), cmTimeAt((c + d) / 2));
+    }
+  });
+  const up = e => { CM.ptrs.delete(e.pointerId); if (!CM.ptrs.size) cv.style.cursor = 'grab'; };
+  cv.addEventListener('pointerup', up);
+  cv.addEventListener('pointercancel', up);
+  cv.addEventListener('pointerleave', () => { if (!CM.ptrs.size) { CM.hoverT = null; drawModal(); } });
+  const reset = () => { CM.auto = true; CM.follow = false; CM.hoverT = null; drawModal(); };
+  cv.addEventListener('dblclick', reset);
+  $('cmReset').onclick = reset;
+  $('cmClose').onclick = () => dlg.close();
+  dlg.addEventListener('close', () => { CM.c = null; CM.ptrs.clear(); });
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });   // a click on the backdrop
+  dlg.addEventListener('keydown', e => {
+    const w = CM.t1 - CM.t0, mid = (CM.t0 + CM.t1) / 2;
+    if (e.key === 'ArrowLeft') cmPan(-w * 0.1);
+    else if (e.key === 'ArrowRight') cmPan(w * 0.1);
+    else if (e.key === '+' || e.key === '=') cmZoom(0.8, mid);
+    else if (e.key === '-') cmZoom(1.25, mid);
+    else if (e.key === '0') reset();
+    else return;
+    e.preventDefault();
+  });
+})();
 
 // ---------- attitude ----------
 // Rocket axes: x is the nose. World axes: x is up, y and z are level. The rocket sends yaw,
@@ -596,6 +806,8 @@ function shade(hex, k) {
 
 const deg = v => `${Math.round(v) || 0}°`;       // never "-0°"
 const wrap180 = a => ((a + 540) % 360) - 180;
+const pointOf = h => ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round(h / 45) % 8];   // short compass point
+const hdgText = h => `${Math.round(h) % 360}° ${pointOf(h)}`;
 const tiltDeg = p => Math.acos(Math.max(-1, Math.min(1, Math.cos(p.pitch * D2R) * Math.cos(p.yaw * D2R)))) / D2R;
 
 function drawAttitude(p) {
@@ -612,10 +824,12 @@ function drawAttitude(p) {
   if (has) for (const k of ['roll', 'pitch', 'yaw']) ATT[k] += wrap180(p[k] - ATT[k]) * 0.35;
   const legend = has
     ? `roll <b>${deg(p.roll)}</b> · pitch <b>${deg(p.pitch)}</b> · yaw <b>${deg(p.yaw)}</b> · tilt <b>${deg(tiltDeg(p))}</b>`
+      + (fin(p.hdg) ? ` · heading <b>${hdgText(p.hdg)}</b>` : '')
     : '';
   if ($('attLegend').innerHTML !== legend) $('attLegend').innerHTML = legend;
 
-  const scale = Math.min(w, h) / 2 / 1.35, cx = w / 2, cy = h / 2 + 4;
+  // sized so the near edge of the ring and its compass letters stay inside the canvas
+  const scale = Math.min(w, h) / 2 / 1.5, cx = w / 2, cy = h / 2 - 0.1 * scale;
   const toScreen = v => { const [x, y] = view(v); return [cx + x * scale, cy - y * scale]; };
 
   // level ring under the rocket and a dashed line straight up, so tilt reads against them
@@ -652,6 +866,17 @@ function drawAttitude(p) {
     g.closePath(); g.fill(); g.stroke();
   }
   g.globalAlpha = 1;
+  // compass points on the ring once the magnetometer has placed north; drawn over the rocket,
+  // outlined in the card colour, so N stays readable whichever side the camera is on
+  if (p && fin(p.northAz)) {
+    g.font = `600 11px ${SANS}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.lineWidth = 3; g.lineJoin = 'round'; g.strokeStyle = css('--panel');
+    ['N', 'E', 'S', 'W'].forEach((name, i) => {
+      const a = (p.northAz + 90 * i) * D2R, at = toScreen([-1.15, 1.08 * Math.cos(a), -1.08 * Math.sin(a)]);
+      g.fillStyle = css(i ? '--muted' : '--gold-text');
+      g.strokeText(name, ...at); g.fillText(name, ...at);
+    });
+  }
   g.fillStyle = css('--muted'); g.font = `11px ${SANS}`;
   g.textAlign = 'left'; g.textBaseline = 'alphabetic';
   g.fillText('drag to turn', 8, h - 8);
@@ -667,6 +892,7 @@ function handlePacket(p, t = now(), v = LIVE) {
   const hasAtt = 'roll' in p;                      // firmware from before the attitude filter has no angles
   const hasFlight = 'st' in p;                     // ...and before the flight estimate, no phase or velocity
   const hasBat = 'vbat' in p;                      // ...and before the battery reading
+  const hasHdg = fin(p.hdg);                       // null while the nose points straight up
   for (const k of CSV_COLS) if (!Number.isFinite(p[k])) p[k] = 0;   // a malformed packet can't break the charts
   v.lastPacketAt = t;
   p.amag = mag(p.ax, p.ay, p.az);
@@ -681,6 +907,8 @@ function handlePacket(p, t = now(), v = LIVE) {
   if (!(p.flags & F.IMU) || !hasAtt) p.roll = p.pitch = p.yaw = NaN;
   if (!hasFlight) p.st = p.vel = p.mvel = NaN;
   if (!hasBat) p.vbat = NaN;
+  if (!(p.flags & F.MAG)) p.hdg = p.magf = NaN;
+  if (!hasHdg) p.hdg = NaN;
   p.oldFw = !hasAtt;
   if (!(p.flags & F.GPS)) p.fix = 0;
   if (p.fix < 3) p.galt = p.gvu = NaN;
@@ -697,12 +925,22 @@ function handlePacket(p, t = now(), v = LIVE) {
     }
   }
 
+  // where north lies in the attitude view: the heading is absolute and the angles are relative
+  // to the pad, so the nose's bearing in each gives the turn between the two. Kept while the
+  // nose points straight up and the heading is unknown.
+  if (fin(p.hdg) && fin(p.roll)) {
+    const M = rotation(p.roll * D2R, p.pitch * D2R, p.yaw * D2R);
+    const az = Math.atan2(-M[2][0], M[1][0]) / D2R - p.hdg;
+    v.northAz = fin(v.northAz) ? v.northAz + wrap180(az - v.northAz) * 0.2 : az;   // steadied: at a slight lean it's noisy
+  }
+  p.northAz = fin(p.magf) ? v.northAz : NaN;
+
   v.pkt = p;
   v.peak = Math.max(v.peak, p.peak);
   const h = { t, st: p.st };
   for (const k of HIST_KEYS) h[k] = p[k];
   v.hist.push(h);
-  while (v.hist.length && v.hist[0].t < t - WINDOW_S - 2) v.hist.shift();
+  while (v.hist.length && v.hist[0].t < t - HIST_S) v.hist.shift();
   trackFlight(v, p, h);
 }
 
@@ -750,7 +988,7 @@ function handleLine(line) {
   if (OPERATOR && !SHARE_POSITION && 'lat' in obj) { const { lat, lon, ...rest } = obj; out = JSON.stringify(rest); }
   if (obj.hb) S.hb = obj;
   else if ('seq' in obj) {
-    S.rows.push([new Date().toISOString(), ...CSV_COLS.map(k => fin(obj[k]) ? obj[k] : 0)]);
+    S.rows.push([new Date().toISOString(), ...CSV_COLS.map(k => fin(obj[k]) ? obj[k] : '')]);   // blank, like the server's
     $('saveBtn').disabled = false;
     handlePacket(obj);
   }
@@ -1073,12 +1311,15 @@ function startDemo() {
 
     const f = st === 4 || st === 0 ? 1 : (a + G) / G;     // what an accelerometer reads along the rocket
     // attitude: spins up off the rail, arcs over a little while coasting, swings under the chute, lies down on landing
-    if (st === 0) { roll = pitch = yaw = 0; spinRate = 0; }
+    if (st === 0) { roll = 0; pitch = 3; yaw = -2; spinRate = 0; }   // the rail is canted a little
     if (st === 1 || st === 2) { spinRate = Math.min(spinRate + (st === 1 ? 90 : -8) * dt, 200); pitch += 1.2 * dt; yaw += 0.5 * dt; }
     if (st === 3) { spinRate = 25; pitch = 25 * Math.sin(t * 1.3); yaw = 18 * Math.cos(t * 0.9); }
     if (st === 4) { spinRate = 0; pitch = 88; yaw = 20; }
     roll = wrap180(roll + Math.max(spinRate, 0) * dt);
     const spin = st === 1 || st === 2 ? 60 : st === 3 ? 25 : 0.5;
+    // compass: north sits 70 deg around from the pad's reference; unknown with the nose straight up
+    const M = rotation(roll * D2R, pitch * D2R, yaw * D2R);
+    const hdg = M[0][0] > Math.cos(3 * D2R) ? null : +(((Math.atan2(-M[2][0], M[1][0]) / D2R - 70) % 360 + 360) % 360).toFixed(1);
     const ax = rnd(0.02) + (st === 3 ? 0.3 * Math.sin(t * 2) : 0), ay = 0.02 + rnd(0.02), az = f + rnd(0.03);
     const msl = PAD_MSL + h, pres = 1013.25 * Math.pow(1 - msl / 44330, 5.255);
     const airt = 22 - 6.5 * h / 1000;
@@ -1090,7 +1331,7 @@ function startDemo() {
       ax: +ax.toFixed(3), ay: +ay.toFixed(3), az: +az.toFixed(3),
       gx: rnd(spin) + 1.2, gy: rnd(spin), gz: rnd(spin) - 0.5,
       hx: rnd(0.2), hy: rnd(0.2), hz: +(az + rnd(0.3)).toFixed(2),
-      peak: +Math.abs(az).toFixed(1), temp: 30.8 + rnd(0.1), flags: 31,
+      peak: +Math.abs(az).toFixed(1), temp: 30.8 + rnd(0.1), flags: 63,
       st, alt: +(h + rnd(0.3)).toFixed(2), vel: +(v + rnd(0.2)).toFixed(1), malt: Math.round(malt), mvel: +mvel.toFixed(1),
       pres: +pres.toFixed(2), airt: +(airt + rnd(0.05)).toFixed(2), rh: +(45 + rnd(0.5)).toFixed(2),
       fix: gpsOk ? 3 : 0, sats: gpsOk ? 12 : 4,
@@ -1099,9 +1340,10 @@ function startDemo() {
       roll: +roll.toFixed(1), pitch: +(pitch + rnd(0.3)).toFixed(1), yaw: +(yaw + rnd(0.3)).toFixed(1),
       rssi: +rssi.toFixed(1), snr: +(9 - Math.max(0, -rssi - 90) * 0.5 + rnd(1)).toFixed(1),
       vbat: +(3.95 - t / 3000 - (st === 1 ? 0.15 : 0) + rnd(0.005)).toFixed(2),   // sags under the motor's vibration and the radio
+      hdg, magf: Math.round(497 + rnd(3)),
       loss: +(100 * lost / seq).toFixed(2), demo: 1,       // the relay doesn't record demo packets
     }));
-    if (seq % 10 === 0) handleLine(JSON.stringify({ hb: 1, live: 1, sf: 8, freq: 915.0, bw: 500, crc: 0, bad: 0, oled: 60, age: 0, plen: 71, badlen: 0 }));
+    if (seq % 10 === 0) handleLine(JSON.stringify({ hb: 1, live: 1, sf: 8, freq: 915.0, bw: 500, crc: 0, bad: 0, oled: 60, age: 0, plen: 77, badlen: 0 }));
   }, 100);
 }
 
@@ -1112,7 +1354,7 @@ function stopDemo() {
 }
 
 // ---------- render ----------
-const SENSORS = [[F.IMU, 'IMU'], [F.HIGH_G, 'high-g'], [F.BARO, 'baro'], [F.SHT, 'SHT45'], [F.GPS, 'GPS']];
+const SENSORS = [[F.IMU, 'IMU'], [F.HIGH_G, 'high-g'], [F.BARO, 'baro'], [F.SHT, 'SHT45'], [F.GPS, 'GPS'], [F.MAG, 'mag']];
 const fin = Number.isFinite;
 const num = (v, dp, unit) => fin(v) ? `${v.toFixed(dp)}<small>${unit}</small>` : '-';
 
@@ -1180,6 +1422,14 @@ function lipoPct(cell) {
   return 0;
 }
 
+function renderHeading(p) {
+  if (!fin(p.magf)) { $('tHdg').textContent = '-'; setText('tHdgSub', 'no magnetometer'); $('tHdgSub').classList.remove('warnc'); return; }
+  $('tHdg').innerHTML = fin(p.hdg) ? `${Math.round(p.hdg) % 360}°<small>${pointOf(p.hdg)}</small>` : '-';
+  const odd = p.magf < 200 || p.magf > 750;        // the Earth's field is 250 to 650 mG anywhere
+  setText('tHdgSub', (fin(p.hdg) ? '' : 'nose straight up, ') + `${p.magf.toFixed(0)} mG` + (odd ? ', field disturbed?' : ' field'));
+  $('tHdgSub').classList.toggle('warnc', odd);
+}
+
 function renderBattery(p) {
   const v = p.vbat;
   if (!fin(v)) { $('tBat').textContent = '-'; setText('tBatSub', 'needs new firmware'); $('tBatSub').classList.remove('warnc'); return; }
@@ -1198,6 +1448,7 @@ function setStatus(text, cls) {
   el.className = 'pill ' + cls;
 }
 
+let lastChartsAt = 0;
 function render() {
   const tl = now(), t = V.clock();
   const live = S.connected || S.demoTimer;
@@ -1243,8 +1494,8 @@ function render() {
     $('tAcc').innerHTML = `${p.amag.toFixed(2)}<small>g</small>`;
     $('tTilt').textContent = fin(p.pitch) ? `tilt ${tiltDeg(p).toFixed(0)}° from vertical` : '';
     $('tPeak').innerHTML = `${V.peak.toFixed(1)}<small>g</small>`;
-    $('tTemp').innerHTML = `${p.temp.toFixed(1)}<small>°C</small>`;
     renderBattery(p);
+    renderHeading(p);
     $('tUp').innerHTML = `${p.t.toFixed(0)}<small>s</small>`;
     renderFlight(p);
     $('fSens').innerHTML = SENSORS.map(([bit, name]) =>
@@ -1259,20 +1510,25 @@ function render() {
     if (OPERATOR && hb.badlen) showMsg(MISMATCH_MSG(hb.badlen));
     else if ($('msg').textContent.startsWith('The rocket is sending')) showMsg('');
     $('tErr').textContent = `crc ${hb.crc} · bad ${hb.bad}`;
-    $('fOled').textContent = hb.oled ? `OLED at 0x${hb.oled.toString(16).toUpperCase()}` : 'not found';
   }
 
   renderClock(p, t);
   renderRange();
   renderSummary();
   renderRecovery(t);
-  chartEls.forEach(c => drawChart(c, t));
+  const sp = chartSpan(t);
+  const many = firstAt(sp.pts, sp.t1) - firstAt(sp.pts, sp.t0) > 4000;   // long spans redraw 4 times a second
+  if (!many || tl - lastChartsAt > 0.25) {
+    lastChartsAt = tl;
+    chartEls.forEach(c => drawSeries(c.canvas, c.cfg, sp, sp.t0, sp.t1));
+  }
+  drawModal();
   drawAttitude(p);
 }
 
 // ---------- chart range: last 30 s or the whole flight ----------
 // Switches to the whole flight by itself on landing, unless someone picked a range during that flight.
-const RANGE = { mode: '30', picked: false, flight: null };
+const RANGE = { mode: 'win', picked: false, flight: null };
 
 function setRange(mode, picked = false) {
   RANGE.mode = mode;
@@ -1284,15 +1540,15 @@ function renderRange() {
   const f = V.flight;
   if (f !== RANGE.flight) {                      // a new flight (or a replay) starts fresh
     RANGE.flight = f; RANGE.picked = false;
-    if (!f && RANGE.mode === 'flight') setRange('30');
   }
   if (f && f.landRx != null && !f.autoRange) {
     f.autoRange = true;
     if (!RANGE.picked) setRange('flight');
   }
-  const btn = document.querySelector('#rangeSeg [data-range="flight"]');
-  btn.disabled = !f;
-  const note = !f ? 'Whole flight fills in from liftoff' : f.launchRx == null ? 'Joined after liftoff, so the start is missing' : '';
+  const kept = V.hist.length > 1 ? V.hist.at(-1).t - V.hist[0].t : 0;
+  const note = RANGE.mode !== 'flight' ? ''
+    : !f ? `No liftoff yet, so this is everything so far${kept > HIST_S - 60 ? ' (the last hour)' : ''}`
+    : f.launchRx == null ? 'Joined after liftoff, so the start is missing' : '';
   if ($('rangeNote').textContent !== note) $('rangeNote').textContent = note;
 }
 
@@ -1604,6 +1860,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && REC.open) 
 $('recOpen').onclick = () => $('recFile').click();
 $('recFile').onchange = e => { replayFile(e.target.files[0]); e.target.value = ''; };
 document.querySelectorAll('#rangeSeg button').forEach(b => { b.onclick = () => setRange(b.dataset.range, true); });
+const winText = v => v < 60 ? `${v} s` : `${v / 60} min`;
+$('winSlider').value = WIN_STOPS.indexOf(winS);
+$('winLabel').textContent = winText(winS);
+$('winSlider').oninput = e => {
+  winS = WIN_STOPS[+e.target.value];
+  $('winLabel').textContent = winText(winS);
+  e.target.setAttribute('aria-valuetext', winText(winS));
+  try { localStorage.setItem('uncc-window', winS); } catch {}
+  setRange('win', true);
+};
 $('sumHide').onclick = () => { if (V.flight) V.flight.dismissed = true; };
 $('rpPlay').onclick = () => setPlaying(!RP.playing);
 $('rpExit').onclick = exitReplay;
@@ -1627,7 +1893,7 @@ if (OPERATOR) {
   else showMsg('This browser has no Web Serial support, so Connect will not work here. Open this page in Chrome or Edge. Demo still works.');
   resumeBroadcast();
 } else {
-  for (const id of ['connectBtn', 'bcastBtn', 'demoBtn', 'fOledWrap']) $(id).hidden = true;
+  for (const id of ['connectBtn', 'bcastBtn', 'demoBtn']) $(id).hidden = true;
   if (!SHARE_POSITION) $('posTile').hidden = true;
   $('title').innerHTML = '<span>UNCC</span> Rocketry Live Telemetry';
   document.title = 'UNCC Rocketry Live Telemetry';

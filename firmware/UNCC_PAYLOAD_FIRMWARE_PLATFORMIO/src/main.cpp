@@ -46,8 +46,8 @@ uint8_t gpsI2C = 0;                               // 0x42 when the GPS answers o
 enum Phase : uint8_t { PAD, BOOST, COAST, DESCENT, LANDED };
 
 struct __attribute__((packed)) Telem {
-  uint8_t  magic;      // 'W' ('V' was the 71-byte packet without the battery, 'U' the 30-byte IMU-only one)
-  uint8_t  flags;      // bit0 IMU, bit1 high-g, bit2 baro, bit3 SHT45, bit4 GPS talking
+  uint8_t  magic;      // 'X' ('W' was 73 bytes without the magnetometer, 'V' 71 without the battery)
+  uint8_t  flags;      // bit0 IMU, bit1 high-g, bit2 baro, bit3 SHT45, bit4 GPS talking, bit5 magnetometer
   uint16_t seq;
   uint32_t ms;
   int16_t  acc[3];     // LSM6DSO32 accel, 0.976 mg/LSB (+-32 g)
@@ -71,10 +71,13 @@ struct __attribute__((packed)) Telem {
   uint16_t gpsSpd;     // GPS ground speed, 0.1 m/s
   int16_t  roll, pitch, yaw;   // attitude, 0.01 deg; all 0 standing on the pad
   uint16_t vbat;       // battery, mV
+  uint16_t heading;    // compass bearing the nose leans toward, 0.01 deg from magnetic north; 0xFFFF unknown
+  uint16_t magField;   // field strength, mG (the Earth's is about 500)
 };
-static_assert(sizeof(Telem) == 73, "base station expects 73 bytes");
+// 77 bytes is the same airtime as 73 at SF12 and 5 symbols (2.6 ms) more at SF8
+static_assert(sizeof(Telem) == 77, "base station expects 77 bytes");
 
-Telem pkt = {'W'};
+Telem pkt = {'X'};
 float peakG = 0;
 volatile bool txDone = false;
 bool txBusy = false;
@@ -155,7 +158,10 @@ uint32_t baroCmd(uint8_t cmd, uint8_t n) {
     Wire.beginTransmission(baro.addr);
     Wire.write(cmd);
     Wire.endTransmission();
-    if (n) { Wire.requestFrom(baro.addr, n); for (uint8_t i = 0; i < n; i++) v = v << 8 | Wire.read(); }
+    if (n) {                                      // a short read is no reading, not 0xFF filler
+      if (Wire.requestFrom(baro.addr, n) != n) return 0;
+      for (uint8_t i = 0; i < n; i++) v = v << 8 | Wire.read();
+    }
   }
   return v;
 }
@@ -306,8 +312,11 @@ bool gpsTalking() { return gpsLastPvt && millis() - gpsLastPvt < 3000; }
 // 400 Hz and the barometer corrects it. Without a barometer it is accel only and drifts, so
 // velocity is pinned to zero whenever the board sits still on the pad or after landing, and
 // altitude to zero while it sits on the pad.
-// "Up" is whichever way gravity pulled while the board sat still on the pad, so this assumes
-// the rocket flies roughly along the axis it stood on.
+// Vertical acceleration comes from the IMU turned into the world frame by the attitude filter,
+// so turning the board, or the rocket arcing over, doesn't read as climbing or falling. Only the
+// high-g accelerometer (used past the IMU's 30 g, or with no IMU) has no attitude to go by: for
+// it "up" is whichever way gravity pulled while it sat still, which assumes the rocket flies
+// roughly along the axis it stood on, as it does under that kind of thrust.
 struct Up { float x, y, z; bool ok; };            // gravity as read at rest, in sensor axes
 Up upImu = {}, upHig = {};
 float kh = 0, kv = 0, P00 = 1, P01 = 0, P11 = 1;
@@ -342,15 +351,22 @@ void kfBaro(float h) {
   P11 -= k1 * P01; P00 *= 1 - k0; P01 *= 1 - k0;
 }
 
-void estimate(float x, float y, float z, float hx, float hy, float hz, float gyro, float dt) {
+// aUp: the IMU's acceleration along world up, gravity included, in g (NAN without an IMU)
+void estimate(float x, float y, float z, float hx, float hy, float hz, float gyro, float aUp, float dt) {
   float lsm = sqrtf(x * x + y * y + z * z), hi = sqrtf(hx * hx + hy * hy + hz * hz);
   bool useImu = imu.bus && lsm < 30, ok = imu.bus || hig.bus;
   if (!ok) return;
 
-  // still = reading what gravity reads, not rotating, for half a second
+  // still = a steady reading of about 1 g and not rotating, for half a second. The accelerometer
+  // reads gravity a few % differently depending on which way it lies, so "about 1 g" is loose
+  // and steadiness against its own 0.25 s average does the work. It is checked against 1 g, not
+  // the learned up vector: while that re-learns after the board is turned it averages old and new
+  // directions and comes up short, which would stop it counting as still halfway through.
   const Up &ref = imu.bus ? upImu : upHig;
   float g = sqrtf(ref.x * ref.x + ref.y * ref.y + ref.z * ref.z);
-  bool calm = imu.bus ? fabsf(lsm - g) < 0.05f && gyro < 8 : fabsf(hi - g) < 0.3f;
+  static float lsmSlow = 1;
+  lsmSlow += 0.01f * (lsm - lsmSlow);
+  bool calm = imu.bus ? fabsf(lsm - 1) < 0.15f && fabsf(lsm - lsmSlow) < 0.02f && gyro < 8 : fabsf(hi - g) < 0.3f;
   stillN = calm ? stillN + 1 : 0;
   bool still = stillN >= 200 || !ref.ok;
   bool grounded = phase == PAD || phase == LANDED;
@@ -359,7 +375,10 @@ void estimate(float x, float y, float z, float hx, float hy, float hz, float gyr
     if (hig.bus) learn(upHig, hx, hy, hz);
   }
 
-  float a = useImu ? upAccel(upImu, x, y, z) : upAccel(upHig, hx, hy, hz);
+  // what the IMU reads for 1 g lying the way it lies now (a few % off, and not the same every way)
+  static float gRef = 0;
+  if (still && grounded && imu.bus) gRef = gRef ? gRef + 0.002f * (lsm - gRef) : lsm;
+  float a = useImu ? (aUp - (gRef ? gRef : 1)) * G0 : upAccel(upHig, hx, hy, hz);
   kfPredict(a, dt);
   if (still && grounded) { kv = 0; P01 = 0; P11 = 0.01f; }   // zero-velocity update
   // with no barometer nothing corrects the altitude, and sitting on the pad it is zero by definition
@@ -372,8 +391,26 @@ void estimate(float x, float y, float z, float hx, float hy, float hz, float gyr
     case COAST: falling = kv < 0 ? falling + 1 : 0; if (falling >= 80) phase = DESCENT; break;  // apogee
     default: break;
   }
-  if (phase != PAD && phase != LANDED && stillN >= 2000) phase = LANDED;   // still for 5 s
+  // still for 5 s; hanging steady under the chute reads 1 g too, so with a barometer it must also
+  // have stopped coming down
+  if (phase != PAD && phase != LANDED && stillN >= 2000 && (!baro.bus || fabsf(kv) < 2)) phase = LANDED;
   if (phase != PAD) { maxAlt = max(maxAlt, kh); maxVel = max(maxVel, kv); }
+}
+
+// One barometer altitude into the filter. Near Mach 1 the static port reads wrong, so the filter
+// coasts on the accels then, but only in flight: anywhere else a velocity that high is the filter
+// gone wrong, and the barometer is what brings it back. A reading far off what the filter expects
+// (a glitch on the bus) is skipped, unless they stay that far off for about a second, which means
+// the filter is the one that's wrong; then it starts over from the barometer.
+void baroAlt(float h) {
+  static uint8_t skipped = 0;
+  if ((phase == BOOST || phase == COAST) && fabsf(kv) > 200) return;
+  float y = h - kh;
+  bool far = fabsf(y) > 30 && y * y > 36 * (P00 + 0.25f);   // more than 30 m and 6 sigma off
+  if (far && skipped < 100) { skipped++; return; }
+  if (far) { kh = h; P00 = 0.25f; P01 = 0; }
+  skipped = 0;
+  kfBaro(h);
 }
 
 void baroPoll() {
@@ -385,20 +422,25 @@ void baroPoll() {
   baroStep = (baroStep + 1) % 10;
   baroCmd(baroStep == 0 ? 0x58 : 0x48, 0);        // next conversion: D2 (temp) or D1 (pressure), OSR 4096
   baroAt = micros();
-  if (!raw) return;
+  if (!raw || raw >= 0xFFFFFF) return;            // nothing converted, or a bus that read all 1s
   if (wasTemp) { baroD2 = raw; return; }
   if (!baroD2) return;
 
   int32_t t;
   uint32_t pa = baroCompute(raw, baroD2, &t);
+  if (t < -4000 || t > 8500 || pa < 1000 || pa > 120000) return;   // outside the sensor's range: garbled
   pkt.pres = pa;
-  if (zeroN < 32) {                               // the pad is altitude zero: average the first 32 readings
-    paSum += pa;
-    if (++zeroN == 32) { p0 = paSum / 32.0f; kh = 0; P00 = 1; }
+  // The pad is altitude zero. The first readings after power-up run low while the sensor settles
+  // (by about 1 hPa, which is 7 m), so skip half a second, then average 32. After that, follow
+  // the pressure (about a 10 s average) whenever the board sits still on the pad, so being moved
+  // or the weather drifting doesn't show up as height. Frozen from liftoff.
+  if (zeroN < 50 + 32) {
+    if (++zeroN > 50) paSum += pa;
+    if (zeroN == 50 + 32) { p0 = paSum / 32.0f; kh = 0; P00 = 1; }
     return;
   }
-  float h = 44330.0f * (1 - powf(pa / p0, 0.190295f));
-  if (fabsf(kv) < 200) kfBaro(h);                 // near Mach 1 the static port reads wrong, so coast on the accels
+  if (phase == PAD && stillN >= 200) p0 += 0.001f * (pa - p0);
+  baroAlt(44330.0f * (1 - powf(pa / p0, 0.190295f)));
 }
 
 void shtPoll() {
@@ -417,16 +459,189 @@ void shtPoll() {
   }
 }
 
+// ---------- MMC5983MA magnetometer ----------
+// I2C at 0x30, 18 bits, 100 readings a second, with a SET pulse every 100 readings to keep the
+// sensor magnetized the same way. Two calibrations:
+//  - pad, automatic: SET, measure, RESET, measure. The field flips sign between the two and the
+//    sensor's own offset does not, so their average is the offset. Runs at boot and every 30 s
+//    while the board sits still on the pad, which follows the offset as the sensor warms up.
+//  - bench, by hand: send 'm' over USB serial and turn the payload through every direction for
+//    20 s. It prints the hard-iron offsets (battery, screws, magnetized parts near the sensor) and
+//    the mapping from magnetometer to IMU axes, to paste in below. The pad can't learn these
+//    because the rocket can't turn on the rail.
+const uint8_t MMC = 0x30;
+const int8_t magAxes[3] = {1, 2, 3};              // magnetometer axis behind IMU x, y, z: 1-based, signed
+const float magHard[3] = {0, 0, 0};               // gauss, magnetometer axes
+const float magScale[3] = {1, 1, 1};
+bool mmcFound = false;
+float mmcOfs[3] = {131072, 131072, 131072};       // counts; 131072 is the nominal zero
+float magImu[3];                                  // calibrated field in IMU axes, gauss
+uint32_t magAt = 0;                               // millis of the last reading
+uint8_t mmcStep = 0;                              // 0 running, 1-6 offset calibration
+uint32_t mmcStepAt = 0, mmcLastCal = 0, mmcSet[3];
+
+void mmcWrite(uint8_t reg, uint8_t v) { Wire.beginTransmission(MMC); Wire.write(reg); Wire.write(v); Wire.endTransmission(); }
+
+bool mmcRead(uint32_t *c) {                       // raw 18-bit counts
+  Wire.beginTransmission(MMC); Wire.write(0x00); Wire.endTransmission(false);
+  if (Wire.requestFrom(MMC, (uint8_t)7) != 7) return false;
+  uint8_t b[7];
+  for (int i = 0; i < 7; i++) b[i] = Wire.read();
+  for (int i = 0; i < 3; i++) c[i] = (uint32_t)b[2 * i] << 10 | b[2 * i + 1] << 2 | (b[6] >> (6 - 2 * i) & 3);
+  return true;
+}
+
+bool detectMmc() {
+  if (!i2cAck(MMC)) return false;
+  Wire.beginTransmission(MMC); Wire.write(0x2F); Wire.endTransmission(false);   // product ID
+  if (Wire.requestFrom(MMC, (uint8_t)1) != 1 || Wire.read() != 0x30) return false;
+  mmcWrite(0x0A, 0x80); delay(15);                // software reset, 10 ms power-on time
+  mmcWrite(0x0A, 0x01);                           // 4 ms measurements (200 Hz bandwidth, 0.6 mG noise)
+  return true;
+}
+
+void mmcRun() {
+  mmcWrite(0x09, 0x20);                           // Auto_SR_en, needed for the periodic SET
+  mmcWrite(0x0B, 0x80 | 0x30 | 0x08 | 0x05);      // periodic SET every 100, continuous, 100 Hz
+}
+
+void mmcCalStep() {                               // the pad offset calibration, one step per call
+  uint32_t c[3], dt = millis() - mmcStepAt;
+  if (mmcStep > 1 && dt > 50) { mmcRun(); mmcStep = 0; return; }   // the sensor stopped answering
+  switch (mmcStep) {
+    case 1: mmcWrite(0x0B, 0); mmcWrite(0x09, 0x08); break;               // stop, SET
+    case 2: if (dt < 1) return; mmcWrite(0x09, 0x01); break;              // measure
+    case 3: if (dt < 6 || !mmcRead(mmcSet)) return; mmcWrite(0x09, 0x10); break;   // RESET
+    case 4: if (dt < 1) return; mmcWrite(0x09, 0x01); break;              // measure
+    case 5:
+      if (dt < 6 || !mmcRead(c)) return;
+      for (int i = 0; i < 3; i++) mmcOfs[i] = (mmcSet[i] + c[i]) / 2.0f;
+      mmcWrite(0x09, 0x08);                       // SET again, the polarity continuous mode runs in
+      mmcLastCal = millis();
+      break;
+    case 6: if (dt < 1) return; mmcRun(); mmcStep = 0; return;
+  }
+  mmcStep++;
+  mmcStepAt = millis();
+}
+
+// bench calibration: field extremes on each axis for the hard iron, and gravity/field pairs
+// for the axis mapping. The angle between gravity and the field is the same whichever way the
+// payload is turned, but only when the two sensors' axes are matched up right.
+struct MagPair { float g[3], m[3]; };
+MagPair bench[200];
+uint16_t benchN = 0;
+uint32_t benchUntil = 0;
+float benchMin[3], benchMax[3];
+
+void benchStart() {
+  for (int i = 0; i < 3; i++) { benchMin[i] = 1e9f; benchMax[i] = -1e9f; }
+  benchN = 0;
+  benchUntil = millis() + 20000;
+  Serial.println("\nmagnetometer calibration: turn the payload slowly through every direction for 20 s,"
+                 " away from steel and laptops");
+}
+
+void benchFinish() {
+  benchUntil = 0;
+  float hard[3], r[3], rMax = 0;
+  for (int i = 0; i < 3; i++) {
+    hard[i] = (benchMax[i] + benchMin[i]) / 2;
+    r[i] = (benchMax[i] - benchMin[i]) / 2;
+    rMax = max(rMax, r[i]);
+  }
+  float rAvg = (r[0] + r[1] + r[2]) / 3, rMin = min(r[0], min(r[1], r[2]));
+  Serial.println("\nmagnetometer calibration done");
+  if (rMin < 0.7f * rMax || rMax < 0.15f)
+    Serial.println("  WARNING: some axis barely moved, turn it through more directions and send 'm' again");
+  if (rMin < 0.05f) { Serial.println("  not enough movement to calibrate, nothing changed"); return; }
+
+  // try all 48 ways the axes could line up, keep the one where the gravity/field angle holds
+  // steadiest; of a mapping and its mirror image, the field dips down in the northern hemisphere
+  static const uint8_t perms[6][3] = {{0, 1, 2}, {0, 2, 1}, {1, 0, 2}, {1, 2, 0}, {2, 0, 1}, {2, 1, 0}};
+  int8_t best[3] = {0, 0, 0};
+  float bestSd = 1e9f, bestDip = 0, curSd = -1;
+  for (int p = 0; p < 6 && benchN >= 20; p++)
+    for (int sg = 0; sg < 8; sg++) {
+      int8_t ax[3];
+      for (int i = 0; i < 3; i++) ax[i] = (sg >> i & 1) ? -(perms[p][i] + 1) : perms[p][i] + 1;
+      float sum = 0, sum2 = 0;
+      for (uint16_t j = 0; j < benchN; j++) {
+        float m[3], d = 0, n = 0;
+        for (int i = 0; i < 3; i++) {
+          int k = abs(ax[i]) - 1;
+          m[i] = (bench[j].m[k] - hard[k]) * rAvg / r[k] * (ax[i] > 0 ? 1 : -1);
+          n += m[i] * m[i];
+        }
+        for (int i = 0; i < 3; i++) d += bench[j].g[i] * m[i];
+        d /= sqrtf(n);
+        sum += d; sum2 += d * d;
+      }
+      float mean = sum / benchN, sd = sqrtf(max(0.0f, sum2 / benchN - mean * mean));
+      if (ax[0] == magAxes[0] && ax[1] == magAxes[1] && ax[2] == magAxes[2]) curSd = sd;
+      if (mean < 0 && sd < bestSd) { bestSd = sd; bestDip = -asinf(constrain(mean, -1.0f, 1.0f)) * RAD_TO_DEG; memcpy(best, ax, 3); }
+    }
+  Serial.println("  paste these over the three lines in the magnetometer section of main.cpp:");
+  if (best[0]) Serial.printf("const int8_t magAxes[3] = {%d, %d, %d};\n", best[0], best[1], best[2]);
+  else Serial.printf("const int8_t magAxes[3] = {%d, %d, %d};   // unchanged: not enough steady samples\n",
+                     magAxes[0], magAxes[1], magAxes[2]);
+  Serial.printf("const float magHard[3] = {%.4ff, %.4ff, %.4ff};\n", hard[0], hard[1], hard[2]);
+  Serial.printf("const float magScale[3] = {%.3ff, %.3ff, %.3ff};\n", rAvg / r[0], rAvg / r[1], rAvg / r[2]);
+  if (best[0]) Serial.printf("  field %.0f mG, dipping %.0f deg; the axis fit holds the dip to +-%.1f deg (current mapping: %.1f)\n",
+                             rAvg * 1000, bestDip, asinf(min(bestSd, 1.0f)) * RAD_TO_DEG,
+                             curSd < 0 ? NAN : asinf(min(curSd, 1.0f)) * RAD_TO_DEG);
+}
+
+void benchSample(const float *m) {               // m: field in magnetometer axes, before hard iron
+  static uint32_t last = 0;
+  for (int i = 0; i < 3; i++) { benchMin[i] = min(benchMin[i], m[i]); benchMax[i] = max(benchMax[i], m[i]); }
+  float a[3], n = 0, w = 0;
+  for (int i = 0; i < 3; i++) {
+    a[i] = pkt.acc[i] * 0.000976f; n += a[i] * a[i];
+    w += sq(pkt.gyr[i] * 0.07f);
+  }
+  n = sqrtf(n);
+  if (imu.bus && benchN < 200 && millis() - last >= 90 && fabsf(n - 1) < 0.05f && w < 60 * 60) {
+    last = millis();                              // only while turning slowly, so the accel reads gravity
+    for (int i = 0; i < 3; i++) { bench[benchN].g[i] = a[i] / n; bench[benchN].m[i] = m[i]; }
+    benchN++;
+  }
+  if ((int32_t)(millis() - benchUntil) >= 0) benchFinish();
+}
+
+void magPoll() {
+  static uint32_t at = 0;
+  if (!mmcFound) return;
+  if (mmcStep) { mmcCalStep(); return; }
+  if (phase == PAD && stillN >= 200 && !benchUntil && millis() - mmcLastCal > 30000) { mmcStep = 1; mmcCalStep(); return; }
+  if (millis() - at < 10) return;
+  at = millis();
+  uint32_t c[3];
+  if (!mmcRead(c)) return;
+  float m[3];
+  for (int i = 0; i < 3; i++) m[i] = (c[i] - mmcOfs[i]) / 16384.0f;   // 16384 counts per gauss
+  if (benchUntil) benchSample(m);
+  for (int i = 0; i < 3; i++) m[i] = (m[i] - magHard[i]) * magScale[i];
+  for (int i = 0; i < 3; i++) { int k = abs(magAxes[i]) - 1; magImu[i] = magAxes[i] > 0 ? m[k] : -m[k]; }
+  magAt = millis();
+}
+
 // ---------- attitude ----------
 // Mahony filter: the gyro is integrated at 400 Hz, and gravity pulls pitch and yaw back
 // whenever the accelerometer reads about 1 g (never during boost or coast, when thrust and
-// drag swamp gravity). Gravity can't see a vertical rocket's roll and there is no
-// magnetometer, so roll comes from the gyro alone and drifts slowly.
-// The nose is a fixed IMU axis, set by how the board is mounted. Pointing that axis straight
-// up reads 0, 0, 0.
+// drag swamp gravity). Gravity can't see a vertical rocket's roll, so the magnetometer holds
+// that one, in every phase: it only ever turns the estimate about the vertical, so a disturbed
+// field can't tilt it, and readings whose strength or dip stray from what the pad saw are
+// skipped. Without a magnetometer roll comes from the gyro alone and drifts slowly.
+// With the magnetometer the world frame is x up, y magnetic north, z west.
+// The nose is a fixed IMU axis, set by how the board is mounted. Roll, pitch and yaw are sent
+// relative to how the airframe sat when it first settled on the pad, so they read 0, 0, 0 there,
+// and turning it afterwards, on the pad or in flight, shows as roll.
 const int noseAxis = 0, noseSign = -1;           // -X of the LSM6DSO32 points at the nose
 float q0 = 1, q1 = 0, q2 = 0, q3 = 0;             // rocket body to world, world x is up
 float gb[3] = {0, 0, 0};                          // gyro bias in rocket axes, rad/s
+float magRef = 0, magRefUp = 0;                   // field strength (G) and its up share on the pad
+float padTurn = 0;                                // airframe turn about the vertical on the pad, rad
 
 void toRocket(const float *v, float *r) {         // IMU axes to rocket axes, x = nose, right-handed
   int k = noseAxis, a = (k + 1) % 3, b = (k + 2) % 3;
@@ -451,6 +666,37 @@ void attitude(const float *accImu, const float *gyrImuDps, bool still, float dt)
     w[1] += kp * (az * vx - ax * vz);
     w[2] += kp * (ax * vy - ay * vx);
   }
+  if (mmcFound && millis() - magAt < 100) {
+    float m[3];
+    toRocket(magImu, m);
+    float mn = sqrtf(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
+    if (mn > 0.05f) {
+      for (int i = 0; i < 3; i++) m[i] /= mn;
+      float r0[3] = {1 - 2 * (q2 * q2 + q3 * q3), 2 * (q1 * q2 - q0 * q3), 2 * (q1 * q3 + q0 * q2)};   // up, in body axes
+      float r1[3] = {2 * (q1 * q2 + q0 * q3), 1 - 2 * (q1 * q1 + q3 * q3), 2 * (q2 * q3 - q0 * q1)};   // north
+      float r2[3] = {2 * (q1 * q3 - q0 * q2), 2 * (q2 * q3 + q0 * q1), 1 - 2 * (q1 * q1 + q2 * q2)};   // west
+      float up = r0[0] * m[0] + r0[1] * m[1] + r0[2] * m[2];   // field in the world frame
+      float hy = r1[0] * m[0] + r1[1] * m[1] + r1[2] * m[2];
+      float hz = r2[0] * m[0] + r2[1] * m[1] + r2[2] * m[2];
+      if (still && phase == PAD) {
+        if (!magRef) { magRef = mn; magRefUp = up; }
+        magRef += 0.002f * (mn - magRef); magRefUp += 0.002f * (up - magRefUp);
+      }
+      bool sane = !magRef || (fabsf(mn / magRef - 1) < 0.15f && fabsf(up - magRefUp) < 0.15f);
+      float hor = sqrtf(hy * hy + hz * hz);       // cos(dip): about 0.44 in Charlotte
+      if (sane && hor > 0.15f) {
+        float e[3], wv[3];
+        for (int i = 0; i < 3; i++) wv[i] = up * r0[i] + hor * r1[i];   // where the field should point if north were right
+        e[0] = m[1] * wv[2] - m[2] * wv[1];
+        e[1] = m[2] * wv[0] - m[0] * wv[2];
+        e[2] = m[0] * wv[1] - m[1] * wv[0];
+        // the error about the vertical is hor^2 * sin(angle off north); divide hor^2 out so the
+        // gain is the same at any dip: 2/s pulls in within a second on the pad, 0.5/s in flight
+        float km = (still ? 2.0f : 0.5f) * (e[0] * r0[0] + e[1] * r0[1] + e[2] * r0[2]) / (hor * hor);
+        for (int i = 0; i < 3; i++) w[i] += km * r0[i];
+      }
+    }
+  }
   float h = 0.5f * dt, a0 = q0, a1 = q1, a2 = q2, a3 = q3;
   q0 += (-a1 * w[0] - a2 * w[1] - a3 * w[2]) * h;
   q1 += ( a0 * w[0] + a2 * w[2] - a3 * w[1]) * h;
@@ -460,10 +706,38 @@ void attitude(const float *accImu, const float *gyrImuDps, bool still, float dt)
   q0 *= r; q1 *= r; q2 *= r; q3 *= r;
 }
 
-void eulerOut() {                                 // yaw, pitch, roll (z, y, x) in the world frame
-  pkt.roll  = (int16_t)(atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2)) * RAD_TO_DEG * 100);
-  pkt.pitch = (int16_t)(asinf(constrain(2 * (q0 * q2 - q3 * q1), -1.0f, 1.0f)) * RAD_TO_DEG * 100);
-  pkt.yaw   = (int16_t)(atan2f(2 * (q0 * q3 + q1 * q2), 1 - 2 * (q2 * q2 + q3 * q3)) * RAD_TO_DEG * 100);
+float upwardAccel(const float *accImu) {          // IMU acceleration along world up, gravity included, g
+  float a[3];
+  toRocket(accImu, a);
+  return (1 - 2 * (q2 * q2 + q3 * q3)) * a[0] + 2 * (q1 * q2 - q0 * q3) * a[1] + 2 * (q1 * q3 + q0 * q2) * a[2];
+}
+
+void eulerOut() {                                 // yaw, pitch, roll (z, y, x), relative to the pad
+  // tilt-compensated heading: the compass bearing of the nose's shadow on the ground, so the way
+  // the rocket leans on the rail, flies, or points once landed. Unknown within 3 deg of vertical.
+  float nUp = 1 - 2 * (q2 * q2 + q3 * q3), nNorth = 2 * (q1 * q2 + q0 * q3), nWest = 2 * (q1 * q3 - q0 * q2);
+  pkt.heading = 0xFFFF;
+  pkt.magField = 0;
+  if (mmcFound && millis() - magAt < 100) {
+    pkt.magField = (uint16_t)(sqrtf(magImu[0] * magImu[0] + magImu[1] * magImu[1] + magImu[2] * magImu[2]) * 1000);
+    if (nUp < 0.9986f) {                          // cos 3 deg
+      float hd = atan2f(-nWest, nNorth) * RAD_TO_DEG;
+      pkt.heading = (uint16_t)((hd < 0 ? hd + 360 : hd) * 100) % 36000;
+    }
+  }
+  // turn the world about the vertical by however the airframe sat once it settled: still for 2 s
+  // on the pad (time for the magnetometer to pull the estimate round to north), or at liftoff if
+  // it never was. Taken once; re-taking it on every packet would cancel any roll on the pad.
+  static bool padTurnSet = false;
+  if (!padTurnSet && (phase != PAD || stillN >= 800)) {
+    padTurn = atan2f(2 * (q2 * q3 + q0 * q1), 1 - 2 * (q1 * q1 + q3 * q3));
+    padTurnSet = true;
+  }
+  float c = cosf(padTurn / 2), s = -sinf(padTurn / 2);
+  float o0 = c * q0 - s * q1, o1 = c * q1 + s * q0, o2 = c * q2 - s * q3, o3 = c * q3 + s * q2;
+  pkt.roll  = (int16_t)(atan2f(2 * (o0 * o1 + o2 * o3), 1 - 2 * (o1 * o1 + o2 * o2)) * RAD_TO_DEG * 100);
+  pkt.pitch = (int16_t)(asinf(constrain(2 * (o0 * o2 - o3 * o1), -1.0f, 1.0f)) * RAD_TO_DEG * 100);
+  pkt.yaw   = (int16_t)(atan2f(2 * (o0 * o3 + o1 * o2), 1 - 2 * (o2 * o2 + o3 * o3)) * RAD_TO_DEG * 100);
 }
 
 // ---------- IMU sampling ----------
@@ -489,14 +763,16 @@ void sample(float dt) {
   float g = (imu.bus && lsm < 30) ? lsm : hi;     // IMU is finer, high-g takes over near its 32 g limit
   if (g > peakG) peakG = g;
 
-  estimate(pkt.acc[0] * 0.000976f, pkt.acc[1] * 0.000976f, pkt.acc[2] * 0.000976f,
-           pkt.hig[0] * 0.098f, pkt.hig[1] * 0.098f, pkt.hig[2] * 0.098f,
-           0.07f * mag(pkt.gyr[0], pkt.gyr[1], pkt.gyr[2]), dt);
+  float aUp = NAN;                                // attitude first: altitude needs to know which way is up
   if (imu.bus) {
     float acc[3], gyr[3];
     for (int i = 0; i < 3; i++) { acc[i] = pkt.acc[i] * 0.000976f; gyr[i] = pkt.gyr[i] * 0.07f; }
     attitude(acc, gyr, stillN >= 200 && (phase == PAD || phase == LANDED), dt);
+    aUp = upwardAccel(acc);
   }
+  estimate(pkt.acc[0] * 0.000976f, pkt.acc[1] * 0.000976f, pkt.acc[2] * 0.000976f,
+           pkt.hig[0] * 0.098f, pkt.hig[1] * 0.098f, pkt.hig[2] * 0.098f,
+           0.07f * mag(pkt.gyr[0], pkt.gyr[1], pkt.gyr[2]), aUp, dt);
 }
 
 // ---------- battery ----------
@@ -525,6 +801,10 @@ void printLine() {
   if (shtAddr)  Serial.printf("  air %.1f C %.0f%%", pkt.airT / 100.0f, pkt.rh / 100.0f);
   if (gpsTalking()) Serial.printf("  gps fix %u, %u sats", pkt.fix, pkt.sats);
   if (imu.bus) Serial.printf("  roll %.0f pitch %.0f yaw %.0f", pkt.roll / 100.0f, pkt.pitch / 100.0f, pkt.yaw / 100.0f);
+  if (mmcFound) {
+    if (pkt.heading == 0xFFFF) Serial.printf("  hdg -- (%u mG)", pkt.magField);
+    else Serial.printf("  hdg %.0f (%u mG)", pkt.heading / 100.0f, pkt.magField);
+  }
   Serial.printf("  bat %.2f V", pkt.vbat / 1000.0f);
   Serial.println();
 }
@@ -553,6 +833,7 @@ void setup() {
   }
   if (detectBaro()) { baroCmd(0x58, 0); baroAt = micros(); }   // first conversion is temperature
   if (detectSht()) shtAddr = 0x44;
+  if ((mmcFound = detectMmc())) { mmcStep = 1; while (mmcStep) mmcCalStep(); }   // first offset calibration
   gpsConfigure();
   gpsLastCfg = millis();
 
@@ -561,6 +842,8 @@ void setup() {
   report(hig.name, hig.bus, hig.addr);
   report(baro.name, baro.bus, baro.addr);
   report("SHT45", shtAddr ? VIA_I2C : NONE, shtAddr);
+  report("MMC5983MA", mmcFound ? VIA_I2C : NONE, MMC);
+  if (mmcFound) Serial.println("  send 'm' to calibrate the magnetometer on the bench");
   Serial.println(gpsI2C ? "GPS: I2C 0x42" : "GPS: listening on UART (RX/TX pins) at 38400");
 
   int s = radio.begin(FREQ, BW, SF, CR, RADIOLIB_SX126X_SYNC_WORD_PRIVATE, TX_DBM, 8, TCXO);
@@ -586,6 +869,8 @@ void loop() {
   shtPoll();
   gpsPoll();
   batteryPoll();
+  magPoll();
+  if (Serial.available() && Serial.read() == 'm' && mmcFound && !benchUntil) benchStart();
 
   if (txDone) {
     txDone = false;
@@ -599,7 +884,8 @@ void loop() {
     pkt.ms = lastTx;
     pkt.peak = (uint16_t)(peakG * 10);
     peakG = 0;
-    pkt.flags = (imu.bus ? 1 : 0) | (hig.bus ? 2 : 0) | (baro.bus ? 4 : 0) | (shtAddr ? 8 : 0) | (gpsTalking() ? 16 : 0);
+    pkt.flags = (imu.bus ? 1 : 0) | (hig.bus ? 2 : 0) | (baro.bus ? 4 : 0) | (shtAddr ? 8 : 0) | (gpsTalking() ? 16 : 0) |
+                (mmcFound ? 32 : 0);
     if (!gpsTalking()) pkt.fix = 0;
     pkt.state = phase;
     pkt.alt = (int32_t)(kh * 100);

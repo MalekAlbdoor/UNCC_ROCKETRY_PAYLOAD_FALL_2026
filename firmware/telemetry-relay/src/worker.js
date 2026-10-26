@@ -26,12 +26,17 @@ const GAP_MS = 10 * 60_000;   // silence that ends a recording
 const KEEP_MS = 14 * 86_400_000;
 const MAX_BYTES = 1e9;        // oldest recordings go first past this (the free plan allows 5 GB)
 const LIVE_MS = 30_000;       // a recording counts as live while packets came in this recently
+const REPAIR_BATCH = 200;     // chunks per step of a one-time repair, a few MB at a time
 
 // Same columns as the GUI's CSV_COLS, minus lat/lon, which never leave the operator's laptop.
+// Each recording keeps the columns it started with (its `layout`), so a CSV never has rows that
+// don't line up with its header. Layout 0 is from before the magnetometer.
 const COLS = ["seq", "t", "ax", "ay", "az", "gx", "gy", "gz", "hx", "hy", "hz", "peak", "temp", "flags",
   "st", "alt", "vel", "malt", "mvel", "pres", "airt", "rh", "fix", "sats", "galt", "gvu", "gspd",
-  "roll", "pitch", "yaw", "vbat", "rssi", "snr", "loss"];
-const HEADER = ["utc_time", ...COLS].join(",") + "\n";
+  "roll", "pitch", "yaw", "vbat", "hdg", "magf", "rssi", "snr", "loss"];
+const LAYOUTS = [COLS.filter((k) => k !== "hdg" && k !== "magf"), COLS];
+const LAYOUT = LAYOUTS.length - 1;
+const header = (layout) => ["utc_time", ...LAYOUTS[layout ?? 0]].join(",") + "\n";
 const F_BARO = 4;
 
 const CORS = { "Access-Control-Allow-Origin": "*" };   // the operator page is opened from disk
@@ -66,6 +71,9 @@ export class LiveRelay extends DurableObject {
       apogee REAL, max_vel REAL, peak_g REAL)`);
     this.sql.exec("CREATE TABLE IF NOT EXISTS chunks (id INTEGER PRIMARY KEY, rec INTEGER, data BLOB)");
     this.sql.exec("CREATE INDEX IF NOT EXISTS chunks_rec ON chunks (rec, id)");
+    this.migrate();
+    // a repair still to finish carries on from the alarm, a batch at a time
+    if (this.repairStep(true)) { ctx.storage.setAlarm(Date.now() + 1000); this.alarmSet = true; }
     // pick the open recording back up after a restart; it continues if packets resume in time
     this.rec = this.sql.exec("SELECT * FROM recordings WHERE closed = 0 ORDER BY id DESC LIMIT 1").toArray()[0] || null;
     // keepalive pings are answered without waking the object
@@ -151,15 +159,74 @@ export class LiveRelay extends DurableObject {
   async alarm() {
     this.alarmSet = false;
     this.flush();
+    if (this.repairStep()) { this.ctx.storage.setAlarm(Date.now() + 1000); this.alarmSet = true; }
   }
 
   // ---------- recordings ----------
+
+  migrate() {
+    this.sql.exec("CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v)");
+    if (this.sql.exec("SELECT v FROM meta WHERE k = 'layout'").toArray().length) return;
+    try { this.sql.exec("ALTER TABLE recordings ADD COLUMN layout INTEGER DEFAULT 0"); } catch {}
+    // the first deploy with the magnetometer columns (2026-10-26, about 18:25 UTC) had no layouts
+    // and wrote those columns into whatever recording was open; take them back out of those lines
+    // so they match the recording's header. Chunks start with their first line's timestamp, so
+    // only chunks from around then on are read.
+    const at = 1 + COLS.indexOf("hdg");
+    const rows = this.sql.exec(`SELECT c.id, c.rec, c.data FROM chunks c JOIN recordings r ON r.id = c.rec
+      WHERE r.layout = 0 AND substr(CAST(c.data AS TEXT), 1, 24) >= '2026-10-26T18:00:00.000Z'`).toArray();
+    for (const c of rows) {
+      const text = new TextDecoder().decode(c.data);
+      let changed = false;
+      const fixed = text.split("\n").map((line) => {
+        const f = line.split(",");
+        if (f.length !== 1 + COLS.length) return line;
+        changed = true;
+        f.splice(at, 2);
+        return f.join(",");
+      }).join("\n");
+      if (!changed) continue;
+      const data = new TextEncoder().encode(fixed);
+      this.sql.exec("UPDATE chunks SET data = ? WHERE id = ?", data, c.id);
+      this.sql.exec("UPDATE recordings SET bytes = bytes - ? WHERE id = ?", c.data.byteLength - data.byteLength, c.rec);
+    }
+    this.sql.exec("INSERT INTO meta (k, v) VALUES ('layout', 1)");
+  }
+
+  // Rows recorded before the battery reading (2026-10-26) have no vbat column, and a recording
+  // that ran across that deploy mixes them with rows that do. Give those rows an empty vbat so
+  // every row matches the header. Returns whether there is more to do; peek only checks.
+  repairStep(peek = false) {
+    const pos = this.sql.exec("SELECT v FROM meta WHERE k = 'vbat'").toArray()[0]?.v ?? 0;
+    if (pos < 0 || peek) return pos >= 0;
+    const old = LAYOUTS[0], at = 1 + old.indexOf("vbat");
+    const page = this.sql.exec(`SELECT c.id, c.rec, c.data FROM chunks c JOIN recordings r ON r.id = c.rec
+      WHERE r.layout = 0 AND c.id > ? ORDER BY c.id LIMIT ?`, pos, REPAIR_BATCH).toArray();
+    for (const c of page) {
+      let changed = false;
+      const fixed = new TextDecoder().decode(c.data).split("\n").map((line) => {
+        const f = line.split(",");
+        if (f.length !== old.length) return line;   // the timestamp and every column but vbat
+        changed = true;
+        f.splice(at, 0, "");
+        return f.join(",");
+      }).join("\n");
+      if (!changed) continue;
+      const data = new TextEncoder().encode(fixed), grew = data.byteLength - c.data.byteLength;
+      this.sql.exec("UPDATE chunks SET data = ? WHERE id = ?", data, c.id);
+      this.sql.exec("UPDATE recordings SET bytes = bytes + ? WHERE id = ?", grew, c.rec);
+      if (this.rec?.id === c.rec) this.rec.bytes += grew;
+    }
+    const next = page.length === REPAIR_BATCH ? page.at(-1).id : -1;
+    this.sql.exec("INSERT OR REPLACE INTO meta (k, v) VALUES ('vbat', ?)", next);
+    return next >= 0;
+  }
 
   record(at, p) {
     let fresh = false;
     if (!this.rec || at - this.rec.last_at > GAP_MS) { this.startRecording(at); fresh = true; }
     const r = this.rec;
-    this.pending.push(new Date(at).toISOString() + "," + COLS.map((k) => {
+    this.pending.push(new Date(at).toISOString() + "," + LAYOUTS[r.layout ?? 0].map((k) => {
       const v = p[k];
       return typeof v === "number" && Number.isFinite(v) ? v : "";
     }).join(",") + "\n");
@@ -189,8 +256,9 @@ export class LiveRelay extends DurableObject {
       this.deleteRecording(id);
       total -= bytes;
     }
-    const id = this.sql.exec("INSERT INTO recordings (started, last_at) VALUES (?, ?) RETURNING id", at, at).one().id;
-    this.rec = { id, started: at, last_at: at, closed: 0, packets: 0, bytes: 0, max_st: 0, apogee: null, max_vel: null, peak_g: null };
+    const id = this.sql.exec("INSERT INTO recordings (started, last_at, layout) VALUES (?, ?, ?) RETURNING id", at, at, LAYOUT).one().id;
+    this.rec = { id, started: at, last_at: at, closed: 0, packets: 0, bytes: 0, max_st: 0, apogee: null, max_vel: null, peak_g: null,
+                 layout: LAYOUT };
   }
 
   flush() {
@@ -244,7 +312,7 @@ export class LiveRelay extends DurableObject {
     let lastChunk = 0, headerSent = false;
     const body = new ReadableStream({
       pull: (ctrl) => {
-        if (!headerSent) { headerSent = true; ctrl.enqueue(enc.encode(HEADER)); return; }
+        if (!headerSent) { headerSent = true; ctrl.enqueue(enc.encode(header(row.layout))); return; }
         const page = this.sql.exec("SELECT id, data FROM chunks WHERE rec = ? AND id > ? ORDER BY id LIMIT 50", id, lastChunk).toArray();
         for (const c of page) ctrl.enqueue(new Uint8Array(c.data));
         if (page.length) { lastChunk = page.at(-1).id; return; }

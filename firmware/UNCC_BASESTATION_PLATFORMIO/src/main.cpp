@@ -39,8 +39,8 @@
 
 // must match the rocket's struct byte for byte
 struct __attribute__((packed)) Telem {
-  uint8_t  magic;      // 'W'
-  uint8_t  flags;      // bit0 IMU, bit1 high-g, bit2 baro, bit3 SHT45, bit4 GPS talking
+  uint8_t  magic;      // 'X'
+  uint8_t  flags;      // bit0 IMU, bit1 high-g, bit2 baro, bit3 SHT45, bit4 GPS talking, bit5 magnetometer
   uint16_t seq;
   uint32_t ms;
   int16_t  acc[3];     // 0.976 mg/LSB
@@ -64,8 +64,10 @@ struct __attribute__((packed)) Telem {
   uint16_t gpsSpd;     // 0.1 m/s
   int16_t  roll, pitch, yaw;   // 0.01 deg
   uint16_t vbat;       // battery, mV
+  uint16_t heading;    // nose bearing from magnetic north, 0.01 deg; 0xFFFF unknown
+  uint16_t magField;   // mG
 };
-static_assert(sizeof(Telem) == 73, "rocket sends 73 bytes");
+static_assert(sizeof(Telem) == 77, "rocket sends 77 bytes");
 
 const char *PHASES[] = {"PAD", "BOOST", "COAST", "DESCENT", "LANDED"};
 const char *phaseName(uint8_t s) { return s < 5 ? PHASES[s] : "?"; }
@@ -159,6 +161,10 @@ void drawSerial() {
       last.alt / 100.0f, last.vel / 10.0f, last.maxAlt, last.maxVel / 10.0f);
     if (last.flags & 1) Serial.printf(" Attitude roll %6.1f   pitch %6.1f   yaw %6.1f deg\033[K\n",
       last.roll / 100.0f, last.pitch / 100.0f, last.yaw / 100.0f);
+    if (last.flags & 32) {
+      if (last.heading == 0xFFFF) Serial.printf(" Compass  heading --- (nose straight up)   field %u mG\033[K\n", last.magField);
+      else Serial.printf(" Compass  heading %5.1f deg magnetic   field %u mG\033[K\n", last.heading / 100.0f, last.magField);
+    }
     if (last.flags & 4) Serial.printf(" Baro     %8.2f hPa\033[K\n", last.pres / 100.0f);
     if (last.flags & 8) Serial.printf(" Air      %6.1f C   %5.1f %%RH\033[K\n", last.airT / 100.0f, last.rh / 100.0f);
     if (last.flags & 16) {
@@ -167,7 +173,7 @@ void drawSerial() {
       else          Serial.printf(" GPS      no fix yet, %u sats\033[K\n", last.sats);
     }
     auto ok = [](int bit) { return (last.flags & bit) ? "ok" : "--"; };
-    Serial.printf(" Sensors  IMU %s  High-g %s  Baro %s  SHT45 %s  GPS %s\033[K\n", ok(1), ok(2), ok(4), ok(8), ok(16));
+    Serial.printf(" Sensors  IMU %s  High-g %s  Baro %s  SHT45 %s  GPS %s  Mag %s\033[K\n", ok(1), ok(2), ok(4), ok(8), ok(16), ok(32));
   }
   if (badLen && millis() - badAt < 5000)
     Serial.printf(" Firmware MISMATCH: got %u byte packets, expected %u. Flash the rocket and base station together.\033[K\n",
@@ -193,6 +199,9 @@ void printJson() {
     last.gpsAlt, last.gpsVup / 10.0f, last.gpsSpd / 10.0f);
   Serial.printf("\"roll\":%.1f,\"pitch\":%.1f,\"yaw\":%.1f,\"vbat\":%.2f,", last.roll / 100.0f, last.pitch / 100.0f,
     last.yaw / 100.0f, last.vbat / 1000.0f);
+  if (last.heading == 0xFFFF) Serial.print("\"hdg\":null,");
+  else Serial.printf("\"hdg\":%.1f,", last.heading / 100.0f);
+  Serial.printf("\"magf\":%u,", last.magField);
   Serial.printf("\"rssi\":%.1f,\"snr\":%.2f,\"loss\":%.2f}\n", lastRssi, lastSnr, lossPct);
 }
 
@@ -214,7 +223,7 @@ void handlePacket() {
 
   if (s == RADIOLIB_ERR_CRC_MISMATCH) {
     crcErrors++;
-  } else if (s != RADIOLIB_ERR_NONE || len != sizeof(p) || p.magic != 'W') {
+  } else if (s != RADIOLIB_ERR_NONE || len != sizeof(p) || p.magic != 'X') {
     badPackets++;
     if (s == RADIOLIB_ERR_NONE && len != sizeof(p)) { badLen = len; badAt = millis(); }   // old or new firmware on the other end
   } else {
