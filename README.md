@@ -21,6 +21,9 @@ Designed in KiCad 10. Open `UNCC_ROCKETRY_PAYLOAD_FALL_2026.kicad_pro` to get st
 
 No KiCad? Download [Schematic.pdf](Schematic.pdf) to view the full schematic.
 
+## Dashboard
+Take a look at live telemetry at telemetry.malekalbdoor.com
+
 ## Status
 
 Schematic in progress. Firmware is being developed on breadboarded breakout boards in parallel. PCB layout has not started.
