@@ -4,82 +4,118 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UNCC Ground Station</title>
+<meta name="theme-color" content="#005035">
+<!-- fonts are optional: offline at the launch site the page falls back to system fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@400..700&display=swap">
 <style>
+  /* UNC Charlotte colors: Charlotte Green #005035 and Niner Gold #A49665 (brand.charlotte.edu).
+     Gold is the one signal color: the main line on each chart, the current flight phase, the rocket. */
   :root {
-    --bg: #f4f5f7; --panel: #ffffff; --border: #dde1e6; --text: #15191e; --muted: #67707b;
-    --grid: #e7eaee; --accent: #a3122a;
-    --x: #d1453b; --y: #2f9e44; --z: #2b6fd6; --total: #15191e;
-    --ok: #2f9e44; --warn: #c27c0e; --bad: #d1453b; --rocket: #d4d8de;
+    --green: #005035; --gold: #A49665;
+    --bg: #edf1ee; --panel: #ffffff; --border: #cfdad3; --text: #0d2119; --muted: #587064;
+    --grid: #e1e9e4; --dots: #cfdbd4; --accent: var(--gold); --gold-text: #75662c;
+    --primary: var(--green); --on-primary: #ffffff;
+    --head: var(--green); --head-text: #ffffff; --head-muted: #b5d0c3; --head-line: rgba(255, 255, 255, 0.28);
+    --x: #d0453a; --y: #2c9a5b; --z: #2f6fd0; --total: #0d2119;
+    --ok: #23955a; --warn: #b7791f; --bad: #cf3d33; --rocket: #dde4e0;
+    --sans: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0f1216; --panel: #171b21; --border: #262c34; --text: #e7eaee; --muted: #8a939e;
-      --grid: #222830; --accent: #e0455c;
-      --x: #ff6b5e; --y: #4cc35f; --z: #5b9bff; --total: #e7eaee;
-      --ok: #4cc35f; --warn: #e3a33b; --bad: #ff6b5e; --rocket: #e4e7eb;
+      --bg: #04100b; --panel: #0a1913; --border: #1a3529; --text: #e3ece6; --muted: #83a293;
+      --grid: #14291f; --dots: #0f2219; --gold-text: #cdbb7f;
+      --primary: var(--gold); --on-primary: #17130a;
+      --head: #00432c; --head-muted: #9cc2b0;
+      --x: #ff6f61; --y: #4fd08a; --z: #5ea8ff; --total: #e3ece6;
+      --ok: #4fd08a; --warn: #e0a640; --bad: #ff6f61; --rocket: #e6ece8;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #0f1216; --panel: #171b21; --border: #262c34; --text: #e7eaee; --muted: #8a939e;
-    --grid: #222830; --accent: #e0455c;
-    --x: #ff6b5e; --y: #4cc35f; --z: #5b9bff; --total: #e7eaee;
-    --ok: #4cc35f; --warn: #e3a33b; --bad: #ff6b5e; --rocket: #e4e7eb;
+    --bg: #04100b; --panel: #0a1913; --border: #1a3529; --text: #e3ece6; --muted: #83a293;
+    --grid: #14291f; --dots: #0f2219; --gold-text: #cdbb7f;
+    --primary: var(--gold); --on-primary: #17130a;
+    --head: #00432c; --head-muted: #9cc2b0;
+    --x: #ff6f61; --y: #4fd08a; --z: #5ea8ff; --total: #e3ece6;
+    --ok: #4fd08a; --warn: #e0a640; --bad: #ff6f61; --rocket: #e6ece8;
   }
 
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   body {
-    margin: 0; background: var(--bg); color: var(--text);
-    font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-variant-numeric: tabular-nums;
+    margin: 0; color: var(--text); font: 14px/1.45 var(--sans);
+    background: var(--bg) radial-gradient(var(--dots) 1px, transparent 1.3px) 0 0 / 22px 22px;   /* protoboard */
   }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
   header {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
-    padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--panel);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px;
+    padding: 12px 16px; background: var(--head); color: var(--head-text); border-bottom: 3px solid var(--gold);
   }
-  header h1 { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: 0.2px; }
-  header h1 span { color: var(--accent); }
+  header h1 { margin: 0; font: 700 20px/1 var(--sans); letter-spacing: -0.4px; }
+  header h1 span { color: var(--gold); margin-right: 3px; }
   .mode { color: var(--muted); font-size: 13px; }
+  header .mode { color: var(--head-muted); font: 11px/1.3 var(--mono); }
+  /* mission clock: counts from liftoff, gold while the rocket is flying */
+  #clock { display: flex; flex-direction: column; gap: 3px; padding-left: 14px; border-left: 1px solid var(--head-line); }
+  #clockT { font: 600 20px/1 var(--mono); letter-spacing: -0.5px; white-space: nowrap; }
+  #clockT.idle { color: var(--head-muted); }
+  #clockT.flying { color: var(--gold); }
+  #clockSub { font-size: 11px; line-height: 1; color: var(--head-muted); }
   .spacer { flex: 1; }
   .pill {
     display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px; border-radius: 999px;
-    border: 1px solid var(--border); font-weight: 600; font-size: 13px;
+    border: 1px solid var(--border); font-weight: 650; font-size: 13px;
   }
   .pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
   .pill.ok::before { background: var(--ok); }
   .pill.warn::before { background: var(--warn); }
   .pill.bad::before { background: var(--bad); }
   .pill.bad { color: var(--bad); border-color: var(--bad); }
+  header .pill { border-color: var(--head-line); }
+  header .pill::before { background: var(--head-muted); }
+  header .pill.ok::before { background: #6fe3a1; box-shadow: 0 0 6px #6fe3a1; }
+  header .pill.warn::before { background: #f2c062; }
+  header .pill.bad { color: #ffb8b0; border-color: #ff8a7e; }
+  header .pill.bad::before { background: #ff8a7e; }
+
   button, .btn {
-    font: inherit; font-weight: 600; padding: 7px 13px; border-radius: 8px; cursor: pointer;
+    font: inherit; font-weight: 650; padding: 7px 13px; border-radius: 6px; cursor: pointer;
     border: 1px solid var(--border); background: var(--panel); color: var(--text);
   }
   .btn { display: inline-block; text-decoration: none; white-space: nowrap; }
   button:hover, .btn:hover { border-color: var(--muted); }
-  button.primary, .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.primary, .btn.primary { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
   button:disabled { opacity: 0.45; cursor: default; }
+  header button { background: transparent; color: var(--head-text); border-color: var(--head-line); }
+  header button:hover { border-color: var(--head-text); }
+  header button.primary { background: var(--gold); border-color: var(--gold); color: #17130a; }
 
-  main { padding: 16px; display: grid; gap: 16px; max-width: 1400px; margin: 0 auto; }
+  main { padding: 16px; display: grid; gap: 14px; max-width: 1400px; margin: 0 auto; }
   #msg {
-    display: none; padding: 10px 13px; border-radius: 8px;
+    display: none; padding: 10px 13px; border-radius: 6px;
     border: 1px solid var(--warn); color: var(--text); background: var(--panel);
   }
-  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
-  .tile { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
-  .tile .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .tile .value { font-size: 22px; font-weight: 650; margin-top: 2px; white-space: nowrap; }
-  .tile .value small { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 3px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+  .tile { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+  .tile .label { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .tile .value { font: 600 21px/1.3 var(--mono); letter-spacing: -0.5px; margin-top: 3px; white-space: nowrap; }
+  .tile .value small { font: 500 12px var(--sans); letter-spacing: 0; color: var(--muted); margin-left: 4px; }
   .tile .sub { color: var(--muted); font-size: 12px; min-height: 17px; }
-  .tile .sub a { color: var(--accent); }
-  .tile .value.pos { font-size: 16px; padding: 4px 0 3px; }
+  .tile .sub a { color: var(--gold-text); }
+  .tile .value.pos { font-size: 13px; padding: 4px 0 3px; white-space: normal; }
   .tile button { margin-top: 4px; padding: 2px 8px; font-size: 12px; }
 
-  .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 16px; }
-  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 12px 8px; min-width: 0; }
+  .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 12px 8px; min-width: 0; }
   .card-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-bottom: 6px; }
-  .card-head h2 { margin: 0; font-size: 14px; font-weight: 650; margin-right: auto; }
+  .card-head h2 { margin: 0; font-size: 14px; font-weight: 650; letter-spacing: -0.1px; margin-right: auto; }
+  .card-head h2 .mode { font-weight: 500; font-size: 12px; }
   .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
-  .legend b { font-weight: 600; color: var(--text); }
+  .legend b { font: 600 11px var(--mono); color: var(--text); }
   .legend i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
   canvas { display: block; width: 100%; height: 190px; }
 
@@ -93,22 +129,22 @@
   .tile .hideBtn, .hideBtn { display: none; position: absolute; top: -9px; right: -7px; z-index: 1; margin: 0;
     padding: 1px 8px; font-size: 11px; border-radius: 999px; background: var(--bg); }
   body.editing .hideBtn { display: inline-block; }
-  #layoutBar { display: none; align-items: center; flex-wrap: wrap; gap: 8px 12px; padding: 10px 13px; border-radius: 8px;
+  #layoutBar { display: none; align-items: center; flex-wrap: wrap; gap: 8px 12px; padding: 10px 13px; border-radius: 6px;
     border: 1px dashed var(--muted); background: var(--panel); color: var(--muted); }
   body.editing #layoutBar { display: flex; }
   #layoutBar span { flex: 1; min-width: 200px; }
 
   /* recordings: every broadcast session is saved on the server for anyone to download */
-  #recPanel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  #recPanel { background: var(--panel); border: 1px solid var(--border); border-top: 3px solid var(--gold); border-radius: 8px; padding: 12px 14px; }
   #recPanel .head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 4px; }
-  #recPanel h2 { margin: 0; font-size: 15px; font-weight: 650; margin-right: auto; }
+  #recPanel h2 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.2px; margin-right: auto; }
   #recPanel .note { color: var(--muted); font-size: 12px; margin: 2px 0 8px; }
   .rec { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 10px 0; border-top: 1px solid var(--border); }
   .rec .info { flex: 1; min-width: 220px; }
-  .rec .name { font-weight: 650; }
-  .rec .meta { color: var(--muted); font-size: 12px; }
+  .rec .name { font-weight: 700; }
+  .rec .meta { color: var(--muted); font: 11px/1.6 var(--mono); }
   .rec .stats { font-size: 13px; margin-top: 2px; }
-  .rec .stats b { font-weight: 650; }
+  .rec .stats b { font: 600 12px var(--mono); }
   .rec .acts { display: flex; gap: 8px; }
   .rec .acts button.del { color: var(--bad); }
   .badge { display: inline-flex; align-items: center; gap: 5px; margin-left: 8px; padding: 1px 8px; border-radius: 999px;
@@ -118,14 +154,59 @@
   @keyframes blink { 50% { opacity: 0.25; } }
   .rec.empty { color: var(--muted); display: block; }
 
+  /* segmented buttons: chart range and replay speed */
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; padding: 5px 11px; font-size: 13px; background: var(--panel); color: var(--muted); }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
+  .chartbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: -4px; }
+
+  /* replay: plays a recording back through the whole dashboard */
+  #replayBar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 10px 14px; border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--gold); }
+  #replayBar .rpTrack { flex: 1; min-width: 220px; }
+  #rpSeek { width: 100%; accent-color: var(--gold); margin: 0; }
+  .rpTimes { display: flex; gap: 12px; font: 11px/1.4 var(--mono); color: var(--muted); }
+  .rpTimes #rpName { flex: 1; text-align: center; color: var(--text); font-family: var(--sans); font-weight: 600;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* flight summary, shown once the rocket has landed */
+  #summary { background: var(--panel); border: 1px solid var(--border); border-top: 3px solid var(--gold); border-radius: 8px; padding: 12px 14px; }
+  #summary .head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-bottom: 8px; }
+  #summary h2 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.2px; }
+  #summary .head .mode { margin-right: auto; }
+  .sumgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px 16px; }
+  .sumgrid .label { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .sumgrid .value { font: 600 26px/1.25 var(--mono); letter-spacing: -0.8px; color: var(--gold-text); }
+  .sumgrid .value small { font: 500 13px var(--sans); letter-spacing: 0; color: var(--muted); margin-left: 4px; }
+  .sumgrid .sub { color: var(--muted); font-size: 12px; }
+
+  /* recovery: where the rocket is relative to the pad */
+  .recov { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; min-height: 190px; }
+  .compass { width: 120px; height: 120px; flex: none; }
+  .compass .ring { fill: none; stroke: var(--grid); stroke-width: 2; }
+  .compass .n { fill: var(--muted); font: 600 11px var(--sans); text-anchor: middle; dominant-baseline: middle; }
+  #recArrow { fill: var(--gold); }
+  .recov .info { flex: 1; min-width: 200px; }
+  .recov .big { font: 600 28px/1.2 var(--mono); letter-spacing: -0.8px; }
+  .recov .sub { color: var(--muted); font-size: 13px; }
+  .recov .coords { font: 13px/1.6 var(--mono); margin-top: 6px; user-select: all; }
+  .recov .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .warnc { color: var(--warn) !important; }
+
   .footer { display: flex; flex-wrap: wrap; gap: 8px 24px; color: var(--muted); font-size: 13px; }
   .footer b { color: var(--text); font-weight: 600; }
   .okc { color: var(--ok); } .badc { color: var(--bad); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { animation: none !important; transition: none !important; }
+  }
 </style>
 </head>
 <body>
 <header>
   <h1 id="title"><span>UNCC</span> Ground Station</h1>
+  <div id="clock" title="Mission clock, counted from liftoff"><span id="clockT" class="idle">T+ --:--.-</span><span id="clockSub">waiting for data</span></div>
   <span class="mode" id="mode"></span>
   <span class="spacer"></span>
   <span class="mode" id="watching"></span>
@@ -146,9 +227,24 @@
     <button class="primary" id="layoutDone">Done</button>
   </div>
 
+  <section id="replayBar" hidden aria-label="Replay">
+    <button class="primary" id="rpPlay">Pause</button>
+    <div class="rpTrack">
+      <input type="range" id="rpSeek" min="0" max="1" step="0.1" value="0" aria-label="Replay position">
+      <div class="rpTimes"><span id="rpPos">0:00</span><span id="rpName"></span><span id="rpDur">0:00</span></div>
+    </div>
+    <div class="seg" id="rpSpeeds" role="group" aria-label="Replay speed">
+      <button data-speed="1">1×</button><button data-speed="2">2×</button><button data-speed="5">5×</button><button data-speed="10">10×</button>
+    </div>
+    <button id="rpLiftoff">Jump to liftoff</button>
+    <button id="rpExit">Back to live</button>
+  </section>
+
   <section id="recPanel" hidden>
     <div class="head">
       <h2>Download data</h2>
+      <button id="recOpen" title="Replay a CSV saved from this page or downloaded from a recording">Replay a CSV file</button>
+      <input type="file" id="recFile" accept=".csv,text/csv" hidden>
       <button id="recNew" hidden title="Ends the current recording. The next packet starts a fresh file, handy right before launch.">Start new recording</button>
       <button id="recClose">Close</button>
     </div>
@@ -163,6 +259,11 @@
     <div id="recList"></div>
   </section>
 
+  <section id="summary" hidden aria-label="Flight summary">
+    <div class="head"><h2>Flight summary</h2><span class="mode" id="sumNote"></span><button id="sumHide">Hide</button></div>
+    <div class="sumgrid" id="sumGrid"></div>
+  </section>
+
   <section class="tiles">
     <div class="tile"><div class="label">Packet</div><div class="value" id="tSeq">-</div><div class="sub" id="tAge"></div></div>
     <div class="tile"><div class="label">RSSI</div><div class="value" id="tRssi">-</div><div class="sub" id="tRssiSub"></div></div>
@@ -171,6 +272,7 @@
     <div class="tile"><div class="label">Accel</div><div class="value" id="tAcc">-</div><div class="sub" id="tTilt"></div></div>
     <div class="tile"><div class="label">Peak g</div><div class="value" id="tPeak">-</div><div class="sub"><button id="peakReset">Reset</button></div></div>
     <div class="tile"><div class="label">Temp</div><div class="value" id="tTemp">-</div><div class="sub">IMU chip</div></div>
+    <div class="tile"><div class="label">Battery</div><div class="value" id="tBat">-</div><div class="sub" id="tBatSub"></div></div>
     <div class="tile"><div class="label">Rocket uptime</div><div class="value" id="tUp">-</div><div class="sub" id="tRows"></div></div>
     <div class="tile"><div class="label">Flight phase</div><div class="value" id="tPhase">-</div><div class="sub" id="tPhaseSub"></div></div>
     <div class="tile"><div class="label">Altitude</div><div class="value" id="tAlt">-</div><div class="sub" id="tAltSub"></div></div>
@@ -182,10 +284,39 @@
     <div class="tile" id="posTile"><div class="label">Position</div><div class="value pos" id="tPos">-</div><div class="sub" id="tPosSub"></div></div>
   </section>
 
+  <div class="chartbar">
+    <div class="seg" id="rangeSeg" role="group" aria-label="Chart time range">
+      <button data-range="30" aria-pressed="true">Last 30 s</button><button data-range="flight" aria-pressed="false" disabled>Whole flight</button>
+    </div>
+    <span class="mode" id="rangeNote"></span>
+  </div>
+
   <section class="charts" id="charts">
     <div class="card" data-id="attitude">
       <div class="card-head"><h2>Attitude</h2><div class="legend" id="attLegend"></div></div>
       <canvas id="attCanvas" style="height: 240px; cursor: grab; touch-action: pan-y" title="Drag to turn the view, double-click to reset"></canvas>
+    </div>
+    <div class="card" data-id="recovery" id="recovery" hidden>
+      <div class="card-head"><h2>Recovery <span class="mode">(only on this computer)</span></h2></div>
+      <div class="recov">
+        <svg class="compass" viewBox="-50 -50 100 100" aria-hidden="true">
+          <circle r="44" class="ring"></circle>
+          <text y="-30" class="n">N</text>
+          <path id="recArrow" d="M0,-36 L10,6 L0,0 L-10,6 Z"></path>
+        </svg>
+        <div class="info">
+          <div class="big" id="recDist">-</div>
+          <div class="sub" id="recDir">Waiting for data</div>
+          <div class="coords" id="recCoords"></div>
+          <div class="sub" id="recAge"></div>
+          <div class="sub" id="recMe"></div>
+          <div class="acts" id="recActs" hidden>
+            <a class="btn primary" id="recDirections" target="_blank" rel="noopener">Directions</a>
+            <button id="recCopy">Copy coordinates</button>
+            <button id="recLocate">Distance from me</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -203,9 +334,9 @@ const F = { IMU: 1, HIGH_G: 2, BARO: 4, SHT: 8, GPS: 16 };
 // `need` is [flags, message]: when the rocket reports none of those sensors the chart says so
 const CHARTS = [
   { title: 'Altitude', unit: 'm above pad', minSpan: 4, dp: 1, need: [F.BARO | F.GPS, 'Needs the barometer or GPS'],
-    fields: [['alt', 'baro + accel', '--z'], ['gagl', 'GPS', '--y']] },
+    fields: [['alt', 'baro + accel', '--gold'], ['gagl', 'GPS', '--y']] },
   { title: 'Vertical velocity', unit: 'm/s', minSpan: 2, dp: 1, need: [F.IMU | F.HIGH_G, 'Needs an accelerometer'],
-    fields: [['vel', 'filter', '--z'], ['gvu', 'GPS', '--y']] },
+    fields: [['vel', 'filter', '--gold'], ['gvu', 'GPS', '--y']] },
   { title: 'Orientation', unit: '°', minSpan: 10, dp: 1, need: [F.IMU, 'Needs the IMU'],
     fields: [['roll', 'roll', '--x'], ['pitch', 'pitch', '--y'], ['yaw', 'yaw', '--z']] },
   { title: 'Accel', unit: 'g', minSpan: 2, dp: 2,
@@ -215,18 +346,20 @@ const CHARTS = [
   { title: 'High-g accel', unit: 'g', minSpan: 4, dp: 1,
     fields: [['hx', 'x', '--x'], ['hy', 'y', '--y'], ['hz', 'z', '--z'], ['hmag', 'total', '--total']] },
   { title: 'Pressure', unit: 'hPa', minSpan: 0.5, dp: 2, need: [F.BARO, 'Barometer not connected yet'],
-    fields: [['pres', 'MS5611', '--z']] },
+    fields: [['pres', 'MS5611', '--gold']] },
   { title: 'Temperature', unit: '°C', minSpan: 2, dp: 1,
     fields: [['airt', 'air', '--x'], ['temp', 'IMU chip', '--z']] },
   { title: 'Humidity', unit: '%', minSpan: 5, dp: 1, need: [F.SHT, 'SHT45 not connected yet'],
-    fields: [['rh', 'SHT45', '--z']] },
+    fields: [['rh', 'SHT45', '--gold']] },
   { title: 'Signal', unit: 'dBm', minSpan: 20, dp: 0,
-    fields: [['rssi', 'RSSI', '--z']] },
+    fields: [['rssi', 'RSSI', '--gold']] },
+  { title: 'Battery', unit: 'V', minSpan: 0.2, dp: 2,
+    fields: [['vbat', 'battery', '--gold']] },
 ];
 const HIST_KEYS = [...new Set(CHARTS.flatMap(c => c.fields.map(([k]) => k)))];
 const CSV_COLS = ['seq', 't', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'hx', 'hy', 'hz', 'peak', 'temp', 'flags',
   'st', 'alt', 'vel', 'malt', 'mvel', 'pres', 'airt', 'rh', 'fix', 'sats', 'lat', 'lon', 'galt', 'gvu', 'gspd',
-  'roll', 'pitch', 'yaw', 'rssi', 'snr', 'loss'];
+  'roll', 'pitch', 'yaw', 'vbat', 'rssi', 'snr', 'loss'];
 const PHASES = ['Pad', 'Boost', 'Coast', 'Descent', 'Landed'];
 // The public page never gets the rocket's position: the operator strips lat/lon before
 // broadcasting. Set to true to show it to everyone.
@@ -248,12 +381,21 @@ const BACKOFF_S = [1, 2, 5, 10];
 
 const S = {
   port: null, reader: null, pipeDone: null, connected: false, demoTimer: null,
-  lastJsonAt: 0, lastPacketAt: 0, pkt: null, hb: null,
-  hist: [], rows: [], peak: 0, gpsGround: null,
+  lastJsonAt: 0, hb: null, rows: [],
 };
+
+// What the screen shows comes from a view: the live one, or a recording being replayed. Each keeps
+// its own history, flight record and GPS fixes, so a replay never mixes with live packets.
+function newView(clock) {
+  return { clock, hist: [], pkt: null, peak: 0, lastPacketAt: 0, gpsGround: null, prevSt: null,
+           flight: null, pad: null, fix: null };
+}
+const LIVE = newView(() => now());
+let V = LIVE;
 
 const $ = id => document.getElementById(id);
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const SANS = '"Geist", system-ui, -apple-system, sans-serif', MONO = '"Geist Mono", ui-monospace, Menlo, monospace';
 const now = () => performance.now() / 1000;
 const mag = (x, y, z) => Math.sqrt(x * x + y * y + z * z);
 
@@ -292,8 +434,17 @@ function drawChart({ cfg, canvas }, tNow) {
 
   const pad = { l: 44, r: 8, t: 6, b: 20 };
   const pw = w - pad.l - pad.r, ph = h - pad.t - pad.b;
-  const t0 = tNow - WINDOW_S;
-  const pts = S.hist.filter(p => p.t >= t0 - 1);
+  // whole flight: x is seconds from liftoff, and stops moving once the rocket has landed
+  const fl = V.flight, whole = RANGE.mode === 'flight' && fl && fl.pts.length > 1;
+  let pts, t0, t1, ref;
+  if (whole) {
+    pts = fl.pts; t0 = pts[0].t; ref = fl.launchRx ?? t0;
+    t1 = fl.done ? pts.at(-1).t : Math.max(tNow, t0 + 1);
+  } else {
+    t1 = tNow; t0 = tNow - WINDOW_S;
+    pts = V.hist.filter(p => p.t >= t0 - 1);
+  }
+  const span = t1 - t0;
 
   let lo = Infinity, hi = -Infinity;
   for (const p of pts) for (const [k] of cfg.fields) {
@@ -301,13 +452,13 @@ function drawChart({ cfg, canvas }, tNow) {
   }
   if (!isFinite(lo)) { lo = -cfg.minSpan / 2; hi = cfg.minSpan / 2; }
   const mid = (lo + hi) / 2;
-  let span = Math.max(hi - lo, cfg.minSpan) * 1.15;
-  lo = mid - span / 2; hi = mid + span / 2;
+  const ySpan = Math.max(hi - lo, cfg.minSpan) * 1.15;
+  lo = mid - ySpan / 2; hi = mid + ySpan / 2;
 
-  const xOf = t => pad.l + (t - t0) / WINDOW_S * pw;
+  const xOf = t => pad.l + (t - t0) / span * pw;
   const yOf = v => pad.t + (hi - v) / (hi - lo) * ph;
 
-  g.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
+  g.font = `10px ${MONO}`;
   g.lineWidth = 1;
   g.strokeStyle = css('--grid');
   g.fillStyle = css('--muted');
@@ -320,10 +471,20 @@ function drawChart({ cfg, canvas }, tNow) {
     g.fillText(Math.abs(v) < step / 1e3 ? '0' : +v.toFixed(6) + '', pad.l - 6, y);
   }
   g.textAlign = 'center'; g.textBaseline = 'top';
-  for (let s = 0; s <= WINDOW_S; s += 5) {
-    const x = Math.round(xOf(tNow - s)) + 0.5;
-    g.beginPath(); g.moveTo(x, pad.t); g.lineTo(x, pad.t + ph); g.stroke();
-    g.fillText(s === 0 ? 'now' : `-${s}s`, x, pad.t + ph + 5);
+  if (whole) {
+    const st = niceStep(span / 6);
+    for (let s = Math.ceil((t0 - ref) / st) * st; s <= t1 - ref + 1e-6; s += st) {
+      const x = Math.round(xOf(ref + s)) + 0.5;
+      g.beginPath(); g.moveTo(x, pad.t); g.lineTo(x, pad.t + ph); g.stroke();
+      const v = +s.toFixed(3);
+      g.fillText(fl.launchRx == null ? `${v}s` : v === 0 ? 'liftoff' : `${v > 0 ? 'T+' : ''}${v}s`, x, pad.t + ph + 5);
+    }
+  } else {
+    for (let s = 0; s <= WINDOW_S; s += 5) {
+      const x = Math.round(xOf(tNow - s)) + 0.5;
+      g.beginPath(); g.moveTo(x, pad.t); g.lineTo(x, pad.t + ph); g.stroke();
+      g.fillText(s === 0 ? 'now' : `-${s}s`, x, pad.t + ph + 5);
+    }
   }
 
   g.save();
@@ -343,8 +504,8 @@ function drawChart({ cfg, canvas }, tNow) {
   }
   g.restore();
 
-  if (cfg.need && S.pkt && !(S.pkt.flags & cfg.need[0])) {
-    g.fillStyle = css('--muted'); g.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
+  if (cfg.need && V.pkt && !(V.pkt.flags & cfg.need[0])) {
+    g.fillStyle = css('--muted'); g.font = `13px ${SANS}`;
     g.textAlign = 'center'; g.textBaseline = 'middle';
     g.fillText(cfg.need[1], pad.l + pw / 2, pad.t + ph / 2);
   }
@@ -419,12 +580,12 @@ function view([X, Y, Z]) {
     if (dragX === null) return;
     camAz = ((camAz - (e.clientX - dragX) * 0.6) % 360 + 360) % 360;
     dragX = e.clientX;
-    drawAttitude(S.pkt);
+    drawAttitude(V.pkt);
   });
   const end = () => { if (dragX !== null) { dragX = null; c.style.cursor = 'grab'; save(); } };
   c.addEventListener('pointerup', end);
   c.addEventListener('pointercancel', end);
-  c.addEventListener('dblclick', () => { camAz = CAM_DEFAULT; save(); drawAttitude(S.pkt); });
+  c.addEventListener('dblclick', () => { camAz = CAM_DEFAULT; save(); drawAttitude(V.pkt); });
 })();
 const LIGHT = (() => { const l = [-0.45, 0.65, 0.6], n = Math.hypot(...l); return l.map(v => v / n); })();
 
@@ -470,7 +631,7 @@ function drawAttitude(p) {
   g.strokeStyle = css('--muted');
   g.beginPath(); g.moveTo(...toScreen([-1.15, 0, 0])); g.lineTo(...toScreen([1.3, 0, 0])); g.stroke();
   g.setLineDash([]);
-  g.fillStyle = css('--muted'); g.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
+  g.fillStyle = css('--muted'); g.font = `11px ${SANS}`;
   g.textAlign = 'left'; g.textBaseline = 'middle';
   g.fillText('up', ...toScreen([1.3, 0, 0]).map((v, i) => v + (i ? 0 : 6)));
 
@@ -491,27 +652,27 @@ function drawAttitude(p) {
     g.closePath(); g.fill(); g.stroke();
   }
   g.globalAlpha = 1;
-  g.fillStyle = css('--muted'); g.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
+  g.fillStyle = css('--muted'); g.font = `11px ${SANS}`;
   g.textAlign = 'left'; g.textBaseline = 'alphabetic';
   g.fillText('drag to turn', 8, h - 8);
   if (!has) {
-    g.fillStyle = css('--muted'); g.font = '13px -apple-system, BlinkMacSystemFont, sans-serif'; g.textAlign = 'center';
+    g.fillStyle = css('--muted'); g.font = `13px ${SANS}`; g.textAlign = 'center';
     g.fillText(!p ? 'Waiting for data' : p.oldFw ? 'Flash the new rocket and base station firmware to see attitude'
       : 'Needs the IMU', w / 2, h - 14);
   }
 }
 
 // ---------- incoming data ----------
-function handlePacket(p, t = now()) {
+function handlePacket(p, t = now(), v = LIVE) {
   const hasAtt = 'roll' in p;                      // firmware from before the attitude filter has no angles
   const hasFlight = 'st' in p;                     // ...and before the flight estimate, no phase or velocity
+  const hasBat = 'vbat' in p;                      // ...and before the battery reading
   for (const k of CSV_COLS) if (!Number.isFinite(p[k])) p[k] = 0;   // a malformed packet can't break the charts
-  S.lastPacketAt = t;
+  v.lastPacketAt = t;
   p.amag = mag(p.ax, p.ay, p.az);
   p.gmag = mag(p.gx, p.gy, p.gz);
   p.hmag = mag(p.hx, p.hy, p.hz);
   p.t_rx = t;
-  S.rows.push([new Date().toISOString(), ...CSV_COLS.map(k => p[k])]);
 
   // blank what the rocket can't measure yet, so charts and tiles show nothing instead of zeros
   if (!(p.flags & F.BARO)) p.alt = p.pres = p.malt = NaN;
@@ -519,21 +680,64 @@ function handlePacket(p, t = now()) {
   if (!(p.flags & (F.IMU | F.HIGH_G))) p.vel = p.mvel = NaN;
   if (!(p.flags & F.IMU) || !hasAtt) p.roll = p.pitch = p.yaw = NaN;
   if (!hasFlight) p.st = p.vel = p.mvel = NaN;
+  if (!hasBat) p.vbat = NaN;
   p.oldFw = !hasAtt;
   if (!(p.flags & F.GPS)) p.fix = 0;
   if (p.fix < 3) p.galt = p.gvu = NaN;
   if (p.fix < 2) p.lat = p.lon = p.gspd = NaN;
+  if (p.lat === 0 && p.lon === 0) p.lat = p.lon = NaN;   // no position: a recording without GPS columns, or no fix yet
   // GPS altitude is above sea level; the pad reading while still on the pad makes it comparable
-  if (p.st === 0 && p.fix >= 3) S.gpsGround = S.gpsGround == null ? p.galt : S.gpsGround * 0.9 + p.galt * 0.1;
-  p.gagl = S.gpsGround != null ? p.galt - S.gpsGround : NaN;
+  if (p.st === 0 && p.fix >= 3) v.gpsGround = v.gpsGround == null ? p.galt : v.gpsGround * 0.9 + p.galt * 0.1;
+  p.gagl = v.gpsGround != null ? p.galt - v.gpsGround : NaN;
+  // where the rocket is, and where the pad was (averaged on the pad, frozen once it has flown)
+  if (fin(p.lat) && fin(p.lon)) {
+    v.fix = { lat: p.lat, lon: p.lon, t, sats: p.sats };
+    if (p.st === 0 && p.fix >= 3 && !v.flight) {
+      v.pad = v.pad ? { lat: v.pad.lat * 0.9 + p.lat * 0.1, lon: v.pad.lon * 0.9 + p.lon * 0.1 } : { lat: p.lat, lon: p.lon };
+    }
+  }
 
-  S.pkt = p;
-  S.peak = Math.max(S.peak, p.peak);
-  const h = { t };
+  v.pkt = p;
+  v.peak = Math.max(v.peak, p.peak);
+  const h = { t, st: p.st };
   for (const k of HIST_KEYS) h[k] = p[k];
-  S.hist.push(h);
-  while (S.hist.length && S.hist[0].t < t - WINDOW_S - 2) S.hist.shift();
-  $('saveBtn').disabled = false;
+  v.hist.push(h);
+  while (v.hist.length && v.hist[0].t < t - WINDOW_S - 2) v.hist.shift();
+  trackFlight(v, p, h);
+}
+
+// The flight record behind the whole-flight charts and the summary: from 5 s before liftoff to
+// 20 s after landing. It stays until the next liftoff, so the summary survives a reboot on the ground.
+function trackFlight(v, p, h) {
+  if (!fin(p.st)) return;
+  const t = h.t, joined = v.prevSt === null;
+  if (p.st >= 1 && (v.prevSt === 0 || (joined && !v.flight))) {
+    v.flight = { launchRx: joined ? null : t, phaseAt: [], landRx: null, landT: null, done: false, descent: null,
+      pts: joined ? [] : v.hist.filter(q => q.t >= t - 5 && q !== h),
+      stats: { alt: -Infinity, altAt: null, gps: -Infinity, vel: 0, mach: 0, g: 0 } };
+  }
+  v.prevSt = p.st;
+  const f = v.flight;
+  if (!f || f.done) return;
+  if (p.st === 0 || (f.landRx != null && t - f.landRx > 20)) { f.done = true; return; }
+  f.pts.push(h);
+  if (f.pts.length > 30000) f.pts.shift();
+  const T = f.launchRx != null ? t - f.launchRx : null;
+  if (T != null && f.phaseAt[p.st] == null) f.phaseAt[p.st] = T;
+  const s = f.stats;
+  if (fin(p.alt) && p.alt > s.alt) { s.alt = p.alt; s.altAt = T; }
+  if (fin(p.gagl)) s.gps = Math.max(s.gps, p.gagl);
+  if (fin(p.vel)) { s.vel = Math.max(s.vel, p.vel); s.mach = Math.max(s.mach, Math.abs(p.vel) / soundSpeed(p)); }
+  s.g = Math.max(s.g, p.peak, p.amag, fin(p.hmag) ? p.hmag : 0);
+  if (p.st === 4 && f.landRx == null) {
+    f.landRx = t;
+    // the rocket calls it landed after 5 s of stillness, so touchdown is the last moment it was still falling
+    const down = f.pts.filter(q => q.st === 3 && fin(q.vel) && q.vel < -0.5);
+    const touch = down.length ? down.at(-1).t : t - 5;
+    if (f.launchRx != null) f.landT = touch - f.launchRx;
+    const last = down.filter(q => q.t >= touch - 10);
+    if (last.length) f.descent = -last.reduce((a, q) => a + q.vel, 0) / last.length;
+  }
 }
 
 function handleLine(line) {
@@ -545,7 +749,11 @@ function handleLine(line) {
   let out = line.slice(i);
   if (OPERATOR && !SHARE_POSITION && 'lat' in obj) { const { lat, lon, ...rest } = obj; out = JSON.stringify(rest); }
   if (obj.hb) S.hb = obj;
-  else if ('seq' in obj) handlePacket(obj);
+  else if ('seq' in obj) {
+    S.rows.push([new Date().toISOString(), ...CSV_COLS.map(k => fin(obj[k]) ? obj[k] : 0)]);
+    $('saveBtn').disabled = false;
+    handlePacket(obj);
+  }
   else return;
   if (OPERATOR && R.authed && R.ws && R.ws.readyState === WebSocket.OPEN) R.ws.send(out);
 }
@@ -629,10 +837,10 @@ function stopRelay() {
 
 // the relay sends the last 30 s with its own receive times, so old data shows as old
 function replayBacklog(m) {
-  S.hist = [];
+  LIVE.hist = [];
   const t = now();
   for (const { at, p } of m.items) handlePacket(p, t - (m.now - at) / 1000);
-  if (m.items.length) S.lastJsonAt = S.lastPacketAt;
+  if (m.items.length) S.lastJsonAt = LIVE.lastPacketAt;
   if (m.hb) S.hb = m.hb;
 }
 
@@ -733,7 +941,7 @@ function renderRecordings() {
     const stats = [];
     if (r.apogee > 0) stats.push(`apogee <b>${Math.round(r.apogee).toLocaleString()} m</b>`);
     if (r.flight && r.maxVel > 0) stats.push(`top speed <b>${r.maxVel.toFixed(0)} m/s</b>`);
-    if (r.peakG > 0) stats.push(`peak <b>${r.peakG.toFixed(1)} g</b>`);
+    if (r.flight ? r.peakG > 0 : r.peakG >= 2) stats.push(`peak <b>${r.peakG.toFixed(1)} g</b>`);
     row.innerHTML = `
       <div class="info">
         <div class="name">${r.flight ? 'Flight' : 'Ground session'}${r.live ? '<span class="badge live">Recording now</span>' : ''}</div>
@@ -741,9 +949,11 @@ function renderRecordings() {
         ${stats.length ? `<div class="stats">${stats.join(' · ')}</div>` : ''}
       </div>
       <div class="acts">
+        <button class="replay">Replay</button>
         <a class="btn primary" href="${apiBase()}/api/recordings/${r.id}.csv" download>Download CSV</a>
         ${OPERATOR ? '<button class="del">Delete</button>' : ''}
       </div>`;
+    row.querySelector('.replay').onclick = () => replayRecording(r);
     const del = row.querySelector('.del');
     if (del) del.onclick = () => {
       if (!R.authed) { showMsg('Turn on Broadcast to manage recordings.'); return; }
@@ -838,8 +1048,9 @@ async function disconnect(lost = false) {
 setInterval(() => { if (S.connected && now() - S.lastJsonAt > 2) send('j').catch(() => {}); }, 1000);
 
 // ---------- demo ----------
-// A simulated flight: 5 s on the pad, 2 s boost to about Mach 0.7, coast to about 2.5 km,
-// then a fast descent so the loop stays short. Packets carry what the real rocket sends.
+// A simulated flight: 5 s on the pad, 2 s boost to about Mach 0.7, coast to about 2.5 km, then
+// down under a drogue at 40 m/s and a main at 6 m/s from 250 m (about two minutes in all).
+// Packets carry what the real rocket sends.
 function startDemo() {
   if (S.demoTimer) { stopDemo(); return; }
   $('demoBtn').textContent = 'Stop demo';
@@ -854,7 +1065,7 @@ function startDemo() {
     if (st === 0 && ft > 5) { st = 1; ft = 0; }
     if (st === 1) { a = 12 * G; if (ft > 2) { st = 2; ft = 0; } }
     if (st === 2) { a = -G - 0.0001 * v * Math.abs(v); if (v < 0) { st = 3; ft = 0; } }
-    if (st === 3) { a = v > -60 ? -G * 0.6 : 0; if (h <= 0) { st = 4; ft = 0; h = 0; v = 0; a = 0; } }
+    if (st === 3) { a = ((h > 250 ? -40 : -6) - v) * 1.2; if (h <= 0) { st = 4; ft = 0; h = 0; v = 0; a = 0; } }
     if (st === 4 && ft > 6) { st = 0; ft = 0; malt = mvel = 0; east = north = 0; }
     if (st !== 4) { v += a * dt; h = Math.max(0, h + v * dt); }
     if (st === 3) { east += 4 * dt; north += 1.5 * dt; }  // drifting downwind
@@ -887,6 +1098,7 @@ function startDemo() {
       galt: Math.round(msl + rnd(3)), gvu: +(v + rnd(1)).toFixed(1), gspd: st === 3 ? 4.3 : 0.1,
       roll: +roll.toFixed(1), pitch: +(pitch + rnd(0.3)).toFixed(1), yaw: +(yaw + rnd(0.3)).toFixed(1),
       rssi: +rssi.toFixed(1), snr: +(9 - Math.max(0, -rssi - 90) * 0.5 + rnd(1)).toFixed(1),
+      vbat: +(3.95 - t / 3000 - (st === 1 ? 0.15 : 0) + rnd(0.005)).toFixed(2),   // sags under the motor's vibration and the radio
       loss: +(100 * lost / seq).toFixed(2), demo: 1,       // the relay doesn't record demo packets
     }));
     if (seq % 10 === 0) handleLine(JSON.stringify({ hb: 1, live: 1, sf: 8, freq: 915.0, bw: 500, crc: 0, bad: 0, oled: 60, age: 0, plen: 71, badlen: 0 }));
@@ -932,6 +1144,52 @@ function renderFlight(p) {
   } else { $('tPos').textContent = '-'; $('tPosSub').textContent = p.flags & F.GPS ? 'waiting for a fix' : ''; }
 }
 
+// ---------- mission clock ----------
+// T+ counts from the first packet that left the pad. Someone who opens the page mid-flight never
+// saw liftoff, so their clock stays blank instead of guessing.
+const fmtT = s => {
+  const m = Math.floor(s / 60), r = s - m * 60;
+  return `${String(m).padStart(2, '0')}:${r.toFixed(1).padStart(4, '0')}`;
+};
+
+function renderClock(p, t) {
+  const st = p && fin(p.st) ? p.st : -1, f = V.flight;
+  let text = 'T+ --:--.-', sub = !p ? 'waiting for data' : st < 0 ? 'needs new firmware' : '', cls = 'idle';
+  if (st === 0) { text = 'T+ 00:00.0'; sub = 'on the pad'; }
+  else if (st > 0 && (!f || f.launchRx == null)) sub = 'joined after liftoff';
+  else if (st > 0 && f.landRx != null) { text = `T+ ${fmtT(f.landT ?? f.landRx - f.launchRx)}`; sub = 'flight time'; cls = ''; }
+  else if (st > 0) { text = `T+ ${fmtT(Math.max(0, t - f.launchRx))}`; sub = 'since liftoff'; cls = 'flying'; }
+  const c = $('clockT');
+  if (c.textContent !== text) c.textContent = text;
+  if (c.className !== cls) c.className = cls;
+  if ($('clockSub').textContent !== sub) $('clockSub').textContent = sub;
+}
+
+// ---------- battery ----------
+// LiPo charge from the resting voltage of one cell. Under load it reads a little low, so it is
+// an estimate. The cell count comes from the voltage itself: 1S tops out at 4.2 V, 2S starts near 6.
+const LIPO = [[4.20, 100], [4.15, 95], [4.11, 90], [4.08, 85], [4.02, 80], [3.98, 75], [3.95, 70], [3.91, 65],
+  [3.87, 60], [3.85, 55], [3.84, 50], [3.82, 45], [3.80, 40], [3.79, 35], [3.77, 30], [3.75, 25], [3.73, 20],
+  [3.71, 15], [3.69, 10], [3.61, 5], [3.27, 0]];
+function lipoPct(cell) {
+  if (cell >= LIPO[0][0]) return 100;
+  for (let i = 1; i < LIPO.length; i++) {
+    const [v1, p1] = LIPO[i - 1], [v0, p0] = LIPO[i];
+    if (cell >= v0) return p0 + (cell - v0) / (v1 - v0) * (p1 - p0);
+  }
+  return 0;
+}
+
+function renderBattery(p) {
+  const v = p.vbat;
+  if (!fin(v)) { $('tBat').textContent = '-'; setText('tBatSub', 'needs new firmware'); $('tBatSub').classList.remove('warnc'); return; }
+  $('tBat').innerHTML = `${v.toFixed(2)}<small>V</small>`;
+  if (v < 2.5) { setText('tBatSub', 'no battery connected'); $('tBatSub').classList.remove('warnc'); return; }
+  const cells = Math.max(1, Math.ceil(v / 4.35)), cell = v / cells, low = cell < 3.6;
+  setText('tBatSub', `about ${Math.round(lipoPct(cell))}%, ${cells}S` + (low ? ', charge before flying' : ''));
+  $('tBatSub').classList.toggle('warnc', low);
+}
+
 const MISMATCH_MSG = n => `The rocket is sending ${n} byte packets but the base station expects a different size, so ` +
   'they are being dropped. Flash the rocket and base station firmware together.';
 function setStatus(text, cls) {
@@ -941,25 +1199,28 @@ function setStatus(text, cls) {
 }
 
 function render() {
-  const t = now();
+  const tl = now(), t = V.clock();
   const live = S.connected || S.demoTimer;
-  const p = S.pkt, hb = S.hb;
+  const p = V.pkt, hb = S.hb;
+  const lp = LIVE.pkt, lAge = tl - LIVE.lastPacketAt;
 
-  if (!OPERATOR) {
+  if (V !== LIVE) setStatus(RP.playing ? `Replay ${RP.speed}×` : 'Replay paused', 'warn');
+  else if (!OPERATOR) {
     // heartbeats arrive every second while the ground station is up, so silence means it is gone
     if (!R.open) setStatus('Connecting', 'warn');
-    else if (!R.publisher || t - S.lastJsonAt > 3) setStatus('Ground station offline', '');
-    else if (!p) setStatus('Waiting for the rocket', 'warn');
-    else if (t - S.lastPacketAt > 5) setStatus(`NO SIGNAL ${Math.floor(t - S.lastPacketAt)} s`, 'bad');
+    else if (!R.publisher || tl - S.lastJsonAt > 3) setStatus('Ground station offline', '');
+    else if (!lp) setStatus('Waiting for the rocket', 'warn');
+    else if (lAge > 5) setStatus(`NO SIGNAL ${Math.floor(lAge)} s`, 'bad');
     else setStatus('Live', 'ok');
-    $('watching').textContent = R.open ? `${R.viewers} watching` : '';
   } else {
     if (!live) setStatus('Disconnected', '');
-    else if (S.connected && t - S.lastJsonAt > 3) setStatus('Waiting for base station', 'warn');
-    else if (!p) setStatus('Listening, no packets yet', 'warn');
-    else if (t - S.lastPacketAt > 5) setStatus(`NO SIGNAL ${Math.floor(t - S.lastPacketAt)} s`, 'bad');
+    else if (S.connected && tl - S.lastJsonAt > 3) setStatus('Waiting for base station', 'warn');
+    else if (!lp) setStatus('Listening, no packets yet', 'warn');
+    else if (lAge > 5) setStatus(`NO SIGNAL ${Math.floor(lAge)} s`, 'bad');
     else setStatus('Live', 'ok');
-
+  }
+  if (!OPERATOR) $('watching').textContent = R.open ? `${R.viewers} watching` : '';
+  else {
     const b = $('bcast');
     b.hidden = !R.want;
     if (R.want) {
@@ -972,7 +1233,7 @@ function render() {
   $('mode').textContent = hb ? `${hb.live ? 'LIVE' : 'RANGE'} mode · SF${hb.sf} · ${hb.bw} kHz · ${hb.freq.toFixed(1)} MHz` : '';
 
   if (p) {
-    const age = (t - S.lastPacketAt) * 1000;
+    const age = (t - V.lastPacketAt) * 1000;
     $('tSeq').textContent = `#${p.seq}`;
     $('tAge').textContent = age < 10000 ? `${age.toFixed(0)} ms ago` : `${(age / 1000).toFixed(0)} s ago`;
     $('tRssi').innerHTML = `${p.rssi.toFixed(0)}<small>dBm</small>`;
@@ -981,8 +1242,9 @@ function render() {
     $('tLoss').innerHTML = `${p.loss.toFixed(1)}<small>%</small>`;
     $('tAcc').innerHTML = `${p.amag.toFixed(2)}<small>g</small>`;
     $('tTilt').textContent = fin(p.pitch) ? `tilt ${tiltDeg(p).toFixed(0)}° from vertical` : '';
-    $('tPeak').innerHTML = `${S.peak.toFixed(1)}<small>g</small>`;
+    $('tPeak').innerHTML = `${V.peak.toFixed(1)}<small>g</small>`;
     $('tTemp').innerHTML = `${p.temp.toFixed(1)}<small>°C</small>`;
+    renderBattery(p);
     $('tUp').innerHTML = `${p.t.toFixed(0)}<small>s</small>`;
     renderFlight(p);
     $('fSens').innerHTML = SENSORS.map(([bit, name]) =>
@@ -1000,12 +1262,254 @@ function render() {
     $('fOled').textContent = hb.oled ? `OLED at 0x${hb.oled.toString(16).toUpperCase()}` : 'not found';
   }
 
+  renderClock(p, t);
+  renderRange();
+  renderSummary();
+  renderRecovery(t);
   chartEls.forEach(c => drawChart(c, t));
   drawAttitude(p);
 }
 
+// ---------- chart range: last 30 s or the whole flight ----------
+// Switches to the whole flight by itself on landing, unless someone picked a range during that flight.
+const RANGE = { mode: '30', picked: false, flight: null };
+
+function setRange(mode, picked = false) {
+  RANGE.mode = mode;
+  if (picked) RANGE.picked = true;
+  document.querySelectorAll('#rangeSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.range === mode));
+}
+
+function renderRange() {
+  const f = V.flight;
+  if (f !== RANGE.flight) {                      // a new flight (or a replay) starts fresh
+    RANGE.flight = f; RANGE.picked = false;
+    if (!f && RANGE.mode === 'flight') setRange('30');
+  }
+  if (f && f.landRx != null && !f.autoRange) {
+    f.autoRange = true;
+    if (!RANGE.picked) setRange('flight');
+  }
+  const btn = document.querySelector('#rangeSeg [data-range="flight"]');
+  btn.disabled = !f;
+  const note = !f ? 'Whole flight fills in from liftoff' : f.launchRx == null ? 'Joined after liftoff, so the start is missing' : '';
+  if ($('rangeNote').textContent !== note) $('rangeNote').textContent = note;
+}
+
+// ---------- flight summary ----------
+function chuteNote(rate) {
+  if (!(rate > 0)) return 'needs the barometer';
+  if (rate < 10) return 'normal for a main parachute';
+  if (rate < 35) return 'fast: drogue speed, or the main is not fully open';
+  return 'very fast: the parachute likely did not open';
+}
+
+let summaryKey = null;
+function renderSummary() {
+  const f = V.flight, show = !!(f && f.landRx != null && !f.dismissed);
+  $('summary').hidden = !show;
+  if (!show) { summaryKey = null; return; }
+  const key = f.landRx + ':' + f.pts.length;
+  if (key === summaryKey) return;
+  summaryKey = key;
+  const s = f.stats, baro = s.alt > -Infinity, gps = s.gps > -Infinity;
+  const cells = [
+    ['Apogee', baro ? Math.round(s.alt).toLocaleString() : gps ? Math.round(s.gps).toLocaleString() : '-', 'm',
+      baro ? (s.altAt != null ? `at T+${s.altAt.toFixed(1)} s` : 'barometer') : gps ? 'from GPS' : 'needs the barometer or GPS'],
+    ['Top speed', s.vel.toFixed(0), 'm/s', baro ? 'filtered, baro + accel' : 'accel only'],
+    ['Max Mach', s.mach.toFixed(2), '', s.mach >= 1 ? 'supersonic' : s.mach >= 0.8 ? 'transonic' : 'subsonic'],
+    ['Peak g', s.g.toFixed(1), 'g', 'highest acceleration'],
+    ['Flight time', f.landT != null ? fmtT(f.landT) : '-', '', 'liftoff to touchdown'],
+    ['Motor burn', f.phaseAt[2] != null ? f.phaseAt[2].toFixed(1) : '-', 's', 'liftoff to burnout'],
+    ['Descent rate', f.descent ? f.descent.toFixed(1) : '-', 'm/s', chuteNote(f.descent)],
+  ];
+  $('sumGrid').innerHTML = cells.map(([label, v, unit, sub]) =>
+    `<div class="cell"><div class="label">${label}</div><div class="value">${v}${v !== '-' && unit ? `<small>${unit}</small>` : ''}</div><div class="sub">${sub}</div></div>`).join('');
+  $('sumNote').textContent = f.launchRx == null ? 'Joined after liftoff, so some numbers may be missing' : '';
+}
+
+// ---------- recovery (operator only: the position never leaves this computer) ----------
+const ME = { at: null, err: '' };
+const toRad = d => d * Math.PI / 180;
+function distM(a, b) {                           // haversine, metres
+  const dLat = toRad(b.lat - a.lat), dLon = toRad(b.lon - a.lon);
+  const x = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
+  return 6371000 * 2 * Math.asin(Math.sqrt(x));
+}
+function bearingDeg(a, b) {                      // from a to b, degrees clockwise from north
+  const y = Math.sin(toRad(b.lon - a.lon)) * Math.cos(toRad(b.lat));
+  const x = Math.cos(toRad(a.lat)) * Math.sin(toRad(b.lat)) - Math.sin(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.cos(toRad(b.lon - a.lon));
+  return (Math.atan2(y, x) / D2R + 360) % 360;
+}
+const COMPASS = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest'];
+const compass = b => COMPASS[Math.round(b / 45) % 8];
+const fmtDist = m => m >= 1000 ? `${(m / 1000).toFixed(2)} km` : `${Math.round(m)} m`;
+const fmtAge = s => s < 90 ? `${Math.round(s)} s` : `${Math.round(s / 60)} min`;
+const setText = (id, text) => { if ($(id).textContent !== text) $(id).textContent = text; };
+
+function renderRecovery(t) {
+  if (!OPERATOR) return;
+  const fx = V.fix, pk = V.pkt;
+  $('recActs').hidden = !fx;
+  $('recArrow').style.display = 'none';
+  if (!fx) {
+    setText('recDist', '-');
+    setText('recDir', V !== LIVE && !RP.hasPos ? 'This recording has no GPS position (only your local CSV does)'
+      : !pk ? 'Waiting for data' : !(pk.flags & F.GPS) ? 'GPS not connected' : 'Waiting for a GPS fix');
+    setText('recCoords', ''); setText('recAge', ''); setText('recMe', '');
+    return;
+  }
+  const coords = `${fx.lat.toFixed(6)}, ${fx.lon.toFixed(6)}`;
+  if (V.pad) {
+    const d = distM(V.pad, fx), b = bearingDeg(V.pad, fx);
+    setText('recDist', d < 15 ? 'At the pad' : fmtDist(d));
+    setText('recDir', d < 15 ? 'Within 15 m of where it sat before launch' : `${compass(b)} of the pad (${Math.round(b)}°)`);
+    if (d >= 15) { $('recArrow').style.display = ''; $('recArrow').setAttribute('transform', `rotate(${b.toFixed(0)})`); }
+  } else {
+    setText('recDist', 'Last fix');
+    setText('recDir', 'No pad position (it needs a 3D fix while on the pad)');
+  }
+  setText('recCoords', coords);
+  const age = t - fx.t;
+  setText('recAge', age < 5 ? `${V === LIVE ? 'Live fix' : 'Fix'}, ${fx.sats} satellites` : `Last fix ${fmtAge(age)} ago`);
+  $('recAge').classList.toggle('warnc', age >= 5);
+  setText('recMe', ME.at ? `From you: ${fmtDist(distM(ME.at, fx))}, head ${compass(bearingDeg(ME.at, fx))} (${Math.round(bearingDeg(ME.at, fx))}°)` +
+    (ME.at.acc > 100 ? `, your location is only good to ${fmtDist(ME.at.acc)}` : '') : ME.err);
+  const href = `https://www.google.com/maps/dir/?api=1&destination=${fx.lat.toFixed(6)},${fx.lon.toFixed(6)}`;
+  if ($('recDirections').getAttribute('href') !== href) $('recDirections').setAttribute('href', href);
+}
+
+function locateMe() {
+  if (!navigator.geolocation) { ME.err = 'This browser cannot get your location. Use Directions on your phone.'; return; }
+  setText('recMe', 'Finding your location…');
+  navigator.geolocation.getCurrentPosition(
+    pos => { ME.at = { lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy }; ME.err = ''; },
+    () => { ME.err = 'Location is not available on this computer. Use Directions on your phone instead.'; },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 });
+}
+
+// ---------- replay a recording through the dashboard ----------
+// Packets go into their own view on a virtual clock, so the charts, 3D rocket, clock and summary
+// all work as they did live. Seeking forward feeds packets ahead; seeking back rebuilds from the start.
+const RP = { on: false, packets: [], dur: 0, pos: 0, idx: 0, playing: false, speed: 1, last: 0, view: null,
+             liftoff: null, hasPos: false, name: '', seekTo: null };
+
+function parseCsv(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) return [];
+  const head = lines[0].split(',').map(h => h.trim());
+  const ti = head.findIndex(h => h === 'utc_time' || h === 'pc_time');
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const c = lines[i].split(','), p = {};
+    head.forEach((h, j) => { if (j !== ti && c[j] !== undefined && c[j] !== '') p[h] = +c[j]; });
+    if (!fin(p.seq)) continue;
+    rows.push({ ms: ti >= 0 ? Date.parse(c[ti]) : NaN, p });
+  }
+  if (!rows.length) return [];
+  // wall clock when the file has it, else rocket uptime; never let time run backwards
+  const wall = fin(rows[0].ms);
+  let prev = 0;
+  return rows.map(r => {
+    const rel = wall && fin(r.ms) ? (r.ms - rows[0].ms) / 1000 : r.p.t - rows[0].p.t;
+    prev = Math.max(prev, fin(rel) ? rel : prev);
+    return { rel: prev, p: r.p };
+  });
+}
+
+function startReplay(packets, name) {
+  if (!packets.length) { showMsg('That file has no packets in it.'); return; }
+  RP.packets = packets; RP.dur = packets.at(-1).rel; RP.name = name;
+  RP.hasPos = packets.some(q => fin(q.p.lat) && q.p.lat !== 0);
+  RP.liftoff = null;
+  for (let i = 1; i < packets.length; i++) {
+    if (packets[i].p.st >= 1 && packets[i - 1].p.st === 0) { RP.liftoff = packets[i].rel; break; }
+  }
+  RP.on = true; RP.view = null; RP.pos = 0;
+  $('replayBar').hidden = false;
+  $('rpName').textContent = name;
+  $('rpLiftoff').hidden = RP.liftoff == null;
+  $('rpSeek').max = RP.dur.toFixed(1);
+  setRecOpen(false);
+  seek(RP.liftoff != null ? Math.max(0, RP.liftoff - 10) : 0);   // a flight starts 10 s before liftoff
+  setSpeed(1);
+  setPlaying(true);
+  window.scrollTo({ top: 0 });
+}
+
+function seek(pos) {
+  pos = Math.max(0, Math.min(RP.dur, pos));
+  if (!RP.view || pos < RP.pos) {                // going back: rebuild from the first packet
+    RP.view = newView(() => RP.pos);
+    RP.idx = 0;
+    V = RP.view;
+  }
+  RP.pos = pos;
+  feed();
+}
+
+function feed() {
+  const pk = RP.packets;
+  while (RP.idx < pk.length && pk[RP.idx].rel <= RP.pos) {
+    handlePacket({ ...pk[RP.idx].p }, pk[RP.idx].rel, RP.view);
+    RP.idx++;
+  }
+}
+
+function stepReplay(ts) {
+  const dt = RP.last ? Math.min((ts - RP.last) / 1000, 0.5) : 0;
+  RP.last = ts;
+  if (!RP.on) return;
+  if (RP.seekTo != null) { seek(RP.seekTo); RP.seekTo = null; }
+  if (RP.playing) {
+    RP.pos = Math.min(RP.dur, RP.pos + dt * RP.speed);
+    feed();
+    if (RP.pos >= RP.dur) setPlaying(false);
+  }
+  if (!RP.dragging) $('rpSeek').value = RP.pos.toFixed(1);
+  setText('rpPos', fmtClock(RP.pos));
+  setText('rpDur', fmtClock(RP.dur));
+}
+
+const fmtClock = s => {
+  const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, r = Math.floor(s % 60);
+  return (h ? `${h}:${String(m).padStart(2, '0')}` : `${m}`) + `:${String(r).padStart(2, '0')}`;
+};
+
+function setPlaying(on) {
+  if (on && RP.pos >= RP.dur) seek(0);           // play again from the start
+  RP.playing = on;
+  $('rpPlay').textContent = on ? 'Pause' : 'Play';
+}
+
+function setSpeed(x) {
+  RP.speed = x;
+  document.querySelectorAll('#rpSpeeds button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.speed === x));
+}
+
+function exitReplay() {
+  RP.on = false; RP.playing = false; RP.view = null; RP.packets = [];
+  V = LIVE;
+  $('replayBar').hidden = true;
+}
+
+async function replayRecording(r) {
+  showMsg('');
+  try {
+    const res = await fetch(`${apiBase()}/api/recordings/${r.id}.csv`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status);
+    startReplay(parseCsv(await res.text()), `${r.flight ? 'Flight' : 'Ground session'}, ${fmtWhen(r.started)}`);
+  } catch { showMsg("Couldn't load that recording. Check the internet connection and try again."); }
+}
+
+function replayFile(file) {
+  if (!file) return;
+  file.text().then(text => startReplay(parseCsv(text), file.name));
+}
+
 let lastFrame = 0;
 function frame(ts) {
+  stepReplay(ts);
   if (ts - lastFrame > 50) { lastFrame = ts; render(); }   // about 20 fps is plenty
   requestAnimationFrame(frame);
 }
@@ -1083,7 +1587,7 @@ $('layoutReset').onclick = () => {
 // ---------- buttons ----------
 $('connectBtn').onclick = () => (S.connected ? disconnect() : connect());
 $('demoBtn').onclick = startDemo;
-$('peakReset').onclick = () => { S.peak = 0; };
+$('peakReset').onclick = () => { V.peak = 0; };
 $('saveBtn').onclick = () => {
   const csv = [['pc_time', ...CSV_COLS].join(','), ...S.rows.map(r => r.join(','))].join('\n');
   const a = document.createElement('a');
@@ -1097,9 +1601,28 @@ $('dataBtn').onclick = () => setRecOpen(!REC.open);
 $('recClose').onclick = () => setRecOpen(false);
 $('recNew').onclick = startNewRecording;
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && REC.open) setRecOpen(false); });
+$('recOpen').onclick = () => $('recFile').click();
+$('recFile').onchange = e => { replayFile(e.target.files[0]); e.target.value = ''; };
+document.querySelectorAll('#rangeSeg button').forEach(b => { b.onclick = () => setRange(b.dataset.range, true); });
+$('sumHide').onclick = () => { if (V.flight) V.flight.dismissed = true; };
+$('rpPlay').onclick = () => setPlaying(!RP.playing);
+$('rpExit').onclick = exitReplay;
+$('rpLiftoff').onclick = () => { RP.seekTo = Math.max(0, RP.liftoff - 10); };
+document.querySelectorAll('#rpSpeeds button').forEach(b => { b.onclick = () => setSpeed(+b.dataset.speed); });
+$('rpSeek').addEventListener('input', e => { RP.dragging = true; RP.seekTo = +e.target.value; });
+$('rpSeek').addEventListener('change', () => { RP.dragging = false; });
+$('recLocate').onclick = locateMe;
+$('recCopy').onclick = () => {
+  const fx = V.fix;
+  if (!fx) return;
+  navigator.clipboard.writeText(`${fx.lat.toFixed(6)}, ${fx.lon.toFixed(6)}`).then(() => {
+    $('recCopy').textContent = 'Copied';
+    setTimeout(() => { $('recCopy').textContent = 'Copy coordinates'; }, 1500);
+  }, () => {});
+};
 
 if (OPERATOR) {
-  $('recLocal').hidden = $('recNew').hidden = false;
+  $('recLocal').hidden = $('recNew').hidden = $('recovery').hidden = false;
   if ('serial' in navigator) navigator.serial.addEventListener('disconnect', e => { if (e.target === S.port) disconnect(true); });
   else showMsg('This browser has no Web Serial support, so Connect will not work here. Open this page in Chrome or Edge. Demo still works.');
   resumeBroadcast();

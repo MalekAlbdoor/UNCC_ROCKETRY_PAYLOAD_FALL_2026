@@ -2,6 +2,7 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <RadioLib.h>
+#include "stm32yyxx_ll_adc.h"
 
 // 1 = live (10 Hz, SF8), 0 = max range (1 Hz, SF12). Must match the base station.
 #define LIVE 1
@@ -45,7 +46,7 @@ uint8_t gpsI2C = 0;                               // 0x42 when the GPS answers o
 enum Phase : uint8_t { PAD, BOOST, COAST, DESCENT, LANDED };
 
 struct __attribute__((packed)) Telem {
-  uint8_t  magic;      // 'V' ('U' was the 30-byte IMU-only packet)
+  uint8_t  magic;      // 'W' ('V' was the 71-byte packet without the battery, 'U' the 30-byte IMU-only one)
   uint8_t  flags;      // bit0 IMU, bit1 high-g, bit2 baro, bit3 SHT45, bit4 GPS talking
   uint16_t seq;
   uint32_t ms;
@@ -69,10 +70,11 @@ struct __attribute__((packed)) Telem {
   int16_t  gpsVup;     // GPS vertical velocity, 0.1 m/s
   uint16_t gpsSpd;     // GPS ground speed, 0.1 m/s
   int16_t  roll, pitch, yaw;   // attitude, 0.01 deg; all 0 standing on the pad
+  uint16_t vbat;       // battery, mV
 };
-static_assert(sizeof(Telem) == 71, "base station expects 71 bytes");
+static_assert(sizeof(Telem) == 73, "base station expects 73 bytes");
 
-Telem pkt = {'V'};
+Telem pkt = {'W'};
 float peakG = 0;
 volatile bool txDone = false;
 bool txBusy = false;
@@ -302,7 +304,8 @@ bool gpsTalking() { return gpsLastPvt && millis() - gpsLastPvt < 3000; }
 // ---------- altitude, velocity and flight phase ----------
 // A two-state Kalman filter (altitude, vertical velocity). The accelerometers drive it at
 // 400 Hz and the barometer corrects it. Without a barometer it is accel only and drifts, so
-// velocity is pinned to zero whenever the board sits still on the pad or after landing.
+// velocity is pinned to zero whenever the board sits still on the pad or after landing, and
+// altitude to zero while it sits on the pad.
 // "Up" is whichever way gravity pulled while the board sat still on the pad, so this assumes
 // the rocket flies roughly along the axis it stood on.
 struct Up { float x, y, z; bool ok; };            // gravity as read at rest, in sensor axes
@@ -359,6 +362,8 @@ void estimate(float x, float y, float z, float hx, float hy, float hz, float gyr
   float a = useImu ? upAccel(upImu, x, y, z) : upAccel(upHig, hx, hy, hz);
   kfPredict(a, dt);
   if (still && grounded) { kv = 0; P01 = 0; P11 = 0.01f; }   // zero-velocity update
+  // with no barometer nothing corrects the altitude, and sitting on the pad it is zero by definition
+  if (still && phase == PAD && !baro.bus) { kh = 0; P00 = 0.01f; }
 
   static uint16_t hot = 0, cool = 0, falling = 0;
   switch (phase) {
@@ -494,6 +499,24 @@ void sample(float dt) {
   }
 }
 
+// ---------- battery ----------
+// The Feather has a 100k/100k divider from BAT to A6 (PA3). On the payload PCB it is VBAT_SENSE
+// on PA1 through 100k/33k, sized for a 2S pack, so switch these two lines for the PCB.
+const uint32_t VBAT_PIN = PA3;
+const float VBAT_DIV = 2.0f;                      // PCB: (100k + 33k) / 33k
+float vbat = 0;                                   // volts, about a 1 s average
+
+void batteryPoll() {
+  static uint32_t at = 0;
+  if (millis() - at < 20) return;                 // 50 readings a second
+  at = millis();
+  // measure against the internal reference, not the 3.3 V rail: on a low 1S cell the
+  // regulator drops out and the rail sags with the battery, which would hide the drop
+  uint32_t vdda = __LL_ADC_CALC_VREFANALOG_VOLTAGE(analogRead(AVREF), LL_ADC_RESOLUTION_12B);
+  float v = __LL_ADC_CALC_DATA_TO_VOLTAGE(vdda, analogRead(VBAT_PIN), LL_ADC_RESOLUTION_12B) / 1000.0f * VBAT_DIV;
+  vbat = vbat ? vbat + 0.02f * (v - vbat) : v;
+}
+
 void printLine() {
   static const char *names[] = {"PAD", "BOOST", "COAST", "DESCENT", "LANDED"};
   Serial.printf("#%u  %s  alt %.1f m  vel %.1f m/s  acc %.2f g  peak %.1f g", pkt.seq, names[pkt.state],
@@ -502,6 +525,7 @@ void printLine() {
   if (shtAddr)  Serial.printf("  air %.1f C %.0f%%", pkt.airT / 100.0f, pkt.rh / 100.0f);
   if (gpsTalking()) Serial.printf("  gps fix %u, %u sats", pkt.fix, pkt.sats);
   if (imu.bus) Serial.printf("  roll %.0f pitch %.0f yaw %.0f", pkt.roll / 100.0f, pkt.pitch / 100.0f, pkt.yaw / 100.0f);
+  Serial.printf("  bat %.2f V", pkt.vbat / 1000.0f);
   Serial.println();
 }
 
@@ -515,6 +539,7 @@ void setup() {
   Wire.begin();
   Wire.setClock(400000);
   gpsSerial.begin(38400);                         // u-blox M10 default
+  analogReadResolution(12);
 
   if (detect(imu)) {
     writeReg(imu, 0x12, 0x01); delay(10);         // CTRL3_C: software reset
@@ -560,6 +585,7 @@ void loop() {
   baroPoll();
   shtPoll();
   gpsPoll();
+  batteryPoll();
 
   if (txDone) {
     txDone = false;
@@ -581,6 +607,7 @@ void loop() {
     pkt.maxAlt = (uint16_t)constrain(maxAlt, 0, 65535);
     pkt.maxVel = (uint16_t)constrain(maxVel * 10, 0, 65535);
     eulerOut();
+    pkt.vbat = (uint16_t)constrain(vbat * 1000, 0, 65535);
     int s = radio.startTransmit((uint8_t *)&pkt, sizeof(pkt));
     if (s == RADIOLIB_ERR_NONE) { txBusy = true; digitalWrite(LED, HIGH); }
     else { Serial.print("tx failed, code "); Serial.println(s); }

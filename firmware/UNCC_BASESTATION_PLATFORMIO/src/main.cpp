@@ -39,7 +39,7 @@
 
 // must match the rocket's struct byte for byte
 struct __attribute__((packed)) Telem {
-  uint8_t  magic;      // 'V'
+  uint8_t  magic;      // 'W'
   uint8_t  flags;      // bit0 IMU, bit1 high-g, bit2 baro, bit3 SHT45, bit4 GPS talking
   uint16_t seq;
   uint32_t ms;
@@ -63,8 +63,9 @@ struct __attribute__((packed)) Telem {
   int16_t  gpsVup;     // 0.1 m/s
   uint16_t gpsSpd;     // 0.1 m/s
   int16_t  roll, pitch, yaw;   // 0.01 deg
+  uint16_t vbat;       // battery, mV
 };
-static_assert(sizeof(Telem) == 71, "rocket sends 71 bytes");
+static_assert(sizeof(Telem) == 73, "rocket sends 73 bytes");
 
 const char *PHASES[] = {"PAD", "BOOST", "COAST", "DESCENT", "LANDED"};
 const char *phaseName(uint8_t s) { return s < 5 ? PHASES[s] : "?"; }
@@ -113,7 +114,6 @@ void drawOled() {
     uint32_t age = millis() - lastHeard;
     float acc = 0.000976f * mag(last.acc[0], last.acc[1], last.acc[2]);
     float hi  = 0.098f * mag(last.hig[0], last.hig[1], last.hig[2]);
-    float gyr = 0.07f * mag(last.gyr[0], last.gyr[1], last.gyr[2]);
 
     if (age > 5000) oled.printf("NO SIGNAL  %lus\n", (unsigned long)(age / 1000));
     else            oled.printf("#%u  %lums ago\n", last.seq, (unsigned long)age);
@@ -121,7 +121,7 @@ void drawOled() {
     oled.printf("%-7s alt %.0fm\n", phaseName(last.state), last.alt / 100.0f);
     oled.printf("vel %.0f  max %um\n", last.vel / 10.0f, last.maxAlt);
     oled.printf("peak %.1fg acc %.2fg\n", last.peak / 10.0f, acc);
-    oled.printf("loss %.1f%%  gyr %.0f\n", lossPct, gyr);
+    oled.printf("loss %.1f%%  bat %.2fV\n", lossPct, last.vbat / 1000.0f);
     if (last.flags & 16) oled.printf("GPS %s %u sats\n", last.fix == 3 ? "3D" : last.fix == 2 ? "2D" : "no fix", last.sats);
     else                 oled.print("GPS --\n");
     oled.printf("I%c H%c B%c S%c  hi %.0fg\n", (last.flags & 1) ? '+' : '-', (last.flags & 2) ? '+' : '-',
@@ -152,8 +152,8 @@ void drawSerial() {
     row("Gyro",   last.gyr[0] * 0.07f,     last.gyr[1] * 0.07f,     last.gyr[2] * 0.07f,     1, "dps");
     row("High-g", last.hig[0] * 0.098f,    last.hig[1] * 0.098f,    last.hig[2] * 0.098f,    1, "g");
     Serial.print("\033[K\n");
-    Serial.printf(" Peak     %5.1f g    Temp %5.1f C    Uptime %7.1f s\033[K\n",
-      last.peak / 10.0f, last.temp / 100.0f, last.ms / 1000.0f);
+    Serial.printf(" Peak     %5.1f g    Temp %5.1f C    Uptime %7.1f s    Battery %.2f V\033[K\n",
+      last.peak / 10.0f, last.temp / 100.0f, last.ms / 1000.0f, last.vbat / 1000.0f);
     Serial.print("\033[K\n");
     Serial.printf(" Flight   %-8s alt %8.1f m   vel %7.1f m/s   max %u m, %.1f m/s\033[K\n", phaseName(last.state),
       last.alt / 100.0f, last.vel / 10.0f, last.maxAlt, last.maxVel / 10.0f);
@@ -191,7 +191,8 @@ void printJson() {
     last.state, last.alt / 100.0f, last.vel / 10.0f, last.maxAlt, last.maxVel / 10.0f, last.pres / 100.0f,
     last.airT / 100.0f, last.rh / 100.0f, last.fix, last.sats, last.lat * 1e-7, last.lon * 1e-7,
     last.gpsAlt, last.gpsVup / 10.0f, last.gpsSpd / 10.0f);
-  Serial.printf("\"roll\":%.1f,\"pitch\":%.1f,\"yaw\":%.1f,", last.roll / 100.0f, last.pitch / 100.0f, last.yaw / 100.0f);
+  Serial.printf("\"roll\":%.1f,\"pitch\":%.1f,\"yaw\":%.1f,\"vbat\":%.2f,", last.roll / 100.0f, last.pitch / 100.0f,
+    last.yaw / 100.0f, last.vbat / 1000.0f);
   Serial.printf("\"rssi\":%.1f,\"snr\":%.2f,\"loss\":%.2f}\n", lastRssi, lastSnr, lossPct);
 }
 
@@ -213,7 +214,7 @@ void handlePacket() {
 
   if (s == RADIOLIB_ERR_CRC_MISMATCH) {
     crcErrors++;
-  } else if (s != RADIOLIB_ERR_NONE || len != sizeof(p) || p.magic != 'V') {
+  } else if (s != RADIOLIB_ERR_NONE || len != sizeof(p) || p.magic != 'W') {
     badPackets++;
     if (s == RADIOLIB_ERR_NONE && len != sizeof(p)) { badLen = len; badAt = millis(); }   // old or new firmware on the other end
   } else {

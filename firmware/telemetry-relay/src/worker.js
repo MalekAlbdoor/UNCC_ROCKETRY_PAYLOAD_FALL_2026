@@ -30,7 +30,7 @@ const LIVE_MS = 30_000;       // a recording counts as live while packets came i
 // Same columns as the GUI's CSV_COLS, minus lat/lon, which never leave the operator's laptop.
 const COLS = ["seq", "t", "ax", "ay", "az", "gx", "gy", "gz", "hx", "hy", "hz", "peak", "temp", "flags",
   "st", "alt", "vel", "malt", "mvel", "pres", "airt", "rh", "fix", "sats", "galt", "gvu", "gspd",
-  "roll", "pitch", "yaw", "rssi", "snr", "loss"];
+  "roll", "pitch", "yaw", "vbat", "rssi", "snr", "loss"];
 const HEADER = ["utc_time", ...COLS].join(",") + "\n";
 const F_BARO = 4;
 
@@ -219,12 +219,12 @@ export class LiveRelay extends DurableObject {
   }
 
   list() {
-    const now = Date.now();
+    const now = Date.now(), publishing = this.publishers().length > 0;
     return this.sql.exec("SELECT * FROM recordings ORDER BY id DESC LIMIT 100").toArray().map((row) => {
       const r = row.id === this.rec?.id ? this.rec : row;   // the open one has newer numbers in memory
       return {
         id: r.id, started: r.started, ended: r.last_at, packets: r.packets, bytes: r.bytes + (r === this.rec ? this.pendingBytes() : 0),
-        live: r === this.rec && now - r.last_at < LIVE_MS, flight: r.max_st >= 1,
+        live: r === this.rec && publishing && now - r.last_at < LIVE_MS, flight: r.max_st >= 1,
         apogee: r.apogee, maxVel: r.max_vel, peakG: r.peak_g,
       };
     });
