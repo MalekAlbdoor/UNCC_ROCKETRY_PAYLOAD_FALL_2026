@@ -9,6 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@400..700&display=swap">
+<script>
+  // a theme picked with the header button wins over the system setting
+  try { const t = localStorage.getItem('uncc-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}
+</script>
 <style>
   /* UNC Charlotte colors: Charlotte Green #005035 and Niner Gold #A49665 (brand.charlotte.edu).
      Gold is the one signal color: the main line on each chart, the current flight phase, the rocket. */
@@ -92,6 +96,8 @@
   header button { background: transparent; color: var(--head-text); border-color: var(--head-line); }
   header button:hover { border-color: var(--head-text); }
   header button.primary { background: var(--gold); border-color: var(--gold); color: #17130a; }
+  #themeBtn { display: inline-grid; place-items: center; padding: 0; width: 34px; align-self: stretch; }
+  #themeBtn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
   main { padding: 16px; display: grid; gap: 14px; max-width: 1400px; margin: 0 auto; }
   #msg {
@@ -233,6 +239,7 @@
   <button id="dataBtn" aria-expanded="false" aria-controls="recPanel">Download CSV</button>
   <button id="demoBtn">Demo</button>
   <button id="layoutBtn">Layout</button>
+  <button id="themeBtn"></button>
 </header>
 
 <main>
@@ -1859,6 +1866,26 @@ $('recNew').onclick = startNewRecording;
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && REC.open) setRecOpen(false); });
 $('recOpen').onclick = () => $('recFile').click();
 $('recFile').onchange = e => { replayFile(e.target.files[0]); e.target.value = ''; };
+// light/dark: follows the system until the button is used, then remembers the choice
+const MOON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>';
+const SUN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const isDark = () => document.documentElement.dataset.theme
+  ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+function renderThemeBtn() {
+  const dark = isDark(), b = $('themeBtn');
+  b.innerHTML = dark ? SUN : MOON;
+  b.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+  b.setAttribute('aria-label', b.title);
+}
+$('themeBtn').onclick = () => {
+  const t = isDark() ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem('uncc-theme', t); } catch {}
+  renderThemeBtn();
+};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderThemeBtn);
+renderThemeBtn();
+
 document.querySelectorAll('#rangeSeg button').forEach(b => { b.onclick = () => setRange(b.dataset.range, true); });
 const winText = v => v < 60 ? `${v} s` : `${v / 60} min`;
 $('winSlider').value = WIN_STOPS.indexOf(winS);
