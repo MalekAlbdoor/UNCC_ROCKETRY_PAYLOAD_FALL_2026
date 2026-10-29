@@ -1081,7 +1081,7 @@
 		(property "Reference" "U11"
 			(at 0 -19.229999 0)
 			(layer "F.SilkS")
-			(uuid "92fd3d77-534a-419c-9d9d-1707c5c7d051")
+			(uuid "a300143b-12a4-4a98-b6fd-ee049325e472")
 			(effects
 				(font
 					(size 1 1)
@@ -1092,7 +1092,7 @@
 		(property "Value" "E22-900M30S"
 			(at 0 19.229999 0)
 			(layer "F.Fab")
-			(uuid "2a893022-e495-4fbd-9386-95a431d9d6ca")
+			(uuid "72604dd2-e1e6-49e5-9951-c207ae868ba3")
 			(effects
 				(font
 					(size 1 1)
@@ -1104,7 +1104,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "be8abe6a-0c9f-4824-bc61-b02ea5a7aee0")
+			(uuid "5f963335-aa19-45ab-a2e4-7686c7826905")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1115,7 +1115,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "b1990821-2359-41c1-88ac-b159490fc024")
+			(uuid "42df5b34-59e7-42ab-88a1-964b602bc7d0")
 			(effects
 				(font
 					(size 1.27 1.27)
