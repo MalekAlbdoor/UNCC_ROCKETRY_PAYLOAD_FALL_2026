@@ -1123,123 +1123,123 @@
 			)
 		)
 		(pin "TX_GPS" output
-			(at 209.55 73.66 0)
+			(at 190.5 73.66 180)
 			(uuid "c498c7de-754f-4cdc-a598-ce5d5fad9f8e")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "RX_GPS" input
-			(at 209.55 76.2 0)
+			(at 190.5 76.2 180)
 			(uuid "1d14d8b4-944a-4a94-9d85-46254a189658")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "TIMER_GPS" output
-			(at 209.55 78.74 0)
+			(at 190.5 78.74 180)
 			(uuid "62432b02-0af1-452f-b8df-d624d0195f28")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "RESET_GPS" input
-			(at 209.55 81.28 0)
+			(at 190.5 81.28 180)
 			(uuid "d04296e6-087c-42ea-998f-071c75ef0f1e")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_RXEN" input
-			(at 209.55 96.52 0)
+			(at 190.5 96.52 180)
 			(uuid "84e6a591-e4e2-41dd-9f91-91be0a06c41a")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_CS" input
-			(at 209.55 100.33 0)
+			(at 190.5 100.33 180)
 			(uuid "2f2be81c-00ba-46e9-96eb-229e8d32245c")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_SCK" input
-			(at 209.55 102.87 0)
+			(at 190.5 102.87 180)
 			(uuid "b9b89d4e-cd30-4638-8293-ee049671bb5e")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_MOSI" input
-			(at 209.55 105.41 0)
+			(at 190.5 105.41 180)
 			(uuid "0eb73722-1916-4c70-893d-e45512f62a89")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_MISO" output
-			(at 209.55 107.95 0)
+			(at 190.5 107.95 180)
 			(uuid "dbabdcad-3cc3-435c-84e7-be4fba30d047")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_BUSY" output
-			(at 209.55 91.44 0)
+			(at 190.5 91.44 180)
 			(uuid "b67b4e04-86fa-450c-b32d-c46786c7951e")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_DIO1" output
-			(at 209.55 110.49 0)
+			(at 190.5 110.49 180)
 			(uuid "020764d8-eef0-44c7-91fd-83215b3200cb")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "LORA_NRST" input
-			(at 209.55 93.98 0)
+			(at 190.5 93.98 180)
 			(uuid "e292d041-4f66-42c7-8b75-fe8ae34e0fba")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(instances
