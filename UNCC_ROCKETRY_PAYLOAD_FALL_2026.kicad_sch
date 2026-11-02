@@ -72,6 +72,16 @@
 	)
 	(wire
 		(pts
+			(xy 88.9 115.57) (xy 120.65 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1507b9ae-7b20-4227-a0dd-59b9ba2f9d11")
+	)
+	(wire
+		(pts
 			(xy 88.9 149.86) (xy 120.65 149.86)
 		)
 		(stroke
@@ -79,6 +89,16 @@
 			(type default)
 		)
 		(uuid "18472796-975a-41ad-b70e-8537a0db98cf")
+	)
+	(wire
+		(pts
+			(xy 88.9 147.32) (xy 120.65 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2092315d-409f-495b-a208-0f95a1329179")
 	)
 	(wire
 		(pts
@@ -169,6 +189,16 @@
 			(type default)
 		)
 		(uuid "655c8949-fe54-499b-9bd4-3180a7eab93c")
+	)
+	(wire
+		(pts
+			(xy 88.9 154.94) (xy 120.65 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6b63f94e-04d7-46e0-b728-39da4b7ee1c5")
 	)
 	(wire
 		(pts
@@ -289,6 +319,16 @@
 			(type default)
 		)
 		(uuid "bc0d109e-baca-4744-ae66-49a60c58473f")
+	)
+	(wire
+		(pts
+			(xy 88.9 113.03) (xy 120.65 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bdf459b4-a6db-4132-9fbd-a873d3851e8c")
 	)
 	(wire
 		(pts
@@ -704,7 +744,7 @@
 				(justify left)
 			)
 		)
-		(pin "CAM_TX" output
+		(pin "CAM1_TX" output
 			(at 120.65 142.24 180)
 			(uuid "b4ba2b09-ea4c-4600-975b-2aa1aae106e4")
 			(effects
@@ -714,9 +754,49 @@
 				(justify left)
 			)
 		)
-		(pin "CAM_RX" input
+		(pin "CAM1_RX" input
 			(at 120.65 144.78 180)
 			(uuid "d5bd03d2-1309-4237-ab7f-c991da282f1e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAM2_RX" input
+			(at 120.65 115.57 180)
+			(uuid "d0311a69-2c53-42da-8b47-54da9f581ed5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAM2_TX" output
+			(at 120.65 113.03 180)
+			(uuid "3be8b081-e93f-4b45-a6cf-e40fb435e819")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAM_SEL" output
+			(at 120.65 147.32 180)
+			(uuid "c6b60134-3b3b-4c69-a6cb-8bbbce5648ab")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VTX_SA" bidirectional
+			(at 120.65 154.94 180)
+			(uuid "62676105-a8d0-47c3-8e55-1941d5a1894a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1348,7 +1428,7 @@
 				(justify right)
 			)
 		)
-		(pin "CAM_TX" input
+		(pin "CAM1_TX" input
 			(at 88.9 142.24 0)
 			(uuid "5d34030e-a2a7-4a06-90a1-62de95cc3f97")
 			(effects
@@ -1358,9 +1438,49 @@
 				(justify right)
 			)
 		)
-		(pin "CAM_RX" output
+		(pin "CAM1_RX" output
 			(at 88.9 144.78 0)
 			(uuid "06a80233-59de-4621-837b-0d1308b475a3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAM2_RX" output
+			(at 88.9 115.57 0)
+			(uuid "f097a489-7253-4450-98e3-5f6b70c17561")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAM2_TX" input
+			(at 88.9 113.03 0)
+			(uuid "ff517e6d-4634-4968-af13-2dac67b49888")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAM_SEL" input
+			(at 88.9 147.32 0)
+			(uuid "682ee52a-d95a-49f0-8bdf-0a548a801198")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "VTX_SA" bidirectional
+			(at 88.9 154.94 0)
+			(uuid "88ef8bcd-dec2-48ee-b97c-070b948bda16")
 			(effects
 				(font
 					(size 1.27 1.27)

@@ -1565,6 +1565,193 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector_Generic:Conn_01x03"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x03"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x03_1_1"
+				(rectangle
+					(start -1.27 3.81)
+					(end 1.27 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Connector_Generic:Conn_01x04"
 			(pin_names
 				(offset 1.016)
@@ -3451,7 +3638,7 @@
 	)
 	(rectangle
 		(start 143.51 15.24)
-		(end 181.61 83.82)
+		(end 184.15 124.46)
 		(stroke
 			(width 0)
 			(type dash)
@@ -3462,7 +3649,7 @@
 		(uuid "6e86ea6c-652f-4dce-83c1-400b829e829c")
 	)
 	(rectangle
-		(start 184.15 86.36)
+		(start 186.69 86.36)
 		(end 281.94 154.94)
 		(stroke
 			(width 0)
@@ -3474,7 +3661,7 @@
 		(uuid "8dcef0ac-45ea-4fc6-8bf6-2fe1de1c029a")
 	)
 	(rectangle
-		(start 184.15 15.24)
+		(start 186.69 15.24)
 		(end 281.94 83.82)
 		(stroke
 			(width 0)
@@ -3487,7 +3674,7 @@
 	)
 	(text "USB-C\n"
 		(exclude_from_sim no)
-		(at 192.532 19.304 0)
+		(at 195.58 19.304 0)
 		(effects
 			(font
 				(size 2.54 2.54)
@@ -3505,9 +3692,9 @@
 		)
 		(uuid "2ff1f62a-eb32-4905-89fe-2c73a6542af1")
 	)
-	(text "CAM\n"
+	(text "CAM & VTX"
 		(exclude_from_sim no)
-		(at 149.606 21.336 0)
+		(at 155.702 20.066 0)
 		(effects
 			(font
 				(size 2.54 2.54)
@@ -3517,13 +3704,24 @@
 	)
 	(text "DEBUGGER"
 		(exclude_from_sim no)
-		(at 196.342 90.932 0)
+		(at 198.882 90.932 0)
 		(effects
 			(font
 				(size 2.54 2.54)
 			)
 		)
 		(uuid "8270a544-08d0-46b6-af89-ed757446506e")
+	)
+	(text "J4, J8: identical camera ports\nJ6: Camera Select\nJ7: switcher, SEL = PB5 (PWM)"
+		(exclude_from_sim no)
+		(at 147.066 122.936 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f7e39f90-80be-4646-8224-642867474b57")
 	)
 	(junction
 		(at 59.69 39.37)
@@ -3579,6 +3777,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 80.01) (xy 163.83 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05823c35-9ab3-466b-aa2e-7f77c6bb0d00")
+	)
+	(wire
+		(pts
 			(xy 240.03 129.54) (xy 245.11 129.54)
 		)
 		(stroke
@@ -3596,6 +3804,16 @@
 			(type default)
 		)
 		(uuid "0a6e154f-181b-4bb2-a806-b6ec4292652b")
+	)
+	(wire
+		(pts
+			(xy 161.29 82.55) (xy 163.83 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "170feedd-986d-4b25-8801-e9fd9abb078b")
 	)
 	(wire
 		(pts
@@ -3629,6 +3847,26 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 97.79) (xy 162.56 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "271cbb01-a478-4d2f-b4d0-0e79663563e1")
+	)
+	(wire
+		(pts
+			(xy 161.29 100.33) (xy 163.83 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "341791f2-aa87-4faf-a75d-8fd6852b06ef")
+	)
+	(wire
+		(pts
 			(xy 227.33 101.6) (xy 227.33 99.06)
 		)
 		(stroke
@@ -3639,6 +3877,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 62.23) (xy 163.83 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "38f02a7e-1203-40ff-8e97-1be71ce79d34")
+	)
+	(wire
+		(pts
 			(xy 82.55 41.91) (xy 82.55 39.37)
 		)
 		(stroke
@@ -3646,6 +3894,16 @@
 			(type default)
 		)
 		(uuid "39cf228a-d08f-4055-bd60-a003eca2fd3c")
+	)
+	(wire
+		(pts
+			(xy 161.29 102.87) (xy 162.56 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4215d08e-7edd-4536-b697-c545a2e4552a")
 	)
 	(wire
 		(pts
@@ -3679,7 +3937,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 48.26) (xy 166.37 48.26)
+			(xy 161.29 41.91) (xy 163.83 41.91)
 		)
 		(stroke
 			(width 0)
@@ -3726,6 +3984,16 @@
 			(type default)
 		)
 		(uuid "5d278218-213a-450f-a9e2-aae78c6f3581")
+	)
+	(wire
+		(pts
+			(xy 171.45 100.33) (xy 172.72 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f84e632-f25c-489c-a337-80aa9df3cc98")
 	)
 	(wire
 		(pts
@@ -3789,6 +4057,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 77.47) (xy 163.83 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "85b4dbfc-d210-44a2-a05e-a2002303db65")
+	)
+	(wire
+		(pts
 			(xy 256.54 41.91) (xy 254 41.91)
 		)
 		(stroke
@@ -3806,6 +4084,16 @@
 			(type default)
 		)
 		(uuid "91b407b5-0d48-4149-aa86-5bff5efb2fa6")
+	)
+	(wire
+		(pts
+			(xy 161.29 59.69) (xy 163.83 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "947cb221-c8b0-4d42-963f-570fc653cfb6")
 	)
 	(wire
 		(pts
@@ -3849,7 +4137,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 43.18) (xy 166.37 43.18)
+			(xy 161.29 36.83) (xy 163.83 36.83)
 		)
 		(stroke
 			(width 0)
@@ -3869,7 +4157,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 40.64) (xy 166.37 40.64)
+			(xy 161.29 34.29) (xy 163.83 34.29)
 		)
 		(stroke
 			(width 0)
@@ -3896,6 +4184,16 @@
 			(type default)
 		)
 		(uuid "ae094be8-dce4-41f2-81c2-2ae021c399d0")
+	)
+	(wire
+		(pts
+			(xy 161.29 54.61) (xy 163.83 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2419800-953c-4f46-a39e-b7efab1cc6fb")
 	)
 	(wire
 		(pts
@@ -3989,6 +4287,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 57.15) (xy 163.83 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d50c794a-29de-4054-86e6-18795af18fd1")
+	)
+	(wire
+		(pts
 			(xy 80.01 41.91) (xy 80.01 39.37)
 		)
 		(stroke
@@ -4039,7 +4347,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 45.72) (xy 166.37 45.72)
+			(xy 161.29 39.37) (xy 163.83 39.37)
 		)
 		(stroke
 			(width 0)
@@ -4137,6 +4445,28 @@
 		)
 		(uuid "fab2b346-8053-43a3-baae-2eabde590617")
 	)
+	(hierarchical_label "CAM2_TX"
+		(shape input)
+		(at 163.83 57.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "013df4ad-ab96-4333-9111-29dd871a4426")
+	)
+	(hierarchical_label "CAM2_RX"
+		(shape output)
+		(at 163.83 59.69 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "01478d9d-faf1-49ab-84ba-b420dd66b4ae")
+	)
 	(hierarchical_label "SWCLK"
 		(shape output)
 		(at 245.11 111.76 0)
@@ -4148,9 +4478,20 @@
 		)
 		(uuid "0281e875-228c-4f53-bf0a-2e38386399f3")
 	)
-	(hierarchical_label "CAM_RX"
+	(hierarchical_label "CAM_SEL"
+		(shape input)
+		(at 163.83 80.01 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "26167cab-bee2-4e79-b359-a99bb7c54488")
+	)
+	(hierarchical_label "CAM1_RX"
 		(shape output)
-		(at 166.37 45.72 0)
+		(at 163.83 39.37 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4180,6 +4521,17 @@
 			(justify left)
 		)
 		(uuid "3f16fd5b-2f09-4640-9051-47e6bf9ead43")
+	)
+	(hierarchical_label "VTX_SA"
+		(shape bidirectional)
+		(at 172.72 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6e123c7f-4ed5-4240-b71c-9f50f4caffcc")
 	)
 	(hierarchical_label "USB_DP"
 		(shape bidirectional)
@@ -4214,9 +4566,9 @@
 		)
 		(uuid "92d8d6e9-7dda-4f8c-a50e-8f8e95bc3616")
 	)
-	(hierarchical_label "CAM_TX"
+	(hierarchical_label "CAM1_TX"
 		(shape input)
-		(at 166.37 43.18 0)
+		(at 163.83 36.83 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4343,7 +4695,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x04")
-		(at 158.75 43.18 0)
+		(at 156.21 36.83 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -4355,7 +4707,7 @@
 		(fields_autoplaced yes)
 		(uuid "09620e2f-de14-488e-a2f1-6afdce2b4d55")
 		(property "Reference" "J4"
-			(at 156.21 43.18 0)
+			(at 153.67 36.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4365,8 +4717,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "CAMERA"
-			(at 156.21 45.72 0)
+		(property "Value" "CAM1"
+			(at 153.67 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4376,8 +4728,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical"
-			(at 158.75 43.18 0)
+		(property "Footprint" "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
+			(at 156.21 36.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4387,8 +4739,8 @@
 				)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 158.75 43.18 0)
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf"
+			(at 156.21 36.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4399,7 +4751,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 158.75 43.18 0)
+			(at 156.21 36.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4453,7 +4805,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT30PW-M"
+		(property "Value" "BATT"
 			(at 20.32 41.9099 0)
 			(hide yes)
 			(show_name no)
@@ -4465,7 +4817,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical"
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
 			(at 22.86 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -4476,7 +4828,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
 			(at 22.86 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -4866,7 +5218,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical"
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
 			(at 80.01 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -4877,7 +5229,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
 			(at 80.01 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -4987,6 +5339,85 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "#PWR071")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VCC")
+		(at 163.83 54.61 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "563f1da2-ff65-434b-904f-5b38043e2506")
+		(property "Reference" "#PWR0173"
+			(at 163.83 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAM_5V"
+			(at 163.83 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 163.83 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 163.83 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VCC\""
+			(at 163.83 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "af3cd303-a4b7-48fe-ad01-3942dd40542c")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0173")
 					(unit 1)
 				)
 			)
@@ -5223,6 +5654,92 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "D5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x03")
+		(at 156.21 100.33 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "65855378-6a11-4690-9390-befcbf2ee3ee")
+		(property "Reference" "J6"
+			(at 153.67 100.33 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "VTX"
+			(at 153.67 102.87 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical"
+			(at 156.21 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
+			(at 156.21 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 156.21 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "106f4660-7eaf-466f-9a9c-7aeae9ff2c22")
+		)
+		(pin "2"
+			(uuid "d665ee7a-a8fe-4342-b3fa-ffdb610988cf")
+		)
+		(pin "3"
+			(uuid "04699acd-e5ff-41ee-b633-e1d3b655539d")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -5756,6 +6273,164 @@
 		)
 	)
 	(symbol
+		(lib_id "power:VCC")
+		(at 162.56 97.79 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "94287266-6ac9-48b3-adef-45df664b9207")
+		(property "Reference" "#PWR0169"
+			(at 162.56 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+BATT"
+			(at 162.56 92.71 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 162.56 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 162.56 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VCC\""
+			(at 162.56 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6a01f3de-631b-426a-8f25-7f64f96b03ab")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0169")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 167.64 100.33 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "95ac3411-33cd-4d12-931e-548acde49cc2")
+		(property "Reference" "R28"
+			(at 167.64 93.98 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100R"
+			(at 167.64 96.52 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 167.64 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 167.64 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 167.64 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6ede67aa-87ce-4c64-ac52-3387ebed1d95")
+		)
+		(pin "2"
+			(uuid "2fcb3832-f756-4d4f-b3fc-9a53f4cc697b")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "R28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 261.62 59.69 0)
 		(unit 1)
@@ -6199,7 +6874,7 @@
 	)
 	(symbol
 		(lib_id "power:VCC")
-		(at 166.37 40.64 0)
+		(at 163.83 34.29 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -6211,7 +6886,7 @@
 		(fields_autoplaced yes)
 		(uuid "b536177a-faca-493b-9289-989c7ef79362")
 		(property "Reference" "#PWR072"
-			(at 166.37 34.29 0)
+			(at 163.83 27.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6222,7 +6897,7 @@
 			)
 		)
 		(property "Value" "CAM_5V"
-			(at 166.37 36.83 0)
+			(at 163.83 30.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6232,7 +6907,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 166.37 40.64 0)
+			(at 163.83 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6243,7 +6918,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 166.37 40.64 0)
+			(at 163.83 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6254,7 +6929,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VCC\""
-			(at 166.37 40.64 0)
+			(at 163.83 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6271,6 +6946,92 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "#PWR072")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x03")
+		(at 156.21 80.01 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c1503b40-be71-40de-a075-70254f475375")
+		(property "Reference" "J7"
+			(at 153.67 80.01 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "CAM_SW"
+			(at 153.67 82.55 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical"
+			(at 156.21 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf"
+			(at 156.21 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 156.21 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "16d95168-468c-48b2-be0b-73d72c4593fd")
+		)
+		(pin "2"
+			(uuid "329c431b-b2db-46db-8f24-afe7905f4932")
+		)
+		(pin "3"
+			(uuid "5687e632-a03f-43d3-968f-0cc7e65a0b98")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -6357,6 +7118,84 @@
 	)
 	(symbol
 		(lib_id "power:GND")
+		(at 162.56 102.87 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d3f1b170-4917-4101-b1a3-825a89dd90c8")
+		(property "Reference" "#PWR0170"
+			(at 162.56 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 162.56 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 162.56 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 162.56 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 162.56 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2f6c2ab0-57ba-4731-8a73-70d0dcd56f1f")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0170")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
 		(at 107.95 57.15 0)
 		(unit 1)
 		(body_style 1)
@@ -6435,7 +7274,165 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 166.37 48.26 0)
+		(at 163.83 82.55 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e0d6c362-965d-4b56-9969-49ba52e1cc96")
+		(property "Reference" "#PWR0172"
+			(at 163.83 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 163.83 87.63 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 163.83 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 163.83 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 163.83 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4c2c3108-34e9-48b5-8f8a-0dd49e6cf87a")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0172")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VCC")
+		(at 163.83 77.47 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ea629cb2-1722-47c6-bbe3-8446a22fb1d2")
+		(property "Reference" "#PWR0171"
+			(at 163.83 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAM_5V"
+			(at 163.83 73.66 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 163.83 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 163.83 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VCC\""
+			(at 163.83 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "510aa6ba-46ae-4d62-a9da-7755df2a995a")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0171")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 163.83 41.91 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -6447,7 +7444,7 @@
 		(fields_autoplaced yes)
 		(uuid "eb9d5c9c-f539-45c7-94ae-aa89e4043593")
 		(property "Reference" "#PWR073"
-			(at 166.37 54.61 0)
+			(at 163.83 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6458,7 +7455,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 166.37 53.34 0)
+			(at 163.83 46.99 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6468,7 +7465,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 166.37 48.26 0)
+			(at 163.83 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6479,7 +7476,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 166.37 48.26 0)
+			(at 163.83 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6490,7 +7487,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 166.37 48.26 0)
+			(at 163.83 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6507,6 +7504,174 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "#PWR073")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 163.83 62.23 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f2ff4f50-0b92-45eb-b9b5-8dfd629c4f76")
+		(property "Reference" "#PWR0174"
+			(at 163.83 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 163.83 67.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 163.83 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 163.83 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 163.83 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8aef0d38-1ac0-4188-bc01-20c798128d70")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0174")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x04")
+		(at 156.21 57.15 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f4f6fcfa-72df-46e5-95fc-a368f45ac3d3")
+		(property "Reference" "J8"
+			(at 153.67 57.15 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "CAM2"
+			(at 153.67 59.69 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
+			(at 156.21 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf"
+			(at 156.21 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 156.21 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7d2e5791-a342-4124-b6d8-645ce03afeea")
+		)
+		(pin "2"
+			(uuid "670d19dd-6d96-4dd3-8d10-683d1b474215")
+		)
+		(pin "3"
+			(uuid "decad906-7544-47be-92bd-50ce941cd0f3")
+		)
+		(pin "4"
+			(uuid "f4d5b5c1-79a1-4b9a-bfe4-d5cb1767882f")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "J8")
 					(unit 1)
 				)
 			)
