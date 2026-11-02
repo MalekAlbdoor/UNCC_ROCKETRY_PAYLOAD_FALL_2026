@@ -2214,7 +2214,7 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 52.07) (xy 45.72 55.88)
+			(xy 45.72 50.8) (xy 45.72 55.88)
 		)
 		(stroke
 			(width 0)
@@ -3930,7 +3930,7 @@
 	)
 	(symbol
 		(lib_id "power:VCC")
-		(at 45.72 52.07 0)
+		(at 45.72 50.8 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3941,7 +3941,7 @@
 		(fields_autoplaced yes)
 		(uuid "5401304e-6a3a-40b2-b770-efd094156a0e")
 		(property "Reference" "#PWR09"
-			(at 45.72 55.88 0)
+			(at 45.72 54.61 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3952,7 +3952,7 @@
 			)
 		)
 		(property "Value" "+BATT"
-			(at 45.72 46.99 0)
+			(at 45.72 45.72 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3962,7 +3962,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 45.72 52.07 0)
+			(at 45.72 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3973,7 +3973,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 45.72 52.07 0)
+			(at 45.72 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3984,7 +3984,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VCC\""
-			(at 45.72 52.07 0)
+			(at 45.72 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
