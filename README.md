@@ -35,7 +35,11 @@ Copyright (c) 2026 Malek Albdoor.
 Everything in this repository (schematics, PCB layout, 3D models, firmware and the telemetry dashboard) is licensed under [Creative Commons Attribution-NonCommercial 4.0](LICENSE) (CC BY-NC 4.0).
 
 - **You can** use, copy, modify and share it for noncommercial purposes, such as personal projects, school teams and research.
-- **You must** credit Malek Albdoor, link back to this repository, and say if you changed anything.
+- **You must** credit both Malek Albdoor and the [Charlotte Rocketry Club](https://www.charlotterocketry.org/) at UNC Charlotte, link back to this repository, and say if you changed anything.
 - **You cannot** use it, or anything made from it, to make money without written permission.
+
+Credit it like this:
+
+> Based on the UNCC Rocketry payload board by Malek Albdoor and the Charlotte Rocketry Club at UNC Charlotte (https://www.charlotterocketry.org/), https://github.com/MalekAlbdoor/UNCC_ROCKETRY_PAYLOAD_FALL_2026, CC BY-NC 4.0.
 
 Libraries and KiCad library parts used by this project keep their own licenses.
