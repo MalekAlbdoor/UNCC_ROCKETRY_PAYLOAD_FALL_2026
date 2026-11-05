@@ -20,7 +20,7 @@
 #define OLED_SCL   6     // silkscreen D5
 #define OLED_H     64    // 32 for a 128x32 screen
 
-// 1 = live (10 Hz, SF8), 0 = max range (1 Hz, SF12). Must match the rocket.
+// 1 = live (10 Hz, SF8), 0 = max range (0.5 Hz, SF12). Must match the rocket.
 #define LIVE 1
 
 #define FREQ  915.0

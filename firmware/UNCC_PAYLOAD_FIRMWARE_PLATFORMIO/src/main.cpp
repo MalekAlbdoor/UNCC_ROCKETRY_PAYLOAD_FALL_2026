@@ -4,7 +4,7 @@
 #include <RadioLib.h>
 #include "stm32yyxx_ll_adc.h"
 
-// 1 = live (10 Hz, SF8), 0 = max range (1 Hz, SF12). Must match the base station.
+// 1 = live (10 Hz, SF8), 0 = max range (0.5 Hz, SF12). Must match the base station.
 #define LIVE 1
 
 #define FREQ  915.0
@@ -18,7 +18,7 @@
 #else
   #define SF  12
   #define CR  8
-  #define TX_PERIOD_MS 1000
+  #define TX_PERIOD_MS 2000                     // a packet takes about 1.02 s on air at SF12, so 1000 never let the radio rest
 #endif
 
 const int LED = PC1;                              // silkscreen 13
