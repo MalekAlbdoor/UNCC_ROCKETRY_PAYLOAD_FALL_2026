@@ -3,9 +3,13 @@
 #include <Wire.h>
 #include <RadioLib.h>
 #include "stm32yyxx_ll_adc.h"
+#include "flashlog.h"
 
 // 1 = live (10 Hz, SF8), 0 = max range (0.5 Hz, SF12). Must match the base station.
 #define LIVE 1
+
+// 1 = log telemetry to the W25Q512JV flash (see flashlog.h), 0 = off. With no flash chip found it logs nothing.
+#define FLASH_LOG 1
 
 #define FREQ  915.0
 #define BW    500.0
@@ -76,6 +80,7 @@ struct __attribute__((packed)) Telem {
 };
 // 77 bytes is the same airtime as 73 at SF12 and 5 symbols (2.6 ms) more at SF8
 static_assert(sizeof(Telem) == 77, "base station expects 77 bytes");
+static_assert(sizeof(Telem) == FL_REC, "flash log record size must match the packet");
 
 Telem pkt = {'X'};
 float peakG = 0;
@@ -809,6 +814,62 @@ void printLine() {
   Serial.println();
 }
 
+// everything in the packet that is computed rather than read straight off a sensor
+void fillPkt() {
+  pkt.ms = millis();
+  pkt.peak = (uint16_t)(peakG * 10);
+  pkt.flags = (imu.bus ? 1 : 0) | (hig.bus ? 2 : 0) | (baro.bus ? 4 : 0) | (shtAddr ? 8 : 0) | (gpsTalking() ? 16 : 0) |
+              (mmcFound ? 32 : 0);
+  if (!gpsTalking()) pkt.fix = 0;
+  pkt.state = phase;
+  pkt.alt = (int32_t)(kh * 100);
+  pkt.vel = (int16_t)constrain(kv * 10, -32000, 32000);
+  pkt.maxAlt = (uint16_t)constrain(maxAlt, 0, 65535);
+  pkt.maxVel = (uint16_t)constrain(maxVel * 10, 0, 65535);
+  eulerOut();
+  pkt.vbat = (uint16_t)constrain(vbat * 1000, 0, 65535);
+}
+
+// ---------- USB serial commands ----------
+//  m  magnetometer bench calibration
+//  i  flash log status
+//  d  dump the flash log (binary, see tools/flash_dump.py)
+//  E  then Y within 5 s: erase the flash log
+// The dump and the erase hold up everything else, so they only run on the ground.
+void flashInfo() {
+#if FLASH_LOG
+  if (!flReady) { Serial.println("flash: NOT FOUND"); return; }
+  uint32_t used = flUsedBytes();
+  Serial.printf("flash: W25Q512JV, %lu of %lu bytes used (%lu records)\n", (unsigned long)used, (unsigned long)FL_CAP,
+                (unsigned long)(flPage * FL_PER_PAGE + flN));
+#else
+  Serial.println("flash logging is off (FLASH_LOG 0)");
+#endif
+}
+
+void handleSerial() {
+  static uint32_t eraseAsked = 0;
+  while (Serial.available()) {
+    char c = Serial.read();
+    if (c == 'm') { if (mmcFound && !benchUntil) benchStart(); continue; }
+    if (c == 'i') { flashInfo(); continue; }
+#if FLASH_LOG
+    bool ground = phase == PAD || phase == LANDED;
+    if (c == 'd' || c == 'E' || c == 'Y') {
+      if (!flReady) { Serial.println("flash: NOT FOUND"); continue; }
+      if (!ground) { Serial.println("not on the ground, refusing"); continue; }
+    }
+    if (c == 'd') flDump(Serial);
+    else if (c == 'E') { eraseAsked = millis(); Serial.println("erase the whole flash log? send Y within 5 s"); }
+    else if (c == 'Y' && eraseAsked && millis() - eraseAsked < 5000) {
+      eraseAsked = 0;
+      Serial.print("erasing ");
+      if (flEraseAll(Serial)) Serial.println(" done");
+    }
+#endif
+  }
+}
+
 void setup() {
   pinMode(LED, OUTPUT);
   Serial.begin(115200);
@@ -836,6 +897,9 @@ void setup() {
   if ((mmcFound = detectMmc())) { mmcStep = 1; while (mmcStep) mmcCalStep(); }   // first offset calibration
   gpsConfigure();
   gpsLastCfg = millis();
+#if FLASH_LOG
+  flBegin();
+#endif
 
   report(imu.name, imu.bus, imu.addr);
   if (imu.bus) Serial.printf("nose axis: IMU %c%c\n", noseSign > 0 ? '+' : '-', 'X' + noseAxis);
@@ -844,6 +908,7 @@ void setup() {
   report("SHT45", shtAddr ? VIA_I2C : NONE, shtAddr);
   report("MMC5983MA", mmcFound ? VIA_I2C : NONE, MMC);
   if (mmcFound) Serial.println("  send 'm' to calibrate the magnetometer on the bench");
+  flashInfo();
   Serial.println(gpsI2C ? "GPS: I2C 0x42" : "GPS: listening on UART (RX/TX pins) at 38400");
 
   int s = radio.begin(FREQ, BW, SF, CR, RADIOLIB_SX126X_SYNC_WORD_PRIVATE, TX_DBM, 8, TCXO);
@@ -870,7 +935,17 @@ void loop() {
   gpsPoll();
   batteryPoll();
   magPoll();
-  if (Serial.available() && Serial.read() == 'm' && mmcFound && !benchUntil) benchStart();
+  handleSerial();
+
+#if FLASH_LOG
+  // 2 records a second sitting on the pad, 50 a second once the rocket has moved
+  static uint32_t lastLog = 0;
+  if (flReady && millis() - lastLog >= (phase == PAD ? 500 : 20)) {
+    lastLog = millis();
+    fillPkt();
+    flAppend(&pkt);
+  }
+#endif
 
   if (txDone) {
     txDone = false;
@@ -881,19 +956,8 @@ void loop() {
 
   if (!txBusy && millis() - lastTx >= TX_PERIOD_MS) {
     lastTx = millis();
-    pkt.ms = lastTx;
-    pkt.peak = (uint16_t)(peakG * 10);
+    fillPkt();
     peakG = 0;
-    pkt.flags = (imu.bus ? 1 : 0) | (hig.bus ? 2 : 0) | (baro.bus ? 4 : 0) | (shtAddr ? 8 : 0) | (gpsTalking() ? 16 : 0) |
-                (mmcFound ? 32 : 0);
-    if (!gpsTalking()) pkt.fix = 0;
-    pkt.state = phase;
-    pkt.alt = (int32_t)(kh * 100);
-    pkt.vel = (int16_t)constrain(kv * 10, -32000, 32000);
-    pkt.maxAlt = (uint16_t)constrain(maxAlt, 0, 65535);
-    pkt.maxVel = (uint16_t)constrain(maxVel * 10, 0, 65535);
-    eulerOut();
-    pkt.vbat = (uint16_t)constrain(vbat * 1000, 0, 65535);
     int s = radio.startTransmit((uint8_t *)&pkt, sizeof(pkt));
     if (s == RADIOLIB_ERR_NONE) { txBusy = true; digitalWrite(LED, HIGH); }
     else { Serial.print("tx failed, code "); Serial.println(s); }

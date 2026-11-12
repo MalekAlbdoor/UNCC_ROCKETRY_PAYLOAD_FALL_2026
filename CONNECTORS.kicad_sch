@@ -4993,7 +4993,7 @@
 		)
 		(uuid "2a5d7ff1-c8c1-4f60-9fe5-49aebd0b3202")
 	)
-	(label "USB_DP"
+	(label "USB_D+"
 		(at 229.87 48.26 0)
 		(effects
 			(font
@@ -5013,17 +5013,7 @@
 		)
 		(uuid "4a95107b-1e9a-4f1f-8b8d-97ea136c22e9")
 	)
-	(label "USB_DM"
-		(at 254 41.91 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "51560979-2991-4643-81a7-ab05ae467a3d")
-	)
-	(label "USB_DP"
+	(label "USB_D+"
 		(at 229.87 50.8 0)
 		(effects
 			(font
@@ -5033,7 +5023,7 @@
 		)
 		(uuid "552372c2-43c7-4d4f-8805-b83f81b487c1")
 	)
-	(label "USB_DM"
+	(label "USB_D-"
 		(at 229.87 43.18 0)
 		(effects
 			(font
@@ -5043,7 +5033,7 @@
 		)
 		(uuid "62065cc6-1fb0-476d-8926-7d311254e75c")
 	)
-	(label "USB_DP"
+	(label "USB_D+"
 		(at 254 39.37 180)
 		(effects
 			(font
@@ -5051,7 +5041,17 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "985bbf53-1e5c-405e-a8d7-b0c49ebff060")
+		(uuid "88299a05-8ccd-4416-a880-c536e3492abc")
+	)
+	(label "USB_D-"
+		(at 254 41.91 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9e8377c2-03e5-48b0-9078-5959260a079a")
 	)
 	(label "BATT_RAW"
 		(at 63.5 39.37 0)
@@ -5073,7 +5073,7 @@
 		)
 		(uuid "f82a16ca-f26e-421a-a22c-8b0ee2691d47")
 	)
-	(label "USB_DM"
+	(label "USB_D-"
 		(at 229.87 45.72 0)
 		(effects
 			(font
@@ -5324,7 +5324,7 @@
 		)
 		(uuid "6e123c7f-4ed5-4240-b71c-9f50f4caffcc")
 	)
-	(hierarchical_label "USB_DP"
+	(hierarchical_label "USB_D+"
 		(shape bidirectional)
 		(at 269.24 39.37 0)
 		(effects
@@ -5346,7 +5346,7 @@
 		)
 		(uuid "895df278-2715-4446-90bf-ce63d6617d29")
 	)
-	(hierarchical_label "USB_DM"
+	(hierarchical_label "USB_D-"
 		(shape bidirectional)
 		(at 269.24 41.91 0)
 		(effects
