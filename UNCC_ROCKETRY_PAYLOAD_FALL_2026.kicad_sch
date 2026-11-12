@@ -92,6 +92,16 @@
 	)
 	(wire
 		(pts
+			(xy 88.9 160.02) (xy 120.65 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1af9f44a-8639-4c8e-aea9-5c9ebfd0c15c")
+	)
+	(wire
+		(pts
 			(xy 88.9 147.32) (xy 120.65 147.32)
 		)
 		(stroke
@@ -202,6 +212,16 @@
 	)
 	(wire
 		(pts
+			(xy 88.9 157.48) (xy 120.65 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7638edad-170a-4712-85f2-b4fb72f47be4")
+	)
+	(wire
+		(pts
 			(xy 158.75 143.51) (xy 190.5 143.51)
 		)
 		(stroke
@@ -302,6 +322,16 @@
 	)
 	(wire
 		(pts
+			(xy 88.9 162.56) (xy 120.65 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb681429-b2aa-4c4d-a176-3fe27bc8d70e")
+	)
+	(wire
+		(pts
 			(xy 158.75 91.44) (xy 190.5 91.44)
 		)
 		(stroke
@@ -329,6 +359,16 @@
 			(type default)
 		)
 		(uuid "bdf459b4-a6db-4132-9fbd-a873d3851e8c")
+	)
+	(wire
+		(pts
+			(xy 88.9 167.64) (xy 120.65 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bfcf2a81-362a-41ef-ab8e-ed7f571b0b9b")
 	)
 	(wire
 		(pts
@@ -382,6 +422,16 @@
 	)
 	(wire
 		(pts
+			(xy 88.9 165.1) (xy 120.65 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e44d383e-134b-4013-b757-6a74c1b2020f")
+	)
+	(wire
+		(pts
 			(xy 158.75 137.16) (xy 190.5 137.16)
 		)
 		(stroke
@@ -419,6 +469,126 @@
 			(type default)
 		)
 		(uuid "f82ea11a-36da-4a6c-ac35-3f3ecf2ea7bb")
+	)
+	(global_label "SPI1_MISO"
+		(shape bidirectional)
+		(at 158.75 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "50761318-e1a5-4eea-9b54-b6110fe15f15")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 158.75 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
+	(global_label "SPI1_SCK"
+		(shape bidirectional)
+		(at 158.75 134.62 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5b0e3587-502c-4096-9d9d-70a0abab5a26")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 158.75 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
+	(global_label "I2C1_SDA"
+		(shape bidirectional)
+		(at 158.75 124.46 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "73600565-b687-4bf3-9bda-a59d6aa2d559")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 158.75 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
+	(global_label "SPI1_MOSI"
+		(shape bidirectional)
+		(at 158.75 137.16 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "82db7438-bf9f-4cab-aa02-d61b8728856b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 158.75 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
+	(global_label "I2C1_SCL"
+		(shape bidirectional)
+		(at 158.75 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f4f4a4ab-4a30-4e7d-9e99-f527f7874c2b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 158.75 121.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 	)
 	(sheet
 		(at 190.5 119.38)
@@ -568,7 +738,7 @@
 	)
 	(sheet
 		(at 120.65 43.18)
-		(size 38.1 114.3)
+		(size 38.1 127)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -594,7 +764,7 @@
 			)
 		)
 		(property "Sheetfile" "MCU.kicad_sch"
-			(at 120.65 158.0646 0)
+			(at 120.65 170.7646 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1014,6 +1184,56 @@
 				(justify left)
 			)
 		)
+		(pin "GPIO_PC1" bidirectional
+			(at 120.65 157.48 180)
+			(uuid "f8b4cf13-4907-4ce3-8df6-c645ff435526")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GPIO_PC3" bidirectional
+			(at 120.65 160.02 180)
+			(uuid "5398fbcc-a6c7-47d6-a3fa-45581cc0c345")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GPIO_PC14" bidirectional
+			(at 120.65 162.56 180)
+			(uuid "343ded59-1625-4fa6-9430-9a6d5ca5d1a9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GPIO_PC15" bidirectional
+			(at 120.65 165.1 180)
+			(uuid "9f463fb1-3e3a-474d-99ca-af6b500d26d0")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GPIO_PD2" bidirectional
+			(at 120.65 167.64 180)
+			(uuid "0c9d918b-630f-4414-9745-ee2dce5aa82e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(instances
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963"
@@ -1332,7 +1552,7 @@
 	)
 	(sheet
 		(at 69.85 110.49)
-		(size 19.05 46.99)
+		(size 19.05 59.69)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1358,7 +1578,7 @@
 			)
 		)
 		(property "Sheetfile" "CONNECTORS.kicad_sch"
-			(at 69.85 158.0646 0)
+			(at 69.85 170.7646 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1501,6 +1721,56 @@
 		(pin "USB_DM" bidirectional
 			(at 88.9 152.4 0)
 			(uuid "e1348c15-1c09-4a75-a388-6d452e451384")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO_PC1" bidirectional
+			(at 88.9 157.48 0)
+			(uuid "328a73fb-0687-4f59-809b-b71b1f66de79")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO_PC3" bidirectional
+			(at 88.9 160.02 0)
+			(uuid "659d8dd7-d164-4dab-a355-3c26c4b49f72")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO_PC14" bidirectional
+			(at 88.9 162.56 0)
+			(uuid "c7f92e6c-8acd-43ce-9cd7-ac7f5f8693ba")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO_PC15" bidirectional
+			(at 88.9 165.1 0)
+			(uuid "1108db54-22e8-4f99-aed5-522a5c750513")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO_PD2" bidirectional
+			(at 88.9 167.64 0)
+			(uuid "a17c16db-3af0-4dd5-85ce-a524d5ba21f6")
 			(effects
 				(font
 					(size 1.27 1.27)

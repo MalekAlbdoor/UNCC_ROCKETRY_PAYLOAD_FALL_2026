@@ -2904,6 +2904,129 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Mechanical:MountingHole_Pad"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "H"
+				(at 0 6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole_Pad"
+				(at 0 4.445 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mounting Hole with connection"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*Pad*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "MountingHole_Pad_0_1"
+				(circle
+					(center 0 1.27)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "MountingHole_Pad_1_1"
+				(pin input line
+					(at 0 -2.54 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Power_Protection:USBLC6-2SC6"
 			(pin_names
 				(hide yes)
@@ -4024,6 +4147,17 @@
 		)
 		(uuid "8270a544-08d0-46b6-af89-ed757446506e")
 	)
+	(text "J12 expansion port\nI2C, debug UART, SPI\nCS pins: J9 to J11 GPIO"
+		(exclude_from_sim no)
+		(at 20.32 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c8bdcf8d-6117-4e15-9a13-f94d775e7494")
+	)
 	(text "J4, J8: identical camera ports\nJ6: Camera Select\nJ7: switcher, SEL = PB5 (PWM)"
 		(exclude_from_sim no)
 		(at 147.066 122.936 0)
@@ -4048,16 +4182,22 @@
 		(uuid "3e2a029f-8cdc-4801-8520-c9dc4c14c3a8")
 	)
 	(junction
+		(at 30.48 177.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "45ee9c74-37d9-4349-9e0b-b4c08afeecf1")
+	)
+	(junction
 		(at 227.33 139.7)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "581959a1-11fa-4972-a57e-034c0c326a4e")
 	)
 	(junction
-		(at 29.21 39.37)
+		(at 30.48 186.69)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "79558fb0-7cae-42cc-81aa-05329e58f83f")
+		(uuid "705615a4-9d53-4707-82b3-3598746e8335")
 	)
 	(junction
 		(at 29.21 41.91)
@@ -4070,6 +4210,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9953ea35-17ce-4258-8a95-87921234d45c")
+	)
+	(junction
+		(at 29.21 39.37)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a947e3ab-57bf-446e-8a92-866eb39c340a")
 	)
 	(no_connect
 		(at 240.03 119.38)
@@ -4129,6 +4275,16 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 177.8) (xy 30.48 186.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1934fea4-80fe-451e-a8af-9e9b09d9465d")
+	)
+	(wire
+		(pts
 			(xy 261.62 30.48) (xy 261.62 34.29)
 		)
 		(stroke
@@ -4166,6 +4322,16 @@
 			(type default)
 		)
 		(uuid "271cbb01-a478-4d2f-b4d0-0e79663563e1")
+	)
+	(wire
+		(pts
+			(xy 34.29 95.25) (xy 26.67 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2a7efe46-ad52-47ee-b92c-8cefd58117bf")
 	)
 	(wire
 		(pts
@@ -4209,6 +4375,26 @@
 	)
 	(wire
 		(pts
+			(xy 38.1 148.59) (xy 30.48 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ab0c85a-e342-47c8-a701-1502c6eee3b6")
+	)
+	(wire
+		(pts
+			(xy 57.15 130.81) (xy 49.53 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ecc1e15-1738-4b90-845f-a0c807195256")
+	)
+	(wire
+		(pts
 			(xy 161.29 102.87) (xy 162.56 102.87)
 		)
 		(stroke
@@ -4249,6 +4435,16 @@
 	)
 	(wire
 		(pts
+			(xy 34.29 92.71) (xy 26.67 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4faf242e-9590-49f9-a6a8-cf2689d2db21")
+	)
+	(wire
+		(pts
 			(xy 161.29 41.91) (xy 163.83 41.91)
 		)
 		(stroke
@@ -4269,7 +4465,17 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 39.37) (xy 46.99 39.37)
+			(xy 38.1 151.13) (xy 30.48 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58d09940-e58f-4748-a89e-7e4bc2cefeff")
+	)
+	(wire
+		(pts
+			(xy 27.94 41.91) (xy 39.37 41.91)
 		)
 		(stroke
 			(width 0)
@@ -4286,6 +4492,16 @@
 			(type default)
 		)
 		(uuid "5aa2c619-8789-4bbc-b355-08877030fa9e")
+	)
+	(wire
+		(pts
+			(xy 38.1 146.05) (xy 30.48 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c9de157-5ffc-41c3-ad89-aacc5537b639")
 	)
 	(wire
 		(pts
@@ -4329,6 +4545,16 @@
 	)
 	(wire
 		(pts
+			(xy 57.15 133.35) (xy 49.53 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6285b397-6190-4bc2-8b27-686f49d3c26a")
+	)
+	(wire
+		(pts
 			(xy 118.11 35.56) (xy 118.11 39.37)
 		)
 		(stroke
@@ -4359,6 +4585,26 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 186.69) (xy 30.48 187.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6cbedd00-535d-4ba1-84b5-7c25b047f0d1")
+	)
+	(wire
+		(pts
+			(xy 29.21 39.37) (xy 46.99 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f066a78-daed-4672-a2e3-9c0be3e342ca")
+	)
+	(wire
+		(pts
 			(xy 240.03 106.68) (xy 245.11 106.68)
 		)
 		(stroke
@@ -4369,6 +4615,26 @@
 	)
 	(wire
 		(pts
+			(xy 57.15 135.89) (xy 49.53 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7a6eb218-e16b-4a1a-b090-4f05d4da8b50")
+	)
+	(wire
+		(pts
+			(xy 34.29 97.79) (xy 26.67 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83e21234-8c0a-457a-99d8-394d2887dda8")
+	)
+	(wire
+		(pts
 			(xy 161.29 77.47) (xy 163.83 77.47)
 		)
 		(stroke
@@ -4376,6 +4642,16 @@
 			(type default)
 		)
 		(uuid "85b4dbfc-d210-44a2-a05e-a2002303db65")
+	)
+	(wire
+		(pts
+			(xy 27.94 39.37) (xy 29.21 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "88205351-536d-4603-a435-b00b7474c83c")
 	)
 	(wire
 		(pts
@@ -4429,16 +4705,6 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 41.91) (xy 39.37 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "99ec5e72-80aa-437f-807e-66b24229a0ea")
-	)
-	(wire
-		(pts
 			(xy 240.03 114.3) (xy 245.11 114.3)
 		)
 		(stroke
@@ -4446,6 +4712,26 @@
 			(type default)
 		)
 		(uuid "9c6805cb-285d-492c-ba3b-216f7b534a5a")
+	)
+	(wire
+		(pts
+			(xy 34.29 100.33) (xy 26.67 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9efee519-30c5-4741-af43-630c8f8ab242")
+	)
+	(wire
+		(pts
+			(xy 99.06 133.35) (xy 106.68 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a06caafe-b38c-4f47-ac3d-a8a5b79bb14b")
 	)
 	(wire
 		(pts
@@ -4639,6 +4925,26 @@
 	)
 	(wire
 		(pts
+			(xy 106.68 135.89) (xy 99.06 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea523a19-a1c2-4f74-9504-c3281cb27e9d")
+	)
+	(wire
+		(pts
+			(xy 49.53 138.43) (xy 57.15 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eae0b242-bae8-4fc5-9217-89520aa76112")
+	)
+	(wire
+		(pts
 			(xy 245.11 59.69) (xy 245.11 52.07)
 		)
 		(stroke
@@ -4676,6 +4982,16 @@
 			(type default)
 		)
 		(uuid "fdbba849-fa90-4470-a9e0-47a9f7048fe8")
+	)
+	(label "DBG_RX"
+		(at 99.06 135.89 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2a5d7ff1-c8c1-4f60-9fe5-49aebd0b3202")
 	)
 	(label "USB_DP"
 		(at 229.87 48.26 0)
@@ -4747,6 +5063,16 @@
 		)
 		(uuid "ef0d50fc-6e09-44dd-b0ae-f5ef0fb3f0c9")
 	)
+	(label "DBG_TX"
+		(at 99.06 133.35 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f82a16ca-f26e-421a-a22c-8b0ee2691d47")
+	)
 	(label "USB_DM"
 		(at 229.87 45.72 0)
 		(effects
@@ -4756,6 +5082,126 @@
 			(justify left bottom)
 		)
 		(uuid "fab2b346-8053-43a3-baae-2eabde590617")
+	)
+	(global_label "SPI1_MISO"
+		(shape bidirectional)
+		(at 30.48 148.59 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "25129897-919c-452c-9fbb-79716b819478")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "I2C1_SCL"
+		(shape bidirectional)
+		(at 49.53 135.89 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "568a3705-7218-4d04-9e06-a9e9230b793e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 49.53 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "I2C1_SDA"
+		(shape bidirectional)
+		(at 49.53 133.35 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "882553b6-1967-4066-ba9c-826675458d58")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 49.53 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "SPI1_MOSI"
+		(shape bidirectional)
+		(at 30.48 151.13 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "89c70a86-857d-450d-9671-7b3fcf50ed82")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "SPI1_SCK"
+		(shape bidirectional)
+		(at 30.48 146.05 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e4688c99-4739-4d56-b825-f46861acc153")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 	)
 	(hierarchical_label "CAM2_TX"
 		(shape input)
@@ -4789,6 +5235,39 @@
 			(justify left)
 		)
 		(uuid "0281e875-228c-4f53-bf0a-2e38386399f3")
+	)
+	(hierarchical_label "GPIO_PC14"
+		(shape bidirectional)
+		(at 26.67 97.79 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0b66995c-d53a-4a2e-a18c-08ea40040aba")
+	)
+	(hierarchical_label "GPIO_PC1"
+		(shape bidirectional)
+		(at 26.67 92.71 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0f5f9a69-19c3-4e9d-a5a9-55c9e49861d9")
+	)
+	(hierarchical_label "GPIO_PC3"
+		(shape bidirectional)
+		(at 26.67 95.25 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "13ccd0c7-3f67-46c7-9d09-2a8a283dfd27")
 	)
 	(hierarchical_label "CAM_SEL"
 		(shape input)
@@ -4900,6 +5379,17 @@
 		)
 		(uuid "f0684f7e-534e-4ffa-bc05-e8e5ca737f11")
 	)
+	(hierarchical_label "GPIO_PC15"
+		(shape bidirectional)
+		(at 26.67 100.33 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f3a9f70e-589a-4ccb-9a24-c6eb397cab4f")
+	)
 	(hierarchical_label "SWO"
 		(shape input)
 		(at 245.11 116.84 0)
@@ -5007,7 +5497,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Screw_Terminal_01x04")
-		(at 43.18 105.41 0)
+		(at 39.37 95.25 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5018,7 +5508,7 @@
 		(fields_autoplaced yes)
 		(uuid "0954c4d8-e808-4b8b-9443-1b71a7e12fa5")
 		(property "Reference" "J9"
-			(at 45.72 105.4099 0)
+			(at 41.91 95.2499 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5029,7 +5519,7 @@
 			)
 		)
 		(property "Value" "Screw_Terminal_01x04"
-			(at 45.72 107.9499 0)
+			(at 41.91 97.7899 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5040,7 +5530,7 @@
 			)
 		)
 		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal"
-			(at 43.18 105.41 0)
+			(at 39.37 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5051,7 +5541,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 105.41 0)
+			(at 39.37 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5062,7 +5552,7 @@
 			)
 		)
 		(property "Description" "Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 43.18 105.41 0)
+			(at 39.37 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5184,8 +5674,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Screw_Terminal_01x02")
-		(at 22.86 39.37 0)
-		(mirror y)
+		(at 22.86 41.91 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5195,7 +5684,7 @@
 		(dnp no)
 		(uuid "13044a62-c2e1-4166-b005-c9303103c3ee")
 		(property "Reference" "J2"
-			(at 20.32 39.3699 0)
+			(at 20.32 41.9101 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5206,7 +5695,7 @@
 			)
 		)
 		(property "Value" "BATT"
-			(at 20.32 41.9099 0)
+			(at 20.32 39.3701 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5218,7 +5707,7 @@
 			)
 		)
 		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
-			(at 22.86 39.37 0)
+			(at 22.86 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5229,7 +5718,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
-			(at 22.86 39.37 0)
+			(at 22.86 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5240,7 +5729,7 @@
 			)
 		)
 		(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 22.86 39.37 0)
+			(at 22.86 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5745,6 +6234,241 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 49.53 138.43 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "323470d0-27d3-48ac-bbfd-e2adbdd3fe48")
+		(property "Reference" "#PWR0182"
+			(at 49.53 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 49.53 143.51 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 49.53 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 49.53 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 49.53 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8464c921-e7f4-46de-af0a-c828da0508ed")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0182")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 33.02 186.69 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3955f5bb-2231-451d-aa19-53faad96fdef")
+		(property "Reference" "H5"
+			(at 36.83 185.4199 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 36.83 187.9599 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad"
+			(at 33.02 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 33.02 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "868e238c-c6f4-4a23-9f6b-b4419efeb3c2")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "H5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VCC")
+		(at 49.53 130.81 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "49d35370-4cd2-4f9f-9cae-2bc49770f4f7")
+		(property "Reference" "#PWR0181"
+			(at 49.53 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "3V3"
+			(at 49.53 125.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 49.53 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 49.53 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VCC\""
+			(at 49.53 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a5cdf871-3516-4196-a0d3-2fb09fb3e9cb")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0181")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:VCC")
 		(at 163.83 54.61 0)
 		(mirror y)
@@ -5818,6 +6542,83 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "#PWR0173")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 27.94 186.69 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "56a8da53-4971-4787-958a-b3afc186c54a")
+		(property "Reference" "H2"
+			(at 26.67 180.34 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 26.67 182.88 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad"
+			(at 27.94 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 27.94 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 27.94 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ee6d19b2-3abf-40dc-b214-ac57b14cf044")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "H2")
 					(unit 1)
 				)
 			)
@@ -6001,7 +6802,7 @@
 				)
 			)
 		)
-		(property "Value" "SMBJ9.0CA"
+		(property "Value" "SMBJ15CA"
 			(at 67.31 47.63 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6166,7 +6967,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "AO3407A"
 			(at 107.95 35.56 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6187,7 +6988,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "http://www.aosmd.com/pdfs/datasheet/AO3401A.pdf"
+		(property "Datasheet" "https://aosmd.com/res/datasheets/AO3407A.pdf"
 			(at 120.65 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -6198,7 +6999,7 @@
 				)
 			)
 		)
-		(property "Description" "-4.0A Id, -30V Vds, P-Channel MOSFET, SOT-23"
+		(property "Description" "-4.3A Id, -30V Vds, P-Channel MOSFET, SOT-23"
 			(at 107.95 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -6228,6 +7029,94 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Screw_Terminal_01x04")
+		(at 62.23 133.35 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6e5a8822-c569-41bd-b8c9-989c2bfb816a")
+		(property "Reference" "J12"
+			(at 64.77 133.3499 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Screw_Terminal_01x04"
+			(at 64.77 135.8899 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal"
+			(at 62.23 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 62.23 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 62.23 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "0ef83d9f-ad20-4e6a-bbe0-5df58fd29106")
+		)
+		(pin "1"
+			(uuid "1b354fdc-55d8-4940-b69d-640f29427768")
+		)
+		(pin "3"
+			(uuid "1f45546b-d19e-4aa6-94a4-82a2b731b5d5")
+		)
+		(pin "2"
+			(uuid "e0e93305-0118-4456-a1a0-b8da3bd0f423")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "J12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:Fuse")
 		(at 50.8 39.37 90)
 		(unit 1)
@@ -6249,7 +7138,7 @@
 				)
 			)
 		)
-		(property "Value" "3A"
+		(property "Value" "4A"
 			(at 50.8 41.91 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6292,7 +7181,7 @@
 				)
 			)
 		)
-		(property "MPN" "0451003.MRL"
+		(property "MPN" "0451004.MRL"
 			(at 50.8 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -6673,94 +7562,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Screw_Terminal_01x04")
-		(at 78.74 105.41 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9172d79c-876d-4caf-819a-137e521453fb")
-		(property "Reference" "J10"
-			(at 81.28 105.4099 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Screw_Terminal_01x04"
-			(at 81.28 107.9499 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal"
-			(at 78.74 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 78.74 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 78.74 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "4"
-			(uuid "f51f313a-edab-43d2-84ba-c9b857febd25")
-		)
-		(pin "1"
-			(uuid "2cf4bbe2-fd14-4bb3-98fa-e49a8cd35647")
-		)
-		(pin "3"
-			(uuid "28c84bc8-7fa5-4a30-b979-f1eb198d5281")
-		)
-		(pin "2"
-			(uuid "5d009054-c122-4014-97b3-f462d29e9958")
-		)
-		(instances
-			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
-				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
-					(reference "J10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:VCC")
 		(at 162.56 97.79 0)
 		(unit 1)
@@ -7118,6 +7919,84 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 30.48 187.96 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b0d685e8-9085-4413-bd17-cb056f2ea641")
+		(property "Reference" "#PWR0183"
+			(at 30.48 194.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 30.48 193.04 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 30.48 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 30.48 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f9d204d2-b233-42ce-948f-74dda91f6429")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "#PWR0183")
 					(unit 1)
 				)
 			)
@@ -7605,6 +8484,83 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 27.94 177.8 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d071f09c-2361-4355-a539-9be9ce8a03ea")
+		(property "Reference" "H3"
+			(at 26.67 171.45 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 26.67 173.99 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad"
+			(at 27.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 27.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 27.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a050a4e9-8661-413c-9fd8-7c1e745d6a33")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 162.56 102.87 0)
 		(unit 1)
@@ -7840,94 +8796,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Screw_Terminal_01x04")
-		(at 114.3 105.41 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e9a9dcdf-eb65-45ac-a807-10f49b7c8672")
-		(property "Reference" "J11"
-			(at 116.84 105.4099 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Screw_Terminal_01x04"
-			(at 116.84 107.9499 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal"
-			(at 114.3 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 114.3 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 114.3 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "4"
-			(uuid "bb2f2614-52ef-4d35-ae33-2d4a37633d96")
-		)
-		(pin "1"
-			(uuid "5964094e-333d-4b51-b69e-11fd1ac2b94e")
-		)
-		(pin "3"
-			(uuid "970a78ce-0ff9-4b71-8229-0e4b7dfa2f6e")
-		)
-		(pin "2"
-			(uuid "8b5762e3-2d71-40ac-87ab-426f6a69baf1")
-		)
-		(instances
-			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
-				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
-					(reference "J11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:VCC")
 		(at 163.83 77.47 0)
 		(mirror y)
@@ -8080,6 +8948,94 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "#PWR073")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Screw_Terminal_01x04")
+		(at 111.76 133.35 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f11bf48c-5615-4d11-8b48-6bc3089fbd02")
+		(property "Reference" "J13"
+			(at 114.3 133.3499 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Screw_Terminal_01x04"
+			(at 114.3 135.8899 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal"
+			(at 111.76 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 111.76 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 111.76 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "c03a1965-7a44-4daa-a2f7-45dcbff2e4ba")
+		)
+		(pin "1"
+			(uuid "a0694fae-fcc8-45f0-9124-54c34daa2ece")
+		)
+		(pin "3"
+			(uuid "b766d4b8-b904-48fb-8904-f292ce07d433")
+		)
+		(pin "2"
+			(uuid "4f5fdc60-baaf-4356-af53-d209291cc0fb")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "J13")
 					(unit 1)
 				)
 			)
@@ -8248,6 +9204,85 @@
 			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
 				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
 					(reference "J8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 33.02 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f71c208e-b7a9-4064-ace0-961a93cd45b7")
+		(property "Reference" "H4"
+			(at 36.83 176.5299 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 36.83 179.0699 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad"
+			(at 33.02 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 33.02 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c83aa1ac-7bec-4276-a2ff-30ee03d985ed")
+		)
+		(instances
+			(project "UNCC_ROCKETRY_PAYLOAD_FALL_2026"
+				(path "/b97e5c20-8436-474e-baf5-e9be786f6963/cca503f2-fb2f-4549-9962-6b55583dd8ef"
+					(reference "H4")
 					(unit 1)
 				)
 			)
