@@ -5124,39 +5124,6 @@
 		)
 		(uuid "0281e875-228c-4f53-bf0a-2e38386399f3")
 	)
-	(hierarchical_label "GPIO_PC14"
-		(shape bidirectional)
-		(at 60.96 106.68 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "0b66995c-d53a-4a2e-a18c-08ea40040aba")
-	)
-	(hierarchical_label "GPIO_PC1"
-		(shape bidirectional)
-		(at 60.96 101.6 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "0f5f9a69-19c3-4e9d-a5a9-55c9e49861d9")
-	)
-	(hierarchical_label "GPIO_PC3"
-		(shape bidirectional)
-		(at 60.96 104.14 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "13ccd0c7-3f67-46c7-9d09-2a8a283dfd27")
-	)
 	(hierarchical_label "CAM_SEL"
 		(shape input)
 		(at 163.83 80.01 0)
@@ -5278,6 +5245,50 @@
 		)
 		(uuid "a233fb03-e0a0-405c-9676-bf0c4486ff96")
 	)
+	(hierarchical_label "GPIO_PC3"
+		(shape bidirectional)
+		(at 60.96 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a560b84d-39b9-4116-b2af-c0212c9ec3fa")
+	)
+	(hierarchical_label "GPIO_PC1"
+		(shape bidirectional)
+		(at 60.96 104.14 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b6614ae6-9282-41b6-af0d-786f02befcbc")
+	)
+	(hierarchical_label "GPIO_PC14"
+		(shape bidirectional)
+		(at 60.96 109.22 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bc23e5f4-89f4-463d-9f86-aa47d8e617b6")
+	)
+	(hierarchical_label "GPIO_PC15"
+		(shape bidirectional)
+		(at 60.96 106.68 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cdaae75a-5339-4b5b-9706-6a90700112a8")
+	)
 	(hierarchical_label "DBG_TX"
 		(shape input)
 		(at 245.11 132.08 0)
@@ -5288,17 +5299,6 @@
 			(justify left)
 		)
 		(uuid "f0684f7e-534e-4ffa-bc05-e8e5ca737f11")
-	)
-	(hierarchical_label "GPIO_PC15"
-		(shape bidirectional)
-		(at 60.96 109.22 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "f3a9f70e-589a-4ccb-9a24-c6eb397cab4f")
 	)
 	(hierarchical_label "SWO"
 		(shape input)
