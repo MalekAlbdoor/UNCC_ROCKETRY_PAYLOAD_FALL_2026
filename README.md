@@ -37,6 +37,10 @@ Routed copper on all four layers, with silkscreen on the top and bottom (bottom 
 
 ![PCB layout, all four copper layers](images/board_layout.png)
 
+All layers together, as shown in the KiCad PCB editor:
+
+![PCB editor view with all layers](images/board_pcb_editor.png)
+
 ## Dashboard
 Take a look at live telemetry at telemetry.malekalbdoor.com
 
