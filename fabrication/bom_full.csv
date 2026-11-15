@@ -1,0 +1,55 @@
+Qty,Designators,Value,Footprint,Manufacturer,MPN,LCSC,Assembly,Link
+1,BZ1,CMT-8504-100-SMT,MagneticBuzzer_CUI_CMT-8504-100-SMT,CUI Devices,CMT-8504-100-SMT-TR,C22359707,JLC places,https://www.lcsc.com/search?q=C22359707
+18,"C1,C2,C3,C4,C5,C7,C10,C11,C12,C13,C14,C15,C16,C24,C27,C29,C32,C33",100nF,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,YAGEO,CC0603KRX7R9BB104,C14663,JLC places,https://www.lcsc.com/search?q=C14663
+1,C6,10uF 25V,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,Samsung,CL31A106KBHNNNE,C13585,JLC places,https://www.lcsc.com/search?q=C13585
+5,"C8,C9,C23,C34,C38",1uF,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Samsung,CL10A105KB8NNNC,C15849,JLC places,https://www.lcsc.com/search?q=C15849
+1,C17,75pF,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,YAGEO,CC0603JRNPO9BN750,C282074,JLC places,https://www.lcsc.com/search?q=C282074
+4,"C18,C19,C30,C31",22uF,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,Samsung,CL31A226KAHNNNE,C12891,JLC places,https://www.lcsc.com/search?q=C12891
+2,"C20,C28",4.7uF 10V,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Samsung,CL10A475KO8NNNC,C19666,JLC places,https://www.lcsc.com/search?q=C19666
+2,"C21,C22",2.2uF 10V,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Samsung,CL10A225KO8NNNC,C23630,JLC places,https://www.lcsc.com/search?q=C23630
+2,"C25,C26",12pF C0G,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Samsung,CL10C120JB8NNNC,C38523,JLC places,https://www.lcsc.com/search?q=C38523
+1,C35,1nF,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Samsung,CL10B102KB8NNNC,C1588,JLC places,https://www.lcsc.com/search?q=C1588
+2,"C36,C37",10uF,C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,Samsung,CL21A106KAYNNNE,C15850,JLC places,https://www.lcsc.com/search?q=C15850
+2,"D1,D3",B5819W,D_SOD-123,,B5819W,C7420330,JLC places,https://www.lcsc.com/search?q=C7420330
+1,D2,Green,LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder,Everlight,19-217/G7C-AN1P2/6T,C2986030,JLC places,https://www.lcsc.com/search?q=C2986030
+1,D4,Red,LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder,Hubei KENTO,KT-0603R,C2286,JLC places,https://www.lcsc.com/search?q=C2286
+1,D5,SMBJ15CA,D_SMB,,SMBJ15CA,C2760879,JLC places,https://www.lcsc.com/search?q=C2760879
+1,F1,4A,Fuse_Littelfuse-NANO2-451_453,Littelfuse,0451004.MRL,C27515,JLC places,https://www.lcsc.com/search?q=C27515
+2,"FB1,FB2",600R@100MHz,L_0603_1608Metric_Pad1.05x0.95mm_HandSolder,Sunlord,GZ1608D601TF,C1002,JLC places,https://www.lcsc.com/search?q=C1002
+1,J1,STDC14,PinHeader_2x07_P1.27mm_Vertical_SMD,,,,hand solder,
+1,J2,BATT,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,JST,B2B-XH-A,,hand solder,
+1,J3,ARM_SW,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,JST,B2B-XH-A,,hand solder,
+1,J4,CAM1,JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical,JST,B4B-PH-K,,hand solder,
+1,J5,USB_C,USB_C_Receptacle_HRO_TYPE-C-31-M-12,HRO,TYPE-C-31-M-12,,hand solder,
+1,J6,VTX,JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,JST,B3B-XH-A,,hand solder,
+1,J7,CAM_SW,JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical,JST,B3B-PH-K,,hand solder,
+1,J8,CAM2,JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical,JST,B4B-PH-K,,hand solder,
+3,"J9,J12,J13",Screw_Terminal_01x04,"TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal",Phoenix Contact,"PT 1,5/4-3.5-H",,hand solder,
+1,L1,10uH,L_Wuerth_XHMI-6060,Wurth Elektronik,74439346100,C2651185,JLC places,https://www.lcsc.com/search?q=C2651185
+1,Q1,AO3407A,SOT-23,Alpha & Omega,AO3407A,C347478,JLC places,https://www.lcsc.com/search?q=C347478
+1,Q2,AO3400A,SOT-23,Alpha & Omega,AO3400A,C20917,JLC places,https://www.lcsc.com/search?q=C20917
+11,"R1,R4,R5,R6,R7,R12,R13,R14,R15,R18,R27",10k 1%,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF1002T5E,C25804,JLC places,https://www.lcsc.com/search?q=C25804
+4,"R2,R16,R21,R23",100k 1%,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF1003T5E,C25803,JLC places,https://www.lcsc.com/search?q=C25803
+1,R3,13.3k 1%,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF1332T5E,C25952,JLC places,https://www.lcsc.com/search?q=C25952
+2,"R8,R9",4.7k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF4701T5E,C23162,JLC places,https://www.lcsc.com/search?q=C23162
+2,"R10,R11",5.1k 1%,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF5101T5E,C23186,JLC places,https://www.lcsc.com/search?q=C23186
+1,R17,33k 1%,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF3302T5E,C4216,JLC places,https://www.lcsc.com/search?q=C4216
+1,R19,330R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF3300T5E,C23138,JLC places,https://www.lcsc.com/search?q=C23138
+2,"R20,R28",100R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF1000T5E,C22775,JLC places,https://www.lcsc.com/search?q=C22775
+1,R22,1k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF1001T5E,C21190,JLC places,https://www.lcsc.com/search?q=C21190
+3,"R24,R25,R26",0,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,UniOhm,0603WAF0000T5E,C21189,JLC places,https://www.lcsc.com/search?q=C21189
+1,SW1,BOOT0,SW_SPST_TL3342,E-Switch,TL3342F450QG,C2886897,JLC places,https://www.lcsc.com/search?q=C2886897
+1,U1,STM32F405RGTx,LQFP-64_10x10mm_P0.5mm,STMicroelectronics,STM32F405RGT6,C15742,JLC places,https://www.lcsc.com/search?q=C15742
+1,U2,TPS54302,SOT-23-6,Texas Instruments,TPS54302DDCR,C311983,JLC places,https://www.lcsc.com/search?q=C311983
+1,U3,AP2112K-3.3,SOT-23-5,Diodes Inc,AP2112K-3.3TRG1,C23380830,JLC places,https://www.lcsc.com/search?q=C23380830
+1,U4,LSM6DSO32,LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y,STMicroelectronics,LSM6DSO32XTR,C3663738,JLC places,https://www.lcsc.com/search?q=C3663738
+1,U5,H3LIS331DLTR,LGA-16_3x3mm_P0.5mm_LayoutBorder3x5y,STMicroelectronics,H3LIS331DLTR,C2655074,JLC places,https://www.lcsc.com/search?q=C2655074
+1,U6,MS5611-01BA,LGA-8_3x5mm_P1.25mm,TE Connectivity,MS5611-01BA03,C37148,JLC places,https://www.lcsc.com/search?q=C37148
+1,U7,USBLC6-2SC6,SOT-23-6,STMicroelectronics,USBLC6-2SC6,C2827654,JLC places,https://www.lcsc.com/search?q=C2827654
+1,U8,SHT45-AD1F-R2,Sensirion_DFN-4_1.5x1.5mm_P0.8mm_SHT4x_NoCentralPad,Sensirion,SHT45-AD1F-R2,C5360602,JLC places,https://www.lcsc.com/search?q=C5360602
+1,U9,SAM-M10Q-00B,ublox_SAM-M8Q,u-blox,SAM-M10Q-00B,C5443880,JLC places,https://www.lcsc.com/search?q=C5443880
+1,U10,W25Q512JVFIQ,SOIC-16W_7.5x10.3mm_P1.27mm,Winbond,W25Q512JVFIQ,C2962011,JLC places,https://www.lcsc.com/search?q=C2962011
+1,U11,E22-900M30S,WIRELM-SMD_E22-900M30S,EBYTE,E22-900M30S,C411294,JLC places,https://www.lcsc.com/search?q=C411294
+1,U12,TPS22917DBV,SOT-23-6,Texas Instruments,TPS22917DBVR,C2681320,JLC places,https://www.lcsc.com/search?q=C2681320
+1,U13,MMC5983MA,LGA-16_3x3mm_P0.5mm,MEMSIC,MMC5983MA,C404329,JLC places,https://www.lcsc.com/search?q=C404329
+1,Y1,8MHz,Crystal_SMD_Abracon_ABM3B-4Pin_5.0x3.2mm,Abracon,ABM3B-8.000MHZ-10-D-1-G-T,C1985378,JLC places,https://www.lcsc.com/search?q=C1985378
