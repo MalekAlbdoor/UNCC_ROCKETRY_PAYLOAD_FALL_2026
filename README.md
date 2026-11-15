@@ -31,6 +31,12 @@ No KiCad? Download [Schematic.pdf](Schematic.pdf) to view the full schematic.
 
 ![Angled 3D view](images/board_3d_angled.png)
 
+### PCB layout
+
+Routed copper on all four layers, with silkscreen on the top and bottom (bottom view is mirrored).
+
+![PCB layout, all four copper layers](images/board_layout.png)
+
 ## Dashboard
 Take a look at live telemetry at telemetry.malekalbdoor.com
 
