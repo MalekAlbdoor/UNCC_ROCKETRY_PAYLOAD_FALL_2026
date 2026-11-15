@@ -7,6 +7,7 @@
 	(title_block
 		(title "UNCC Rocketry Payload, Fall 2026")
 		(date "2026-10-23")
+		(rev "A")
 		(comment 1 "Author: Malek Albdoor")
 	)
 	(lib_symbols)

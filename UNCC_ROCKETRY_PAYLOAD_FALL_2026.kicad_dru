@@ -1,0 +1,18 @@
+(version 1)
+# JLCPCB 4-layer standard process (JLC04161H-7628, 1.6 mm, 1 oz outer / 0.5 oz inner)
+# Trace/space of 3.0-3.5 mil carries a surcharge at JLC, so the floor is 4 mil (0.1016 mm), set in Board Setup.
+
+(rule "JLC PTH pad hole to hole >= 0.45"
+	(constraint hole_to_hole (min 0.45mm))
+	(condition "A.Type == 'Pad' && B.Type == 'Pad' && A.Pad_Type == 'Through-hole' && B.Pad_Type == 'Through-hole'"))
+
+(rule "JLC NPTH min drill 0.5"
+	(constraint hole_size (min 0.5mm))
+	(condition "A.Pad_Type == 'NPTH, mechanical'"))
+
+(rule "JLC PTH pad annular ring >= 0.15"
+	(constraint annular_width (min 0.15mm))
+	(condition "A.Type == 'Pad' && A.Pad_Type == 'Through-hole'"))
+
+(rule "JLC silk to pad 0.15"
+	(constraint silk_clearance (min 0.15mm)))
