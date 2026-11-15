@@ -39,6 +39,8 @@ No KiCad? Download [Schematic.pdf](Schematic.pdf) to view the full schematic.
 |---|---|
 | [mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026.step](mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026.step) | Full board with all components (STEP) |
 | [mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026_board_only.step](mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026_board_only.step) | Bare board, no components (STEP) |
+| [mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026.stl](mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026.stl) | Full board with all components (STL mesh) |
+| [mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026_board_only.stl](mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026_board_only.stl) | Bare board, no components (STL mesh) |
 | [mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026_outline.dxf](mechanical/UNCC_ROCKETRY_PAYLOAD_FALL_2026_outline.dxf) | Board outline for CAD (DXF) |
 | [images/board_dimensions.svg](images/board_dimensions.svg) | Dimensioned drawing with mounting holes and connector positions |
 
