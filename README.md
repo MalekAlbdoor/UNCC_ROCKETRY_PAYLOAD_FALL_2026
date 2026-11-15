@@ -23,13 +23,16 @@ No KiCad? Download [Schematic.pdf](Schematic.pdf) to view the full schematic.
 
 ## Board
 
-4-layer, 53.34 x 127.0 mm board, designed to JLCPCB's cheapest standard 4-layer rules.
+4-layer, 53.34 x 127.0 mm board, designed to JLCPCB's standard 4-layer rules.
 
 | Top | Bottom |
 |---|---|
 | ![Top of the board](images/board_top.png) | ![Bottom of the board](images/board_bottom.png) |
 
 ![Angled 3D view](images/board_3d_angled.png)
+
+## Dashboard
+Take a look at live telemetry at telemetry.malekalbdoor.com
 
 ## Mechanical
 
@@ -60,9 +63,6 @@ No KiCad? Download [Schematic.pdf](Schematic.pdf) to view the full schematic.
 Heights come from the KiCad 3D models, so check them against the part datasheets before you design a tight enclosure. Connector positions are listed on the dimensioned drawing.
 
 ![Side view](images/board_side.png)
-
-## Dashboard
-Take a look at live telemetry at telemetry.malekalbdoor.com
 
 ## Status
 
