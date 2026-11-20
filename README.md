@@ -15,6 +15,8 @@ The schematic is split into hierarchical sheets, all tied together on the root s
 | FLASH | Onboard flight data storage |
 | CONNECTORS | Battery input protection, arming switch, debug header, camera and USB-C |
 
+Parts, pin map, power and connector pinouts are in [docs/hardware.md](docs/hardware.md).
+
 ## Tools
 
 Designed in KiCad 10. Open `UNCC_ROCKETRY_PAYLOAD_FALL_2026.kicad_pro` to get started.
