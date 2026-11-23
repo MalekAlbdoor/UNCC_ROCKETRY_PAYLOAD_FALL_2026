@@ -11,6 +11,10 @@
 		(comment 1 "Author: Malek Albdoor")
 	)
 	(lib_symbols)
+	(no_connect
+		(at 120.65 167.64)
+		(uuid "5b1c0e2a-7d34-4f6e-9a18-3c2d4e5f6a70")
+	)
 	(wire
 		(pts
 			(xy 158.75 102.87) (xy 190.5 102.87)
@@ -370,16 +374,6 @@
 			(type default)
 		)
 		(uuid "bdf459b4-a6db-4132-9fbd-a873d3851e8c")
-	)
-	(wire
-		(pts
-			(xy 88.9 167.64) (xy 120.65 167.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bfcf2a81-362a-41ef-ab8e-ed7f571b0b9b")
 	)
 	(wire
 		(pts
@@ -1702,16 +1696,6 @@
 		(pin "GPIO_PC15" bidirectional
 			(at 88.9 165.1 0)
 			(uuid "1108db54-22e8-4f99-aed5-522a5c750513")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "GPIO_PD2" bidirectional
-			(at 88.9 167.64 0)
-			(uuid "a17c16db-3af0-4dd5-85ce-a524d5ba21f6")
 			(effects
 				(font
 					(size 1.27 1.27)
